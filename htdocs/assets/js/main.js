@@ -23,15 +23,19 @@ var Main = function () {
       new _MainMenu2.default();
     });
 
-    var url = 'http://localhost:3000/questions/create';
+    var url = 'http://localhost:3000/questions.json';
     $.ajax({
       url: url,
       type: 'POST',
+      // xhrFields: {
+      //   withCredentials: true
+      // },
       data: {
         title: 'title0',
         content: 'text',
         lat: 0,
-        lng: 1
+        lng: 1,
+        user_id: 0
       },
       success: function success(result) {
         console.log(result);

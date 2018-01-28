@@ -37,7 +37,19 @@ class QuestionsController < ApplicationController
 
 
   def create
-  	@question = Question.new(question_params)
+
+    if params
+      @question = Question.new
+      @question.title = params['title']
+      @question.content = params['content']
+      @question.lat = params['lat']
+      @question.lng = params['lng']
+      @question.user_id = params['user_id']
+      # json_request = JSON.parse(request.body.read)
+      # @question = Question.new(json_request)
+    else
+      @question = Question.new(question_params)
+    end
   	
   	#render plain: @question.user_id.to_s + "!!!"
   	#return
@@ -50,7 +62,7 @@ class QuestionsController < ApplicationController
       else
   			format.html{ render :new }
         format.json{ render json: @question.errors, status: :unprocessable_entity }
-  		end
+      end
   	end
 
   end
