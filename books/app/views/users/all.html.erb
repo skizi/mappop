@@ -1,0 +1,21 @@
+<h1>Users#all</h1>
+<p>現在のログインユーザー：
+<%= User.find_by(id: session[:user_id]).name %>
+<!--<%= current_user.name %>-->
+
+<% if logged_in? %>
+	<%= link_to "ログアウト", logout_path, method: :delete %>
+<% else %>
+	<%= link_to "ログイン", login_path, method: :new %>
+<% end %>
+</p>
+
+<% @users.each do |user| %>
+	<h2>id:<%= user.id %></h2>
+	<p>email:<%= user.email %></p>
+	<p>password:<%= user.password_digest %></p>
+	<p>name：<%= user.name %></p>
+	<p>username：<%= user.username %></p>
+	<p>location：<%= user.location %></p>
+	<p>about：<%= user.about %></p>
+<% end %>

@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+@import "mixin";
+
+/*  BASE STYLE  */
+body {
+	color: $txt;
+	font-family: $baseFont;
+    -webkit-text-size-adjust: 100%;
+	word-wrap: break-word;
+	// background-image:url( '../images/loading.gif' );
+	// background-repeat:no-repeat;
+	// background-position:center center;
+	// background-attachment: fixed;
+}
+
+
+// リンク
+a {
+	//tap時の不透明度20％
+	-webkit-tap-highlight-color: rgba(255,255,255,.2);
+	&:link {
+		color: $linkColor;
+	}
+	&:visited {
+		color: $linkColor_visited;
+		//color:darken($linkColor, 20%);
+	}
+	&:hover {
+		text-decoration: none;
+		color: $linkColor_hover;
+		//color:lighten($linkColor, 20%);
+	}
+	&:active {
+		color: $linkColor_active;
+		//color:lighten($linkColor, 20%);
+	}
+}
+
+// from ballog
+// http://blog.bluearrowslab.com/smartphone/topicks/376/
+
+input[type="text"]:focus {
+  outline: 0;
+  border-color: none;
+}
+
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    position: relative;
+    margin-right: 5px;
+    border-radius: 8px;
+    border: 1px solid #4c4c4c;
+    -webkit-box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    background: $white;
+}
+
+
+input[type="checkbox"]:checked:before {
+    position: absolute;
+    left: 1px;
+    top: 17px;
+    display: block;
+    content: "";
+    width: 10px;
+    height: 4px;
+    background: $black;
+    -webkit-transform: rotate(45deg);
+    -webkit-transform-origin: right center;
+}
+
+input[type="checkbox"]:checked:after {
+    display: block;
+    position: absolute;
+    left: 9px;
+    top: 17px;
+    content: "";
+    width: 19px;
+    height: 4px;
+    background: $black;
+    -webkit-transform: rotate(-53deg);
+    -webkit-transform-origin: left center;
+}
+

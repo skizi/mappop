@@ -1,0 +1,11 @@
+<div id="content">
+	<%= notice %>
+	<h2><%= @tweet.title %></h2>
+	<p><%= @tweet.content %></p>
+	<img src="<%= url_for_public@tweet.photo_url %>">
+	<%=
+		#image_tag('/'+@tweet.photo_url)
+	%>
+	
+	<a href="/tweets/">＜＜一覧へ戻る</a>
+</div>

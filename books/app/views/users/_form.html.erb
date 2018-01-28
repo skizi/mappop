@@ -1,0 +1,30 @@
+
+	<%= form_for(user) do |f| %>
+		<div class="c_mb40 email">
+			<%= f.label :email %>
+			<%= f.text_field :email %>
+		</div>
+		<div class="c_mb40 password">
+			<%= f.label :password %>
+			<%= f.password_field :password %>
+		</div>
+		<div class="c_mb40 name">
+			<%= f.label :name %>
+			<%= f.text_field :name %>
+		</div>
+		<div class="c_mb40 username">
+			<%= f.label :username %>
+			<%= f.text_field :username %>
+		</div>
+		<div class="c_mb40 location">
+			<%= f.label :location %>
+			<%= f.text_field :location %>
+		</div>
+		<div class="c_mb40 about">
+			<%= f.label :about %>
+			<%= f.text_area :about %>
+		</div>
+
+		<%= f.submit class:"submit_btn0 c_mcenter" %>
+		
+	<% end %>

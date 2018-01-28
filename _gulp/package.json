@@ -1,0 +1,35 @@
+{
+  "name": "fluxtest",
+  "version": "1.0.0",
+  "description": "honda ch",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.10",
+    "gulp-compass": "^2.0.3",
+    "gulp-concat": "^2.6.0",
+    "gulp-declare": "^0.3.0",
+    "gulp-handlebars": "^4.0.0",
+    "gulp-minify-css": "^0.3.11",
+    "gulp-plumber": "^0.6.6",
+    "gulp-uglify": "^1.0.2",
+    "gulp-wrap": "^0.11.0",
+    "path": "^0.4.9",
+    "prop-types": "^15.5.10"
+  },
+  "devDependencies": {
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
+    "gulp": "^3.9.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^1.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "yoshida",
+  "license": "ISC"
+}

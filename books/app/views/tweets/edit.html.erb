@@ -1,0 +1,9 @@
+<div id="content">
+
+	<h2>日記編集</h2>
+	<a href="/tweets/" class="submit_btn1 c_mb40">＜＜戻る</a>
+
+	<%= render 'form', tweet: @tweet %>
+
+	<a href="/tweets/upload/<%= @tweet.id %>">画像をアップロードする</a>
+</div>

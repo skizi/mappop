@@ -1,0 +1,19 @@
+@charset "utf-8";
+// ===================================================================
+// 各SCSSファイルのインポート
+// ===================================================================
+
+$prefixList:-o-,-ms-,-moz-,-webkit-,null;
+@import "compass/utilities/general/clearfix";
+
+// リセットCSS、フォントサイズ
+@import "reset";
+
+// ミックスイン、@extend、CSS3など
+@import "mixin";
+
+@import "base";
+
+// メインスタイル
+@import "main";
+

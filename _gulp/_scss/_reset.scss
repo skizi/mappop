@@ -1,0 +1,104 @@
+@charset "utf-8";
+
+// ===================================================================
+// リセット用CSS
+// ===================================================================
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* add a little bit rules */
+html {
+	overflow-y: scroll;
+}
+img,
+object,
+embed {
+	vertical-align: top;
+}
+
+input, select {
+	vertical-align:middle;
+}
+
+
+//FONT SIZING WITH REM
+//http://snook.ca/archives/html_and_css/font-size-with-rem
+html {
+	font-size: 62.5%;
+}
+body {
+	font-size: 18px; font-size: 1.8rem;
+}
+
+/* YUI 3.4.1 (build 4118) Copyright 2011 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License. http://yuilibrary.com/license/ */
+	// // Percents could work for IE, but for backCompat purposes, we are using keywords.
+	// // x-small is for IE6/7 quirks mode.
+	// body {
+	// 	font:13px/1.231 arial,helvetica,clean,sans-serif;
+	// 	*font-size:small; // for IE
+	// 	*font:x-small; // for IE in quirks mode
+	// }
+
+// Nudge down to get to 13px equivalent for these form elements
+select, input, button, textarea {
+	font:99% arial,helvetica,clean,sans-serif;
+}
+
+// To help tables remember to inherit
+table {
+	font-size:inherit;
+	font:100%;
+}
+
+// Bump up IE to get to 13px equivalent for these fixed-width elements
+pre, code, kbd, samp, tt {
+	font-family:monospace;
+	*font-size:108%;
+	line-height:100%;
+}

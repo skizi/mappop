@@ -1,0 +1,13 @@
+
+	<%= form_for(tweet) do |f| %>
+		<div class="c_mb40 title">
+			<%= f.label :title %>
+			<%= f.text_field :title %>
+		</div>
+		<div class="c_mb40 content">
+			<%= f.label :content %>
+			<%= f.text_area :content %>
+		</div>
+		<%= f.submit class:"submit_btn0 c_mcenter" %>
+		
+	<% end %>

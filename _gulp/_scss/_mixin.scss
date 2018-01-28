@@ -1,0 +1,397 @@
+@charset "utf-8";
+// ===================================================================
+// 設定
+// ===================================================================
+
+//ie9用 svg
+// $experimental-support-for-svg: true;
+
+// /*============================
+// IMPORT
+// ============================*/
+@import "compass/css3";
+
+$use_extend_object: true;   // 汎用クラスを使用するか
+$use_spacing_classes: true; // 余白調整用のクラスを使用するか
+
+// @import "common/navi/*.png";
+// @import "common/ico/*.png";
+// $spritesNavi: sprite-map("common/navi/*.png");
+// $spritesIco: sprite-map("common/ico/*.png");
+// $imgExtLink:'../images/common/ico_extlink_gr.png';
+// $imgExtLinkPk:'../images/common/ico_extlink_pk.png';
+// $imgArrLocation:'../images/common/ico_arr_location.png';
+
+
+// 色いろ
+    //白
+    $white:#fff;
+    //墨
+    $black:#252525;
+    //グレー
+    $lightGray:#efefef;
+    $gray:#848484;
+    //水色
+    $blue:#39f;
+    //赤（エラー文言など）
+    $red:#d90014;;
+
+//背景
+    $bg:$white;
+//テキスト
+    $txt: $black;
+//ボーダー
+    $border:$gray;
+
+//コンテンツ幅
+    $baseWidth:1000px;
+
+// ベースリンクカラー
+$linkColor: $txt;
+$linkColor_visited: $txt;
+$linkColor_hover: $blue;
+$linkColor_active: $blue;
+
+// ベースリンクカラー
+$linkColor: $txt;
+$linkColor_visited: $txt;
+$linkColor_hover: $txt;
+$linkColor_active: $txt;
+
+
+// フォント
+$baseFont: microsoft yahei,Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif;
+$baseFont_ie: "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif;
+
+// ===================================================================
+// mixinやらCSS3やら、extendも。
+// ===================================================================
+//■■■■■■■ Document　■■■■■■■■■
+
+// ===================================================================
+// extend
+// ===================================================================
+
+//placeholder selector  --  extend用のクラス
+//クラスでなく%で指定することで、大元の%の記述が出力されずにすむ
+//%btnBL {
+//	background:blue;
+//	width:90%;
+//	padding:10px;
+//}
+
+//.twitterBtn{
+//	@extend %btnBL;
+//	text-align:center;
+//}
+// ===================================================================
+// mixin
+// ===================================================================
+	// 下記は全てコンパスから読み込むように変更
+	// ■■■■■■■■border-radius
+	// ■■■■■■■■background-size
+	// ■■■■■■■■opacity
+
+
+//--------------------------------------------------
+//    Font-Size Bug Fix　-- iOS4での12px以下フォントバグをFix
+//--------------------------------------------------
+//from:http://inputxoutput.com/css-preprocessor-advent-calendar-2012/
+// Font-size Bug Fix for Multi-byte fonts
+// http://webtech-walker.com/archive/2011/03/30190850.html
+// @mixin font-size($value) {
+//   $property: font-size;
+
+//   @if $value < 12 {
+//     #{$property}: #{$value}px;
+//     letter-spacing: -0.001em;
+//   }
+//   @else {
+//     #{$property}: #{$value}px;
+//   }
+// }
+
+//--------------------------------------------------
+//   img sizing
+//--------------------------------------------------
+// img width100% リキッドで拡縮させるため
+@mixin img100p {
+    img{width: 100%; height: auto;}
+}
+// img maxwidth100% リキッドで最大値を決めて拡縮させるため
+@mixin imgMax100p {
+    img{max-width: 100%; height: auto;}
+}
+
+
+//--------------------------------------------------
+//   background
+//--------------------------------------------------
+// background
+@mixin background($image-file) {
+  display: block;
+  width: image-width($image-file);
+  height: 0;
+  padding-top: image-height($image-file);
+  background: url($image-file) 0 0 no-repeat;
+  overflow: hidden;
+}
+
+// retina-background
+@mixin retina-background($image-file) {
+  display: block;
+  width: image-width($image-file) / 2;
+  height: 0;
+  padding-top: image-height($image-file) / 2;
+  background: url($image-file) 0 0 no-repeat;
+  background-size: (image-width($image-file) / 2) (image-height($image-file) / 2);
+  overflow: hidden;
+}
+
+//スプライト画像を背景として置くやつ
+//-------------------------------------------
+//    Set Sprite Img as Background
+//-------------------------------------------
+@mixin spriteImg($spritemap,$filename) {
+    width:image-width(sprite-file($spritemap,$filename));
+    height:image-height(sprite-file($spritemap,$filename));
+    background: $spritemap no-repeat;
+    background-position: sprite-position($spritemap,$filename);
+    overflow:hidden;
+    text-indent: -9999px;
+    display:block;
+}
+
+//画像を背景として置くやつ（右側）
+//-------------------------------------------
+//    putIcon :before or :after
+//-------------------------------------------
+@mixin putIcon($filename) {
+    content: '';
+    display: block;
+    position: absolute; right: 20px; top: 50%;
+    width: image-width($filename);
+    height: image-height($filename);
+    margin-top: - (image-height($filename) / 2);
+    background: url($filename) 50% 50% no-repeat;
+    pointer-events: none;
+}
+
+//画像置換のやつ
+//-------------------------------------------
+//    Image Replace
+//-------------------------------------------
+
+@mixin imageReplace {
+  // text-indent: 100%;
+  // white-space: nowrap;
+  // overflow: hidden;
+  text-indent: -9999px;
+}
+
+
+// ===================================================================
+// アニメーションの関数
+// ===================================================================
+//@contentにはbase.scss内のkeyframes関数の中身が書き出される
+//@-webkit-keyframesのベンダープレフィックスは省略不可
+@mixin keyframes($animation-name){
+  @-webkit-keyframes #{$animation-name}{
+    @content;
+  }
+  @-moz-keyframes #{$animation-name}{
+    @content;
+  }
+  @-o-keyframes #{$animation-name}{
+    @content;
+  }
+  @keyframes #{$animation-name}{
+    @content;
+  }
+}
+
+@mixin set-animation($animation-property){
+  @each $prefix in $prefixList{
+    #{$prefix}animation:$animation-property;
+  }
+}
+
+// ===================================================================
+// フォントサイズの関数
+// ===================================================================
+// 13px基準
+// $fontSizeList: 62%, 70%, 77%, 85%, 93%, 100%, 108%, 116%, 124%, 131%, 139%, 147%, 154%, 162%, 170%, 177%, 185%, 193%, 200%, 208%, 216%, 224%, 231%, 239%, 247%, 254%, 262%, 270%, 277%, 285%, 293%, 300%, 308%;
+// 15px基準
+// $fontSizeList: 53%, 60%, 67%, 73%, 80%, 87%, 93%, 100%, 107%, 113%, 120%, 127%, 133%, 140%, 147%, 153%, 160%, 167%, 173%, 180%, 187%, 193%, 200%, 207%, 213%, 220%, 227%, 233%, 240%, 247%, 253%, 260%, 267%;
+// rem基準
+$fontSizeList: 0.8rem, 0.9rem, 1.0rem, 1.1rem, 1.2rem, 1.3rem, 1.4rem, 1.5rem, 1.6rem, 1.7rem, 1.8rem, 1.9rem, 2.0rem, 2.1rem, 2.2rem, 2.3rem, 2.4rem, 2.5rem, 2.6rem, 2.7rem, 2.8rem, 2.9rem, 3.0rem, 3.1rem, 3.2rem, 3.3rem, 3.4rem, 3.5rem, 3.6rem, 3.7rem, 3.8rem, 3.9rem, 4.0rem;
+
+@function fz($size) {
+  @if $size < 8 {
+  $size: 8;
+  }
+  @if $size > 40 {
+  $size: 40;
+  }
+  @return nth($fontSizeList, $size - 7);
+}
+
+
+//スマホ用リンク伝達回避
+//-------------------------------------------
+//    Kill Events
+//-------------------------------------------
+//アンドロでのリンク誤作動バグフィックスのミックスイン
+// 
+// CSS3の「pointer-events」を使えば、JavaScriptを使わずに現在位置のリンクを無効にすることができます。
+// ナビゲーションなど、<a>タグやclassの有無に関係なく実装できるので、コードを全ページ共通で使うことができます。
+// http://html5-css3.jp/tips/pointer-events.html
+
+@mixin killEvents {
+	pointer-events: none;
+}
+
+
+// ===================================================================
+// class
+// ===================================================================
+/*  CLASSES  */
+
+//--------------------------------------------------
+//    Hover ScaleDown Img　-- マウスオーバーで縮小
+//--------------------------------------------------
+// .scale{
+// 	position: relative;
+// 	a{
+// 		img{
+//			//ガタついたのでコメアウト
+// 			// -webkit-transition: all .1s ease;
+// 			// transition: all .1s ease;
+// 		}
+// 		&:hover{
+// 			img{
+// 				-webkit-transform-origin: center center;
+// 				-webkit-transform: scale(0.98);
+// 				transform: scale(0.98);
+// 			}
+// 		}
+// 	}
+// }
+
+
+
+//--------------------------------------------------
+//    Hover alpha Img　-- マウスオーバーでアルファ
+//--------------------------------------------------
+// .alpha{
+// 	img {
+// 	-webkit-transition: opacity .4s ease-out;
+// 	   -moz-transition: opacity .4s ease-out;
+// 	    -ms-transition: opacity .4s ease-out;
+// 	     -o-transition: opacity .4s ease-out;
+// 	        transition: opacity .4s ease-out;
+// 	}
+// 	&:hover img { opacity: 0.7;}
+// }
+
+//--------------------------------------------------
+//    Hover InsetBorder for Img　-- マウスオーバーで画像の上にボーダー（widthを変えずに）
+//--------------------------------------------------
+// .insetBorder{
+// 	overflow: hidden;
+// 	display: inline-block;
+// 	//ガタついたのでコメアウト
+// 	// -webkit-transition: all .1s ease;
+// 	// transition: all .1s ease;
+// 	// img{
+// 	// 	-webkit-transition: all .1s ease;
+// 	// 	transition: all .1s ease;
+
+// 	// }
+// 	&:hover{
+// 		 border: 3px solid $blue;
+// 		img{
+// 			margin: -3px;
+// 		}
+// 	}
+// }
+/*============================
+DEFAULT CLASS
+============================*/
+@if $use_extend_object {
+
+    // Layout
+    .fL { float: left !important; }
+    .fR { float: right !important; }
+
+    .dI { display: inline !important; }
+    .dIb { display: inline-block !important; }
+    .dB { display: block !important; }
+
+    // Text
+    .bold { font-weight: bold !important; }
+    .normal { font-weight: normal !important; }
+
+    .aC { text-align: center !important; }
+    .aR { text-align: right !important; }
+    .aL { text-align: left !important; }
+
+    // Font-size（rem）
+    // .fz18 { font-size: fz(18) !important; } //【注釈など】
+    // .fz22 { font-size: fz(22) !important; } //【パンくず】
+    // .fz24 { font-size: fz(24) !important; } //【デフォルトサイズ】
+    // // .fz26 { font-size: fz(26) !important; }
+    // .fz28 { font-size: fz(28) !important; } //ページ内アンカー（/preparations/calender/とか）
+    // .fz30 { font-size: fz(30) !important; } //【ひよこの見出し部分】
+    // // .fz32 { font-size: fz(32) !important; }
+    // .fz34 { font-size: fz(34) !important; } //【ページのキャッチ２（黒）】
+    // // .fz36 { font-size: fz(36) !important; }
+    // // .fz38 { font-size: fz(38) !important; }
+    // .fz40 { font-size: fz(40) !important; } //【ページのキャッチ（ピンク）】
+    // // .fz44 { font-size: fz(44) !important; }
+    // // .fz48 { font-size: fz(48) !important; }
+
+    // Line-height
+    .lh1_2 { line-height: 1.2 !important; }
+    .lh1_4 { line-height: 1.4 !important; }
+    .lh1_6 { line-height: 1.6 !important; }
+    .lh1_8 { line-height: 1.8 !important; }
+    .lh2 { line-height: 2 !important; }
+
+
+    // 余白調整用のクラス
+    @if $use_spacing_classes {
+        .m0 { margin: 0 !important; }
+        .m0a { margin: 0 auto !important; }
+        //SP版は4単位で100まで
+        @for $i from -1 through 25 {
+            .mT#{$i * 4} { margin-top: 4px * $i !important; }
+            .mB#{$i * 4} { margin-bottom: 4px * $i !important; }
+            .mR#{$i * 4} { margin-right: 4px * $i !important; }
+            .mL#{$i * 4} { margin-left: 4px * $i !important; }
+        }
+    }
+
+    .p0 { padding: 0 !important; }
+    .pT0 { padding-top: 0 !important; }
+    .pB0 { padding-bottom: 0 !important; }
+    .pT24 { padding-top: 24px !important; }
+    .pB24 { padding-bottom: 24px !important; }
+    .pT48 { padding-top: 48px !important; }
+    .pB48 { padding-bottom: 48px !important; }
+}
+//Android4系のテキスト領域が縮むバグの対処用
+// http://rapid-progress.net/android-text-bug/
+// http://www.hirokonakahara.com/blog/?p=1524
+// .textFix{background-color:#fff;}
+p,li,dt,dd,h2,h3,h4,span{background: url('../images/spacer.gif') 0 0 no-repeat;}
+//上記以外でバグが起こったら下記クラスを利用
+.textFix{background: url('../images/spacer.gif') 0 0 no-repeat !important;}
+
+/* clearfix */
+///* newest clearfix　forIE8 and newer */
+.cf:after,.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+}

@@ -1,0 +1,25 @@
+
+	<%= form_for(question) do |f| %>
+		<div class="c_mb40 title">
+			<%= f.label :title %>
+			<%= f.text_field :title %>
+		</div>
+		<div class="c_mb40 content">
+			<%= f.label :content %>
+			<%= f.text_area :content %>
+		</div>
+		<div class="c_mb40 lat">
+			<%= f.label :lat %>
+			<%= f.text_field :lat %>
+		</div>
+		<div class="c_mb40 lng">
+			<%= f.label :lng %>
+			<%= f.text_field :lng %>
+		</div>
+
+		<%= f.label :user_id %>
+		<%= f.text_field :user_id %>
+
+		<%= f.submit class:"submit_btn0 c_mcenter" %>
+		
+	<% end %>

@@ -1,0 +1,10 @@
+<h1>Questions#all</h1>
+<p>All</p>
+
+<% @questions.each do |question| %>
+	<h2><%= question.title %></h2>
+	<p><%= question.content %></p>
+	<p>緯度：<%= question.lat %></p>
+	<p>経度：<%= question.lng %></p>
+	<p>user_id：<%= question.user_id %></p>
+<% end %>

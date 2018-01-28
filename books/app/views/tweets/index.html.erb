@@ -1,0 +1,19 @@
+<div id="content">
+	<h2>日記一覧</h2>
+	<div class="cf">
+		<a href="/tweets/new" class="submit_btn1 float_right">日記を投稿する</a>
+	</div>
+
+	<% @tweets.each do |tweet| %>
+		<div class="c_mb100 tweet_container">
+			<h2><%= tweet.title %></h2>
+			<p><%= tweet.content.truncate(20) %></p>
+			<!--
+			<a href="/tweets/detail/<%= tweet.id %>">続きを読む＞＞</a>
+			-->
+	        <%= link_to 'Show', tweet %>
+			<%= link_to 'Edit', edit_tweet_path(tweet) %>
+		</div>
+	<% end %>
+	<%= paginate @tweets %>
+</div>

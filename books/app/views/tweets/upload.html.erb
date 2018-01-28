@@ -1,0 +1,9 @@
+<%= form_tag({ action: :upload_process }, multipart: true) do %>
+
+	<label>
+	ファイルを指定：<%= file_field_tag :upfile, size: 50 %>
+	</label>
+	<%= text_field_tag :id, @tweet.id %>
+	<%= submit_tag 'アップロード' %>
+
+<% end %>
