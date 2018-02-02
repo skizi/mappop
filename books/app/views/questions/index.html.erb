@@ -1,2 +1,57 @@
-<h1>Questions#index</h1>
-<p>Find me in app/views/questions/index.html.erb</p>
+<% content_for :js_css_include do %>
+	<%= stylesheet_link_tag "all", :media => "all" %>
+
+	<%= javascript_include_tag 'libs', media:'all', 'data-turbolinks-track': 'reload' %>
+	<script>
+		var app = {};
+		function initMap(){
+		  app.initMap();
+		}
+	</script>
+	<%= javascript_include_tag 'questions/main', media:'all', 'data-turbolinks-track': 'reload' %>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbL29XjQJ8Qrovfqi_xDRJz88MbmSBREQ&callback=initMap"
+	    async defer></script>
+<% end %>
+
+<p>GoogleMap</p>
+<div class="map_container">
+	<div class="map"></div>
+	<a href="javascript:void(0);" class="btn0">質問を投稿</a>
+</div>
+
+
+<div class="modal new">
+	<div class="inner">
+		<div class="c_mb30">
+			<label for="question_title">Title</label>
+			<input type="text" name="title" class="title">
+		</div>
+		<div class="c_mb30">
+			<label for="question_content">Content</label>
+			<textarea name="content" class="content"></textarea>
+		</div>
+
+		<label for="question_user_id">User</label>
+		<input type="text" class="c_mb30" name="user_id" id="question_user_id">
+
+		<input type="submit" name="commit" value="Create Question" class="btn0 submit_btn c_mcenter" data-disable-with="Create Question">
+
+		<a href="javascript:void(0);" class="close_btn">×</a>
+	</div>
+</div>
+
+
+<div class="modal show">
+	<div class="inner">
+		<div class="c_mb30">
+			<label for="question_title">Title</label>
+			<input type="text" name="title" class="title">
+		</div>
+		<div class="c_mb30">
+			<label for="question_content">Content</label>
+			<textarea name="content" class="content"></textarea>
+		</div>
+
+		<a href="javascript:void(0);" class="close_btn">×</a>
+	</div>
+</div>

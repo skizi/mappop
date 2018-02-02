@@ -1,46 +1,51 @@
 import MainMenu from './MainMenu';
 import Map from './Map';
+import NewPostModal from './NewPostModal';
+import ShowPostModal from './ShowPostModal';
 
 
 class Main{
 
   constructor(){
 
-    $( window ).load(function(){
+    window.onready = function(){
       new MainMenu();
-    });
-
-
-    var url = 'http://localhost:3000/questions.json';
-    $.ajax({
-        url:url,
-        type:'POST',
-        // xhrFields: {
-        //   withCredentials: true
-        // },
-        data:{
-            title:'title0',
-            content:'text',
-            lat:0,
-            lng:1,
-            user_id:0
-        },
-        success:function( result ){
-          console.log( result );
-        },
-        error:function( result ){
-          console.log( result );
-        }
-    })
+      this.newPostModal = new NewPostModal();
+      this.showPostModal = new ShowPostModal();
+    }.bind( this );
 
   }
 
 
   initMap(){
-    new Map();
+
+    this.map = new Map();
+    this.map.initMap();
+    this.map.element.addEventListener( 'ysdCallback', this.mapCallBackHandler.bind( this ) );
+  
+  }
+
+
+  mapCallBackHandler( e ){
+    
+    var obj = e.detail.value;
+    switch( obj.type ){
+
+      case 'popupClick':
+        this.showPostModal.setText( obj.data.title, obj.data.content );
+        this.showPostModal.show();
+        break;
+
+      case 'newPost':
+        this.newPostModal.lat = data.lat;
+        this.newPostModal.lng = data.lng;
+        this.newPostModal.show();
+        break;
+
+    }
   }
 
 }
 
 var main = new Main();
-app.initMap = main.initMap;
+app.initMap = main.initMap.bind( main );

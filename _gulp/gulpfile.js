@@ -24,7 +24,7 @@ gulp.task('concat_libs', function() {
     .pipe(plumber())
     .pipe(concat("libs.js"))
     //.pipe(uglify())
-    .pipe(gulp.dest('../htdocs/assets/js'));
+    .pipe(gulp.dest('../books/app/assets/javascripts'));
 
 });
 
@@ -42,7 +42,7 @@ gulp.task('concat', function() {
             this.emit("end");
         })
         .pipe(source("main.js"))
-        .pipe(gulp.dest('../htdocs/assets/js'));
+        .pipe(gulp.dest('../books/app/assets/javascripts/questions'));
 
 });
 
@@ -59,7 +59,7 @@ gulp.task('compass', function() {
         comments: false
     }))
     //.pipe(minifyCSS())
-    .pipe(gulp.dest('../htdocs/assets/css'));
+    .pipe(gulp.dest('../books/app/assets/stylesheets'));
 });
 
 

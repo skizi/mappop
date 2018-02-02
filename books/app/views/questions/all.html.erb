@@ -1,8 +1,9 @@
-<h1>Questions#all</h1>
-<p>All</p>
+
+
+<h2>投稿一覧</h2>
 
 <% @questions.each do |question| %>
-	<h2><%= question.title %></h2>
+	<h2>Q.<%= question.title %></h2>
 	<p><%= question.content %></p>
 	<p>緯度：<%= question.lat %></p>
 	<p>経度：<%= question.lng %></p>

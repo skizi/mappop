@@ -1,4 +1,7 @@
 class QuestionsController < ApplicationController
+  # layout 'questions'
+
+
   def index
   end
 

@@ -12,7 +12,19 @@ html{
     overflow: hidden;
 }
 
-#map{
+.map_container{
     height: 512px;
     width: 512px;
+    position: relative;
+
+	.map{
+	    height: 512px;
+	    width: 512px;
+	}
+
+	.btn0{
+		position: absolute;
+		left: 130px;
+		bottom: 20px;
+	}
 }

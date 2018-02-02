@@ -1,0 +1,13 @@
+
+<header>
+	<h1>MapPop</h1>
+	<ul class="main_menu">
+		<li><%= link_to "トップページ", :controller => "home", :action => "index" %></li>
+		<li><%= link_to "MapPopをみる", :controller => "questions", :action => "index" %></li>
+	</ul>
+
+	<ul class="sub_menu">
+		<li><%= link_to "ログイン", :controller => "sessions", :action => "new" %></li>
+		<li><%= link_to "新規登録", :controller => "users", :action => "new" %></li>
+	</ul>
+</header>
