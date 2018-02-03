@@ -24,11 +24,10 @@ class QuestionsController < ApplicationController
 
   def all
     @questions = Question.all
+    # @comments = @questions.comments.all
     respond_to do |format|
       format.html{ render :all }
-      format.json{
-        render json: @questions
-      }
+      format.json{ render json: @questions }
     end
   end
 
@@ -41,7 +40,7 @@ class QuestionsController < ApplicationController
 
   def create
 
-    if params
+    if params['title']
       @question = Question.new
       @question.title = params['title']
       @question.content = params['content']

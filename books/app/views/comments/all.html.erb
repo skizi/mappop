@@ -1,0 +1,10 @@
+
+
+<h2>コメント一覧</h2>
+
+<% @comments.each do |comment| %>
+	<hr>
+	<p>質問番号:<%= comment.question_id %></p>
+	<p>コメント：<%= comment.content %></p>
+	<p>user_id：<%= comment.user_id %></p>
+<% end %>

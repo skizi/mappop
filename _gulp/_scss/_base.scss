@@ -217,5 +217,15 @@ input[type="checkbox"]:checked:after {
                 opacity: 0.7;
             }
         }
+
+        .comments_title{
+            margin-bottom: 10px;
+        }
+
+        .comments{
+            li{
+                margin-bottom: 10px;
+            }
+        }
     }
 }

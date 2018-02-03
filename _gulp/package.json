@@ -1,5 +1,5 @@
 {
-  "name": "fluxtest",
+  "name": "mappop",
   "version": "1.0.0",
   "description": "honda ch",
   "main": "gulpfile.js",
@@ -21,6 +21,7 @@
     "babelify": "^7.3.0",
     "gulp": "^3.9.0",
     "gulp-compass": "^2.1.0",
+    "gulp-notify": "^3.2.0",
     "gulp-strip-debug": "^1.1.0",
     "gulp-uglify": "^1.4.1"
   },

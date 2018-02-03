@@ -50,13 +50,14 @@ var Main = function () {
       switch (obj.type) {
 
         case 'popupClick':
-          this.showPostModal.setText(obj.data.title, obj.data.content);
+          this.showPostModal.refresh();
+          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id);
           this.showPostModal.show();
           break;
 
         case 'newPost':
-          this.newPostModal.lat = data.lat;
-          this.newPostModal.lng = data.lng;
+          this.newPostModal.lat = obj.lat;
+          this.newPostModal.lng = obj.lng;
           this.newPostModal.show();
           break;
 
@@ -94,6 +95,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Map = function () {
@@ -116,7 +123,7 @@ var Map = function () {
     key: 'initMap',
     value: function initMap() {
 
-      var url = 'http://localhost:3000/questions/all.json';
+      var url = _Util2.default.apiHeadUrl + '/questions/all.json';
       $.ajax({
         url: url,
         type: 'GET',
@@ -169,7 +176,7 @@ var Map = function () {
 
 exports.default = Map;
 
-},{}],4:[function(require,module,exports){
+},{"./Util":7}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -222,6 +229,10 @@ var _Modal2 = require('./Modal');
 
 var _Modal3 = _interopRequireDefault(_Modal2);
 
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -264,7 +275,7 @@ var NewPostModal = function (_Modal) {
         return;
       }
 
-      var url = 'http://localhost:3000/questions.json';
+      var url = _Util2.default.apiHeadUrl + '/questions.json';
       $.ajax({
         url: url,
         type: 'POST',
@@ -298,7 +309,7 @@ var NewPostModal = function (_Modal) {
 
 exports.default = NewPostModal;
 
-},{"./Modal":4}],6:[function(require,module,exports){
+},{"./Modal":4,"./Util":7}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -310,6 +321,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _Modal2 = require('./Modal');
 
 var _Modal3 = _interopRequireDefault(_Modal2);
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -329,6 +344,10 @@ var ShowPostModal = function (_Modal) {
 
     _this.title = document.querySelector('.modal.show .title');
     _this.content = document.querySelector('.modal.show .content');
+    _this.comment = document.querySelector('.modal.show .comment');
+    _this.comments = document.querySelector('.modal.show .comments');
+    _this.answerBtn = document.querySelector('.modal.show .answer_btn');
+    _this.answerBtn.addEventListener('click', _this.answerBtnClickHandler.bind(_this));
 
     _this.hide();
 
@@ -337,10 +356,62 @@ var ShowPostModal = function (_Modal) {
 
   _createClass(ShowPostModal, [{
     key: 'setText',
-    value: function setText(title, content) {
+    value: function setText(title, content, questionId) {
 
-      this.title.value = title;
-      this.content.value = content;
+      this.title.innerHTML = title;
+      this.content.innerHTML = content;
+      this.questionId = questionId;
+      var url = _Util2.default.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
+      $.ajax({
+        url: url,
+        type: 'GET',
+        data: {},
+        success: function (results) {
+          console.log(results);
+          this.addComments(results);
+        }.bind(this),
+        error: function (result) {
+          console.log(result);
+        }.bind(this)
+      });
+    }
+  }, {
+    key: 'answerBtnClickHandler',
+    value: function answerBtnClickHandler() {
+
+      var comment = this.comment.value;
+      var question_id = this.questionId;
+      var url = _Util2.default.apiHeadUrl + '/comments.json';
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data: { content: comment, question_id: question_id, user_id: 0 },
+        success: function success(result) {
+          console.log(result);
+        },
+        error: function (result) {
+          console.log(result);
+        }.bind(this)
+      });
+    }
+  }, {
+    key: 'addComments',
+    value: function addComments(results) {
+
+      var html = '';
+      var length = results.length;
+      for (var i = 0; i < length; i++) {
+        var obj = results[i];
+        html += '<li>' + obj.content + '</li>';
+      }
+      this.comments.innerHTML = html;
+    }
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+
+      this.comment.value = '';
+      this.comments.innerHTML = '';
     }
   }]);
 
@@ -349,4 +420,13 @@ var ShowPostModal = function (_Modal) {
 
 exports.default = ShowPostModal;
 
-},{"./Modal":4}]},{},[1]);
+},{"./Modal":4,"./Util":7}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+
+	apiHeadUrl: 'http://localhost:3000'
+
+};
+
+},{}]},{},[1]);

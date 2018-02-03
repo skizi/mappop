@@ -6,12 +6,14 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
-  get 'comments/index'
-  get 'comments/show'
-
 
   get 'questions/all'
   get 'questions/new/:user_id' => 'questions#new'
+
+
+  get 'comments/all'
+  get 'comments/get_comments/:question_id' => 'comments#get_comments'
+  get 'comments/new/:user_id' => 'comments#new'
 
 
   #記述が上の方のものほど重要度が増す
@@ -26,12 +28,17 @@ Rails.application.routes.draw do
   resources :questions
   resources :tweets
   resources :users
+  resources :comments
 
 
   get 'questions/index'
   get 'questions/show'
   get 'questions/new'
   get 'questions/save'
+
+
+  get 'comments/index'
+  get 'comments/show'
 
 
   get 'tweets/index'

@@ -32,13 +32,14 @@ class Main{
     switch( obj.type ){
 
       case 'popupClick':
-        this.showPostModal.setText( obj.data.title, obj.data.content );
+        this.showPostModal.refresh();
+        this.showPostModal.setText( obj.data.title, obj.data.content, obj.data.id );
         this.showPostModal.show();
         break;
 
       case 'newPost':
-        this.newPostModal.lat = data.lat;
-        this.newPostModal.lng = data.lng;
+        this.newPostModal.lat = obj.lat;
+        this.newPostModal.lng = obj.lng;
         this.newPostModal.show();
         break;
 

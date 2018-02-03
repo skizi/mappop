@@ -8,6 +8,7 @@ var plumber   = require('gulp-plumber');
 var source = require('vinyl-source-stream');// bundle の返したファイルストリームを vinyl に変換
 var babelify = require('babelify');
 var browserify = require('browserify');
+var notify = require('gulp-notify');
 
 
 
@@ -59,7 +60,8 @@ gulp.task('compass', function() {
         comments: false
     }))
     //.pipe(minifyCSS())
-    .pipe(gulp.dest('../books/app/assets/stylesheets'));
+    .pipe(gulp.dest('../books/app/assets/stylesheets'))
+    .pipe(notify('Sassコンパイル完了'));
 });
 
 

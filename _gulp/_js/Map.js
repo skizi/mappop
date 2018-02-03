@@ -1,4 +1,7 @@
 
+import Util from './Util';
+
+
 export default class Map{
 
   constructor(){
@@ -19,7 +22,7 @@ export default class Map{
 
   initMap() {
 
-    var url = 'http://localhost:3000/questions/all.json';
+    var url = Util.apiHeadUrl + '/questions/all.json';
     $.ajax({
         url:url,
         type:'GET',

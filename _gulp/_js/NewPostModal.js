@@ -1,5 +1,6 @@
 
 import Modal from './Modal';
+import Util from './Util';
 
 export default class NewPostModal extends Modal{
 
@@ -31,7 +32,7 @@ export default class NewPostModal extends Modal{
       return;
     }
 
-    var url = 'http://localhost:3000/questions.json';
+    var url = Util.apiHeadUrl + '/questions.json';
     $.ajax({
         url:url,
         type:'POST',
