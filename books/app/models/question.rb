@@ -1,3 +1,3 @@
 class Question < ApplicationRecord
-  has_many :comment
+  has_many :comments
 end

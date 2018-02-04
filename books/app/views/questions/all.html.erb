@@ -8,4 +8,5 @@
 	<p>緯度：<%= question.lat %></p>
 	<p>経度：<%= question.lng %></p>
 	<p>user_id：<%= question.user_id %></p>
+	(<%= question.comments.each do |r| %><%= r.content %><% end %>)
 <% end %>
