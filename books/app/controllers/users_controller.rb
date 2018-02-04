@@ -6,7 +6,13 @@ class UsersController < ApplicationController
   end
 
   def show
-	@user = User.find( params[:id] )  
+	@user = User.find( params[:id] )
+
+  @img_paths = []
+  jpgs = Dir.glob(Rails.root.join('public', '*.jpg'))
+  jpgs.each do |png|
+    @img_paths.push('/'+File.basename(png))
+  end
   #@user = User.find_by( :username => params[:username] )
   end
 
@@ -38,15 +44,69 @@ class UsersController < ApplicationController
 
 
   def edit
+    @user = User.find(params[:id])
   end
+
+
+
+  def update
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html{ redirect_to @user, notice: 'user was successfully updated.' }
+      else
+        format.html{ render :show }
+      end
+    end
+  end
+  # def update
+  #   @user = User.find(params[:id])
+  #   # @user = User.new(user_params)
+  #   # @user = User.find( params[:id] ) 
+  #   # @user.photo = params[:photo]
+
+  #   respond_to do |format|
+  #     if @user.update(user_params)
+  #       format.html { redirect_to @user, notice: 'User was successfully created.' }
+  #       format.json { render :show, status: :created, location: @user }
+  #     else
+  #       format.html { render :show }
+  #       format.json { render json: @user.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
 
   def upload
   end
+
+  def upload_process
+    file = params[:upfile]
+    name = file.original_filename
+    perms = ['.jpg', '.jpeg', '.gif', '.png']
+
+    if !perms.include?( File.extname( name ).downcase )
+      result = 'アップロードできるのは画像ファイルのみです'
+    elsif file.size > 1.megabyte
+      result = 'ファイルサイズは1MBまでです。'
+    else 
+      File.open("public/docs/#{name}", 'wb') { |f| f.write(file.read) }
+      result = "#{name}をアップロードしました。"
+    end
+
+
+    user = User.find(params[:id])
+    user.photo = "docs/#{name}"
+    user.save
+
+    #render :json => tweet
+    #render plain: result
+    redirect_to '/users/' + params[:id].to_s
+    #render plain: "id:" + params[:id]
+  end
   
 
   def user_params
-    params.require(:user).permit(:name, :username, :location, :about, :email, :password)
+    params.require(:user).permit(:name, :username, :location, :about, :email, :password, :photo)
   end
 
 end

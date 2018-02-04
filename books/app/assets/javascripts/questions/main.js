@@ -51,7 +51,7 @@ var Main = function () {
 
         case 'popupClick':
           this.showPostModal.refresh();
-          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id);
+          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id, obj.data.comments);
           this.showPostModal.show();
           break;
 
@@ -356,24 +356,25 @@ var ShowPostModal = function (_Modal) {
 
   _createClass(ShowPostModal, [{
     key: 'setText',
-    value: function setText(title, content, questionId) {
+    value: function setText(title, content, questionId, comments) {
 
       this.title.innerHTML = title;
       this.content.innerHTML = content;
       this.questionId = questionId;
-      var url = _Util2.default.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: {},
-        success: function (results) {
-          console.log(results);
-          this.addComments(results);
-        }.bind(this),
-        error: function (result) {
-          console.log(result);
-        }.bind(this)
-      });
+      this.addComments(comments);
+      // var url = Util.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
+      // $.ajax({
+      //     url:url,
+      //     type:'GET',
+      //     data:{},
+      //     success:function( results ){
+      //       console.log( results );
+      //       this.addComments( results );
+      //     }.bind( this ),
+      //     error:function( result ){
+      //       console.log( result );
+      //     }.bind( this )
+      // });
     }
   }, {
     key: 'answerBtnClickHandler',
@@ -396,12 +397,12 @@ var ShowPostModal = function (_Modal) {
     }
   }, {
     key: 'addComments',
-    value: function addComments(results) {
+    value: function addComments(comments) {
 
       var html = '';
-      var length = results.length;
+      var length = comments.length;
       for (var i = 0; i < length; i++) {
-        var obj = results[i];
+        var obj = comments[i];
         html += '<li>' + obj.content + '</li>';
       }
       this.comments.innerHTML = html;

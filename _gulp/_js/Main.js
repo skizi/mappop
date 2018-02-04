@@ -33,7 +33,7 @@ class Main{
 
       case 'popupClick':
         this.showPostModal.refresh();
-        this.showPostModal.setText( obj.data.title, obj.data.content, obj.data.id );
+        this.showPostModal.setText( obj.data.title, obj.data.content, obj.data.id, obj.data.comments );
         this.showPostModal.show();
         break;
 

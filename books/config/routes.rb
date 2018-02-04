@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new'
   get 'users/all'
   get 'users/:id' => 'users#show'
+  post 'users/upload_process'
 
   get 'tweets/upload/:id' => 'tweets#upload'
 

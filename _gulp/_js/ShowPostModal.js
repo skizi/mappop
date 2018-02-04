@@ -20,24 +20,25 @@ export default class ShowPostModal extends Modal{
   }
 
 
-  setText( title, content, questionId ){
+  setText( title, content, questionId, comments ){
 
     this.title.innerHTML = title;
     this.content.innerHTML = content;
     this.questionId = questionId;
-    var url = Util.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
-    $.ajax({
-        url:url,
-        type:'GET',
-        data:{},
-        success:function( results ){
-          console.log( results );
-          this.addComments( results );
-        }.bind( this ),
-        error:function( result ){
-          console.log( result );
-        }.bind( this )
-    });
+    this.addComments( comments );
+    // var url = Util.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
+    // $.ajax({
+    //     url:url,
+    //     type:'GET',
+    //     data:{},
+    //     success:function( results ){
+    //       console.log( results );
+    //       this.addComments( results );
+    //     }.bind( this ),
+    //     error:function( result ){
+    //       console.log( result );
+    //     }.bind( this )
+    // });
 
   }
 
@@ -62,12 +63,12 @@ export default class ShowPostModal extends Modal{
   }
 
 
-  addComments( results ){
+  addComments( comments ){
 
     var html = '';
-    var length = results.length;
+    var length = comments.length;
     for( var i = 0; i < length; i++ ){
-      var obj = results[i];
+      var obj = comments[i];
       html += '<li>' + obj.content + '</li>';
     }
     this.comments.innerHTML = html;

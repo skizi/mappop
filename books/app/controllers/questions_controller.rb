@@ -27,7 +27,7 @@ class QuestionsController < ApplicationController
     @questions = Question.includes(:comments).all
     respond_to do |format|
       format.html{ render :all }
-      format.json{ render json: @questions }
+      format.json{ render json: @questions.to_json(:include => :comments) }
     end
   end
 
