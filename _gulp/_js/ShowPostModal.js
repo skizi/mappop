@@ -65,11 +65,17 @@ export default class ShowPostModal extends Modal{
 
   addComments( comments ){
 
-    var html = '';
+    var html = "";
     var length = comments.length;
     for( var i = 0; i < length; i++ ){
       var obj = comments[i];
-      html += '<li>' + obj.content + '</li>';
+      if( obj.user_id ){
+        var src = '/docs/user_icon/' + obj.user_id + '.jpg';
+      }else{
+        src = '/docs/user_icon/no_image.jpg';
+      }
+
+      html += '<li><img src="' + src + '" width="30">' + obj.content + '</li>';
     }
     this.comments.innerHTML = html;
 

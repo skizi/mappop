@@ -61,6 +61,7 @@ class CommentsController < ApplicationController
 
 
   def comment_params
+    #user_icon付け足す
     params.require(:comment).permit(:content, :user_id, :question_id)
   end
 

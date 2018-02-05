@@ -5,16 +5,20 @@ class SessionsController < ApplicationController
   end
 
   def create
+    if !params[:session]
+      render 'new'
+      return
+    end
 
   	#downcase：大文字を小文字に変換してくれる
     user = User.find_by(email: params[:session][:email].downcase)
     #user = User.find_by(:email => params[:session][:email])#.downcase
 
-  	#render plain: user.password_digest.to_s + "!!!"
-  	#render plain: user.authenticate( params[:session][:password] ).to_s
-  	#return
+  	# render plain: user.password_digest.to_s + "!!!"
+  	# render plain: user.authenticate( params[:session][:password] ).to_s
+  	# return
 
-    if user && user.password_digest && user.authenticate( params[:session][:password] ) then
+    if user && user.password_digest && user.authenticate( params[:session][:password] )
     	#authenticateメソッド：引数の文字列がパスワードと一致するとUserオブジェクトを、間違っているとfalse返すメソッド
     	#reset_session
     	#session[:user_id] = user.id
@@ -29,7 +33,7 @@ class SessionsController < ApplicationController
 
 
   def destroy
-  	log_out
+  	log_out if logged_in?
   	redirect_to root_url
   end
 

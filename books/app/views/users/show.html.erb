@@ -7,7 +7,13 @@
   <li>email : <%= @user[:email] %></li>
   <li>Location : <%= @user[:location] %></li>
   <li>About    : <%= @user[:about] %></li>
-  <li><img src="<%= url_for_public@user.photo %>"></li>
+  <li>
+  	<% if @user.photo.nil? %>
+  		<img src="/docs/user_icon/no_image.jpg" width="100">
+  	<% else %>
+  		<img src="<%= url_for_public@user.photo %>" width="100">
+  	<% end %>
+  </li>
 </ul>
 
 	
@@ -17,13 +23,6 @@
 	<label>
 	ファイルを指定：<%= file_field_tag :upfile, size: 50 %>
 	</label>
-	<%= text_field_tag :id, @user.id %>
+	<%= hidden_field_tag :id, @user.id %>
 	<%= submit_tag 'アップロード' %>
 <% end %>
-<!--
-<%= form_for(@user) do |f| %>
-    <%= f.label :photo %>
-    <%= f.file_field :photo %>
-	<%= f.submit class:"submit_btn0 c_mcenter" %>
-<% end %>
--->

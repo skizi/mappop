@@ -1,8 +1,9 @@
 <h1>Users#all</h1>
-<p>現在のログインユーザー：
-<%= User.find_by(id: session[:user_id]).name %>
-<!--<%= current_user.name %>-->
-
+<% if logged_in? %>
+	<p>現在のログインユーザー：
+	<%= User.find_by(id: session[:user_id]).name %>
+	<!--<%= current_user.name %>-->
+<% end %>
 <% if logged_in? %>
 	<%= link_to "ログアウト", logout_path, method: :delete %>
 <% else %>

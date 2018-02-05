@@ -6,14 +6,14 @@ class UsersController < ApplicationController
   end
 
   def show
-	@user = User.find( params[:id] )
+  	@user = User.find( params[:id] )
 
-  @img_paths = []
-  jpgs = Dir.glob(Rails.root.join('public', '*.jpg'))
-  jpgs.each do |png|
-    @img_paths.push('/'+File.basename(png))
-  end
-  #@user = User.find_by( :username => params[:username] )
+    @img_paths = []
+    jpgs = Dir.glob(Rails.root.join('public', '*.jpg'))
+    jpgs.each do |png|
+      @img_paths.push('/'+File.basename(png))
+    end
+    #@user = User.find_by( :username => params[:username] )
   end
 
 
@@ -30,9 +30,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-
     respond_to do |format|
       if @user.save
+        log_in @user
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -81,7 +81,8 @@ class UsersController < ApplicationController
 
   def upload_process
     file = params[:upfile]
-    name = file.original_filename
+    # name = file.original_filename
+    name = params[:id].to_s + '.' + file.original_filename.split('.')[1]
     perms = ['.jpg', '.jpeg', '.gif', '.png']
 
     if !perms.include?( File.extname( name ).downcase )
@@ -89,13 +90,13 @@ class UsersController < ApplicationController
     elsif file.size > 1.megabyte
       result = 'ファイルサイズは1MBまでです。'
     else 
-      File.open("public/docs/#{name}", 'wb') { |f| f.write(file.read) }
+      File.open("public/docs/user_icon/#{name}", 'wb') { |f| f.write(file.read) }
       result = "#{name}をアップロードしました。"
     end
 
 
     user = User.find(params[:id])
-    user.photo = "docs/#{name}"
+    user.photo = "docs/user_icon/#{name}"
     user.save
 
     #render :json => tweet

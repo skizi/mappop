@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   get 'login' => 'sessions#new'
+  # 'sessions#new'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
