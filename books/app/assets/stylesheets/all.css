@@ -640,7 +640,11 @@ input[type="checkbox"]:checked:after { display: block; position: absolute; left:
 .modal .inner .close_btn { position: absolute; top: 10px; right: 10px; font-weight: bold; font-size: 24px; text-decoration: none; }
 .modal .inner .close_btn:hover { opacity: 0.7; }
 .modal .inner .comments_title { margin-bottom: 10px; }
-.modal .inner .comments li { margin-bottom: 10px; }
+.modal .inner .comments { height: 170px; overflow-y: scroll; }
+.modal .inner .comments li { margin-bottom: 10px; overflow: hidden; *zoom: 1; }
+.modal .inner .comments li img { float: left; }
+.modal .inner .comments li p { height: 30px; line-height: 30px; margin-left: 8px; float: left; }
+.modal .inner .comments li p.no_comment { margin-left: 0; }
 
 /*  CLASSES  */
 /*============================

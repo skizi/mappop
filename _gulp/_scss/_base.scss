@@ -223,8 +223,27 @@ input[type="checkbox"]:checked:after {
         }
 
         .comments{
+            height: 170px;
+            overflow-y: scroll;
+
             li{
                 margin-bottom: 10px;
+                @include clearfix;
+
+                img{
+                    float:left;
+                }
+
+                p{
+                    height: 30px;
+                    line-height: 30px;
+                    margin-left: 8px;
+                    float: left;
+
+                    &.no_comment{
+                        margin-left: 0;
+                    }
+                }
             }
         }
     }

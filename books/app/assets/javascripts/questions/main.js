@@ -313,7 +313,7 @@ exports.default = NewPostModal;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -335,94 +335,116 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ShowPostModal = function (_Modal) {
-  _inherits(ShowPostModal, _Modal);
+    _inherits(ShowPostModal, _Modal);
 
-  function ShowPostModal() {
-    _classCallCheck(this, ShowPostModal);
+    function ShowPostModal() {
+        _classCallCheck(this, ShowPostModal);
 
-    var _this = _possibleConstructorReturn(this, (ShowPostModal.__proto__ || Object.getPrototypeOf(ShowPostModal)).call(this, '.modal.show'));
+        var _this = _possibleConstructorReturn(this, (ShowPostModal.__proto__ || Object.getPrototypeOf(ShowPostModal)).call(this, '.modal.show'));
 
-    _this.title = document.querySelector('.modal.show .title');
-    _this.content = document.querySelector('.modal.show .content');
-    _this.comment = document.querySelector('.modal.show .comment');
-    _this.comments = document.querySelector('.modal.show .comments');
-    _this.answerBtn = document.querySelector('.modal.show .answer_btn');
-    _this.answerBtn.addEventListener('click', _this.answerBtnClickHandler.bind(_this));
+        _this.title = document.querySelector('.modal.show .title');
+        _this.content = document.querySelector('.modal.show .content');
+        _this.comment = document.querySelector('.modal.show .comment');
+        _this.comments = document.querySelector('.modal.show .comments');
+        _this.answerBtn = document.querySelector('.modal.show .answer_btn');
+        _this.answerBtn.addEventListener('click', _this.answerBtnClickHandler.bind(_this));
 
-    _this.hide();
+        _this.hide();
 
-    return _this;
-  }
-
-  _createClass(ShowPostModal, [{
-    key: 'setText',
-    value: function setText(title, content, questionId, comments) {
-
-      this.title.innerHTML = title;
-      this.content.innerHTML = content;
-      this.questionId = questionId;
-      this.addComments(comments);
-      // var url = Util.apiHeadUrl + '/comments/get_comments/' + questionId + '.json';
-      // $.ajax({
-      //     url:url,
-      //     type:'GET',
-      //     data:{},
-      //     success:function( results ){
-      //       console.log( results );
-      //       this.addComments( results );
-      //     }.bind( this ),
-      //     error:function( result ){
-      //       console.log( result );
-      //     }.bind( this )
-      // });
+        return _this;
     }
-  }, {
-    key: 'answerBtnClickHandler',
-    value: function answerBtnClickHandler() {
 
-      var comment = this.comment.value;
-      var question_id = this.questionId;
-      var url = _Util2.default.apiHeadUrl + '/comments.json';
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: { content: comment, question_id: question_id, user_id: 0 },
-        success: function success(result) {
-          console.log(result);
-        },
-        error: function (result) {
-          console.log(result);
-        }.bind(this)
-      });
-    }
-  }, {
-    key: 'addComments',
-    value: function addComments(comments) {
+    //--------------------マウスイベント-------------------
 
-      var html = "";
-      var length = comments.length;
-      for (var i = 0; i < length; i++) {
-        var obj = comments[i];
-        if (obj.user_id) {
-          var src = '/docs/user_icon/' + obj.user_id + '.jpg';
-        } else {
-          src = '/docs/user_icon/no_image.jpg';
+
+    _createClass(ShowPostModal, [{
+        key: 'answerBtnClickHandler',
+        value: function answerBtnClickHandler() {
+
+            var comment = this.comment.value;
+            var question_id = this.questionId;
+            var url = _Util2.default.apiHeadUrl + '/comments.json';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { content: comment, question_id: question_id, user_id: 0 },
+                success: function success(result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }.bind(this)
+            });
+
+            var noComment = this.comments.getElementsByClassName('no_comment')[0];
+            if (noComment) this.comments.removeChild(noComment);
+
+            this.addComment(comment, 0);
+            this.comment.value = '';
         }
 
-        html += '<li><img src="' + src + '" width="30">' + obj.content + '</li>';
-      }
-      this.comments.innerHTML = html;
-    }
-  }, {
-    key: 'refresh',
-    value: function refresh() {
+        //---------------------
 
-      this.comment.value = '';
-      this.comments.innerHTML = '';
-    }
-  }]);
+        //質問タイトルと、質問テキストを配置
 
-  return ShowPostModal;
+    }, {
+        key: 'setText',
+        value: function setText(title, content, questionId, comments) {
+
+            this.title.innerHTML = title;
+            this.content.innerHTML = content;
+            this.questionId = questionId;
+
+            if (comments.length == 0) {
+                this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
+            } else {
+                this.addComments(comments);
+            }
+        }
+
+        //コメント一覧を配置
+
+    }, {
+        key: 'addComments',
+        value: function addComments(comments) {
+
+            this.comments.innerHTML = '';
+            var length = comments.length;
+            for (var i = 0; i < length; i++) {
+                var obj = comments[i];
+                this.addComment(obj.content, obj.user_id);
+            }
+        }
+    }, {
+        key: 'addComment',
+        value: function addComment(content, user_id) {
+
+            var li = document.createElement('li');
+            this.comments.appendChild(li);
+
+            var img = new Image();
+            var src = '/docs/user_icon/' + user_id + '.jpg';
+            img.setAttribute('src', src);
+            img.setAttribute('width', '30');
+            li.appendChild(img);
+            img.onerror = function (_img) {
+                _img.setAttribute('src', '/docs/user_icon/no_image.jpg');
+            }.bind(this, img);
+
+            var p = document.createElement('p');
+            p.innerHTML = content;
+            li.appendChild(p);
+        }
+    }, {
+        key: 'refresh',
+        value: function refresh() {
+
+            this.comment.value = '';
+            this.comments.innerHTML = '';
+        }
+    }]);
+
+    return ShowPostModal;
 }(_Modal3.default);
 
 exports.default = ShowPostModal;
