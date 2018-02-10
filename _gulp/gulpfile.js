@@ -55,7 +55,7 @@ gulp.task('compass', function() {
     .pipe(plumber())
     .pipe(compass({
         config_file: '_scss/config.rb',
-        css : '../htdocs/assets/css',
+        css : '../books/app/assets/stylesheets',
         sass: '_scss',
         comments: false
     }))

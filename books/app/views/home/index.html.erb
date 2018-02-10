@@ -1,2 +1,11 @@
-<h2>その質問が世界を広げる</h2>
-<p>MapPopは地図上で投稿した自分の質問に回答をもらえるサービスです。</p>
+<div class="top_content">
+	<h2>さあ、街へ出かけよう。</h2>
+	<p>地図上で街の情報を共有しよう。</p>
+	<p>新たな街の魅力を知れるかも。</p>
+
+	<% if logged_in? %>
+		<%= link_to "地図をみる", questions_path, method: :index, :class => 'login_btn' %>
+	<% else %>
+		<%= link_to( "新規登録", { controller: "users", action: "new" }, class: :login_btn ) %>
+	<% end %>
+</div>

@@ -59,3 +59,9 @@ gem 'kaminari', '~> 0.17.0'
 #gem 'rack-cors', :require => 'rack/cors'
 gem 'rack-cors', :require => 'rack/cors', group: [:development, :test]
 gem 'bcrypt-ruby', '3.1.1.rc1', :require => 'bcrypt'
+
+
+#メタタグ系の設定用
+gem 'settingslogic'
+
+gem 'meta-tags'

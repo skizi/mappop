@@ -1,0 +1,20 @@
+
+<section class="main_menu">
+	<ul>
+		<li><%= link_to "トップページ", :controller => "home", :action => "index" %></li>
+		<li><%= link_to "MapPopをみる", :controller => "questions", :action => "index" %></li>
+
+		<% if logged_in? %>
+			<li><a href="/users/<%= session[:user_id] %>">マイページ</a></li>
+		<% else %>
+			<%= link_to "ログイン", login_path, method: :new %>
+		<% end %>
+	</ul>
+
+	<% if logged_in? %>
+		<p class="logout_btn">
+			<%= link_to "ログアウト", logout_path, method: :delete %></p>
+	<% else %>
+		<p class="signup_btn"><%= link_to "新規登録", :controller => "users", :action => "new" %></p>
+	<% end %>
+</section>

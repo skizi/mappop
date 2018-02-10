@@ -1,7 +1,7 @@
 http_path = "/"
-css_dir = "../htdocs/assets/css"
+css_dir = "../books/app/assets/stylesheets"
 sass_dir = "."
-images_dir = "../htdocs/assets/images"
+images_dir = "../books/app/assets/images"
 #javascripts_dir = "htdocs/assets/scripts"
 output_style = :compact
 line_comments = false

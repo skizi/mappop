@@ -1,0 +1,69 @@
+defaults: &defaults
+
+  # 全体ページ
+  site:
+    name: マップポップ MapPop
+    root_url: https://mappop.org
+    meta:
+      title: マップポップ MapPop
+      description: さあ、街へ出かけよう。地図上で街の情報を共有しよう。新たな街の魅力を知れるかも。
+      keywords: 地図, 質問, 街, おいしい店, 探す, 旅行, 散策, おもしろスポット
+      webclipicon: /webclipicon.png
+      favicon: /favicon.ico
+      fb:
+        app_id: 9999999999
+      og:
+        title: マップポップ MapPop
+        description: さあ、街へ出かけよう。地図上で街の情報を共有しよう。新たな街の魅力を知れるかも。
+        image: /img/ogp.png
+        type: website
+      twitter:
+        title: マップポップ MapPop
+        description: さあ、街へ出かけよう。地図上で街の情報を共有しよう。新たな街の魅力を知れるかも。
+        image: /img/ogp.png
+    sns_account:
+      twitter: https://twitter.com/sample
+      instagram: https://www.instagram.com/sample
+
+  # 個別ページ
+  about:
+    meta:
+      title: about page
+      description: about description
+      keywords: about1, about2, about3
+
+  # 複数OGP
+  ogp:
+    - index: 1
+      title: ogp1 title
+      description: ogp1 description
+      share_description: ogp1 share_description
+    - index: 2
+      title: ogp2 title
+      description: ogp2 description
+      share_description: ogp2 share_description
+    - index: 3
+      title: ogp3 title
+      description: ogp3 description
+      share_description: ogp3 share_description
+
+  # share
+  share:
+    twitter:
+      text: |-
+        description
+        #hashtag description
+      hashtags: hashtag1, hashtag2
+    line:
+      text: |-
+        description
+        description
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
