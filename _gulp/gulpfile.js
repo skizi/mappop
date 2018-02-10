@@ -32,19 +32,22 @@ gulp.task('concat_libs', function() {
 
 gulp.task('concat', function() {
 
-    browserify({
-            entries: "./_js/Main.js",
-            extensions: [".js"]
-        })
-        .transform(babelify, {presets: ['es2015']})
-        .bundle()
-        .on("error", function (err) {
-            console.log("Error : " + err.message);
-            this.emit("end");
-        })
-        .pipe(source("main.js"))
-        .pipe(gulp.dest('../books/app/assets/javascripts/questions'));
-
+    var jsFiles = [ 'Questions.js', 'Common.js'];
+    jsFiles.forEach(function(fileName) {
+        browserify({
+                entries: "./_js/" + fileName,
+                extensions: [".js"]
+            })
+            .transform(babelify, {presets: ['es2015']})
+            .bundle()
+            .on("error", function (err) {
+                console.log("Error : " + err.message);
+                this.emit("end");
+            })
+            .pipe(source( fileName ))
+            .pipe(gulp.dest( '../books/app/assets/javascripts' ))
+            .pipe(notify('jsコンパイル完了'));
+    });
 });
 
 //Sassファイル(Compass)をコンパイル

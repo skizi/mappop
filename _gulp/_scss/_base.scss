@@ -35,10 +35,7 @@ body {
 	font-family: $baseFont;
     -webkit-text-size-adjust: 100%;
 	word-wrap: break-word;
-	// background-image:url( '../images/loading.gif' );
-	// background-repeat:no-repeat;
-	// background-position:center center;
-	// background-attachment: fixed;
+    overflow-x: hidden;
 }
 
 
@@ -138,23 +135,37 @@ input[type="checkbox"]:checked:after {
 }
 
 
+
 .btn0{
-    width: 200px;
-    height: 30px;
-    line-height: 30px;
+    width:678px;
+    height: 106px;
+    line-height: 106px;
+    margin: 0 auto;
     display: block;
-    background-color: #ddd;
-    border:1px solid #333;
-    border-radius:10px;
-    font-weight: bold;
-    cursor:pointer;
-    color:#333;
+    background-color:#ebb314;
+    color:#fff;
+    font-size:48px;
     text-align: center;
     text-decoration: none;
-}
+    box-shadow: 1px 1px 0px #bc8e10,
+                2px 2px 0px #bc8e10,
+                3px 3px 0px #bc8e10,
+                4px 4px 0px #bc8e10,
+                5px 5px 0px #bc8e10,
+                6px 6px 0px #bc8e10,
+                7px 7px 0px #bc8e10;
+    border: none;
 
-.btn0:hover{
-    background-color: #ebebeb;
+    &:active{
+        box-shadow:none;
+        transform:translate(7px,7px);
+    }
+
+    &:link,
+    &:visited{
+        color:#fff;
+    }
+
 }
 
 
@@ -190,7 +201,7 @@ header{
     border-bottom:6px solid #ebb314;
     box-sizing:border-box;
     position:relative;
-    box-shadow:0px 0px 6px 3px #dbdbdb;
+    box-shadow:0px 0px 3px 3px rgba(1,1,1,0.1);
 
     h1{
         width: 182px;
@@ -225,15 +236,91 @@ header{
 }
 
 section.main_menu{
-    width: 750px;
+    width:100%;
+    height:100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    transition-duration: 0.3s;
+    transition-property: transform;
+    transform: translateX(-750px);
+
+    ul{
+        width: 600px;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: 0px 0px 3px 3px rgba(1,1,1,0.1);
+        background-image:url("./menu/close_btn_bg.png");
+        background-repeat:no-repeat;
+        background-position:right top;
+
+        li{
+            &:first-child{
+                padding-top:100px;
+            }
+
+            a{
+                height: 128px;
+                line-height: 128px;
+                padding-left: 62px;
+                display: block;
+                color: #ebb313;
+                text-decoration: none;
+                border-bottom: 2px solid #ebb313;
+                font-size: 32px;
+            }
+        }
+
+        li.close_btn{
+            width:37px;
+            height: 37px;
+            position:absolute;
+            top:28px;
+            left:540px;
+
+            a{
+                width:37px;
+                height: 37px;
+                padding-left: 0;
+                background-image:url("./menu/close_btn.png");
+                text-indent: -9999px;
+                border-bottom: none;
+            }
+        }
+    }
 }
 
 section.main_content{
     width: 750px;
+    margin-bottom: 80px;
 }
 
 footer{
     width: 750px;
+    padding-bottom: 20px;
+    border-top:4px solid #ebb314;
+
+    div.inner{
+        @include clearfix;
+        min-height: 204px;
+
+        div.left{
+            width:324px;
+            margin-left:50px;
+            padding-top:58px;
+            float:left;
+        }
+
+        div.right{
+            padding-top:58px;
+            margin-left: 42px;
+            float:left;
+        }
+    }
+
+    p.copy{
+        text-align:center;
+    }
 }
 
 
@@ -250,12 +337,15 @@ footer{
         background-color: #fff;
         border-radius: 10px;
         padding: 20px;
-        width: 460px;
-        height: 460px;
-        margin: -250px 0 0 -250px;
+        width: 650px;
+        height: 900px;
+        margin: -450px 0 0 -345px;
         position: absolute;
         top: 50%;
         left: 50%;
+        background-image:url("./menu/close_btn_bg.png");
+        background-repeat:no-repeat;
+        background-position:right top;
 
         div{
             width:100%;
@@ -267,16 +357,14 @@ footer{
         }
 
         .close_btn{
+            width:37px;
+            height: 37px;
+            display: block;
             position:absolute;
-            top:10px;
-            right:10px;
-            font-weight: bold;
-            font-size:24px;
-            text-decoration: none;
-
-            &:hover{
-                opacity: 0.7;
-            }
+            top:28px;
+            left:624px;
+            background-image:url("./menu/close_btn.png");
+            text-indent: -9999px;
         }
 
         .comments_title{

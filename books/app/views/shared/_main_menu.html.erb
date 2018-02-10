@@ -7,14 +7,17 @@
 		<% if logged_in? %>
 			<li><a href="/users/<%= session[:user_id] %>">マイページ</a></li>
 		<% else %>
-			<%= link_to "ログイン", login_path, method: :new %>
+			<li><%= link_to "ログイン", login_path, method: :new %></li>
 		<% end %>
-	</ul>
 
-	<% if logged_in? %>
-		<p class="logout_btn">
-			<%= link_to "ログアウト", logout_path, method: :delete %></p>
-	<% else %>
-		<p class="signup_btn"><%= link_to "新規登録", :controller => "users", :action => "new" %></p>
-	<% end %>
+		<% if logged_in? %>
+			<li class="logout_btn">
+				<%= link_to "ログアウト", logout_path, method: :delete %></li>
+		<% else %>
+			<li class="signup_btn"><%= link_to "新規登録", :controller => "users", :action => "new" %></li>
+		<% end %>
+		<li class="close_btn">
+			<a href="javascript:void(0);" class="close_btn">閉じる</a>
+		</li>
+	</ul>
 </section>

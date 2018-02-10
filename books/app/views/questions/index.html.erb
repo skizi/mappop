@@ -1,19 +1,15 @@
 <% content_for :js_css_include do %>
-	<%= stylesheet_link_tag "all", :media => "all" %>
-
-	<%= javascript_include_tag 'libs', media:'all', 'data-turbolinks-track': 'reload' %>
 	<script>
 		var app = {};
 		function initMap(){
 		  app.initMap();
 		}
 	</script>
-	<%= javascript_include_tag 'questions/main', media:'all', 'data-turbolinks-track': 'reload' %>
+	<%= javascript_include_tag 'Questions', media:'all', 'data-turbolinks-track': 'reload' %>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbL29XjQJ8Qrovfqi_xDRJz88MbmSBREQ&callback=initMap"
 	    async defer></script>
 <% end %>
 
-<p>GoogleMap</p>
 <div class="map_container">
 	<div class="map"></div>
 	<a href="javascript:void(0);" class="btn0">質問を投稿</a>
