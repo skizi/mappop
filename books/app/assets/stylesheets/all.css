@@ -627,7 +627,8 @@ input[type="checkbox"]:checked:after { display: block; position: absolute; left:
 .btn0:active { box-shadow: none; transform: translate(7px, 7px); }
 .btn0:link, .btn0:visited { color: #fff; }
 
-.btn1 { height: 30px; line-height: 30px; display: block; font-weight: bold; cursor: pointer; color: #333; }
+.btn1 { text-align: center; }
+.btn1 a { line-height: 110%; padding: 0 5px; display: inline-block; border-bottom: 1px solid #f1831b; font-size: 30px; color: #f1831b; text-decoration: none; }
 
 .btn1:hover { text-decoration: none; }
 
@@ -641,7 +642,8 @@ header a.login_btn { width: 200px; height: 72px; line-height: 72px; background-c
 header a.main_menu_btn { width: 49px; height: 27px; display: block; position: absolute; top: 48px; left: 50px; }
 
 section.main_menu { width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-750px); }
-section.main_menu ul { width: 600px; height: 100%; background-color: #fff; box-shadow: 0px 0px 3px 3px rgba(1, 1, 1, 0.1); background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; }
+section.main_menu div.bg { width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; }
+section.main_menu ul { width: 600px; height: 100%; background-color: #fff; box-shadow: 0px 0px 3px 3px rgba(1, 1, 1, 0.1); background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; position: relative; }
 section.main_menu ul li:first-child { padding-top: 100px; }
 section.main_menu ul li a { height: 128px; line-height: 128px; padding-left: 62px; display: block; color: #ebb313; text-decoration: none; border-bottom: 2px solid #ebb313; font-size: 32px; }
 section.main_menu ul li.close_btn { width: 37px; height: 37px; position: absolute; top: 28px; left: 540px; }
@@ -649,21 +651,26 @@ section.main_menu ul li.close_btn a { width: 37px; height: 37px; padding-left: 0
 
 section.main_content { width: 750px; margin-bottom: 80px; }
 
+body.questions_index section.main_content { margin-bottom: 0; }
+
 footer { width: 750px; padding-bottom: 20px; border-top: 4px solid #ebb314; }
 footer div.inner { overflow: hidden; *zoom: 1; min-height: 204px; }
 footer div.inner div.left { width: 324px; margin-left: 50px; padding-top: 58px; float: left; }
 footer div.inner div.right { padding-top: 58px; margin-left: 42px; float: left; }
+footer div.inner div.right nav ul li { margin-bottom: 12px; list-style: circle; }
+footer div.inner div.right nav ul li a { color: #a7a7a7; font-size: 20px; text-decoration: none; }
 footer p.copy { text-align: center; }
 
-.modal { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-.modal .inner { background-color: #fff; border-radius: 10px; width: 690px; height: 1054px; margin: -527px 0 0 -345px; position: absolute; top: 50%; left: 50%; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; }
+.modal { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); opacity: 0; display: none; transition-duration: 0.3s; transition-property: opacity; }
+.modal .bg { width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; }
+.modal .inner { background-color: #fff; border-radius: 10px; width: 690px; height: 1054px; margin: -527px 0 0 -345px; position: absolute; top: 50%; left: 50%; opacity: 0; transform: translateY(-20px); background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; transition-duration: 0.3s; transition-property: transform, opacity; }
 .modal .inner input, .modal .inner textarea { width: 100%; }
 .modal .inner div.top { width: auto; margin-bottom: 24px; padding: 40px 42px 60px 42px; border-bottom: 2px solid #ebb314; }
-.modal .inner div.top h2.title { width: 470px; height: 60px; line-height: 60px; margin-bottom: 18px; padding-left: 55px; font-size: 44px; border-bottom: 16px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 10px; }
+.modal .inner div.top h2.title { width: 470px; height: 60px; line-height: 60px; margin-bottom: 18px; padding-left: 55px; font-size: 44px; font-weight: bold; color: #ebb314; border-bottom: 16px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 10px; }
 .modal .inner div.top p.content { min-height: 240px; font-size: 36px; line-height: 60px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); }
 .modal .inner div.bottom { padding: 0 42px 38px 42px; }
 .modal .inner div.bottom h2 { height: 58px; line-height: 58px; margin-bottom: 24px; font-size: 36px; color: #ebb314; border-bottom: 2px dashed #ebb314; }
-.modal .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: scroll; }
+.modal .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: scroll; -webkit-overflow-scrolling: touch; }
 .modal .inner div.bottom ul.comments li { margin-bottom: 10px; overflow: hidden; *zoom: 1; }
 .modal .inner div.bottom ul.comments li img { width: 42px; margin-right: 12px; float: left; }
 .modal .inner div.bottom ul.comments li p { line-height: 44px; font-size: 24px; float: left; }
@@ -969,14 +976,22 @@ p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no
 .signup_container h2, .login_container h2 { margin-bottom: 60px; padding-top: 50px; color: #ebb313; font-size: 50px; text-align: center; }
 .signup_container form div, .login_container form div { overflow: hidden; *zoom: 1; }
 .signup_container form label, .login_container form label { height: 66px; line-height: 66px; display: inline-block; font-size: 36px; float: left; }
-.signup_container form input[type="text"], .signup_container form input[type="password"], .signup_container form textarea, .login_container form input[type="text"], .login_container form input[type="password"], .login_container form textarea { width: 450px; height: 60px; border-radius: 10px; float: right; }
+.signup_container form input[type="text"], .signup_container form input[type="password"], .signup_container form textarea, .login_container form input[type="text"], .login_container form input[type="password"], .login_container form textarea { width: 440px; height: 60px; font-size: 30px; padding-left: 10px; border-radius: 10px; float: right; }
 .signup_container form textarea, .login_container form textarea { height: 200px; }
 .signup_container form .btn0, .login_container form .btn0 { width: 650px; margin-bottom: 50px; }
-.signup_container .signup_btn, .login_container .signup_btn { text-align: center; }
-.signup_container .signup_btn a, .login_container .signup_btn a { line-height: 110%; padding: 0 5px; display: inline-block; border-bottom: 1px solid #f1831b; font-size: 30px; color: #f1831b; text-decoration: none; }
 
 .map_container { width: 750px; height: 1000px; position: relative; }
 .map_container .map { height: 100%; width: 100%; }
 .map_container .btn0 { position: absolute; left: 36px; bottom: 35px; }
 
 .popup { cursor: pointer; }
+
+body.users_show div.photo_container { height: 266px; padding-top: 26px; background-color: #f2f2f2; margin-bottom: 10px; background-image: url("./mypage/photo_bg.gif"); background-repeat: repeat-x; background-position: bottom; }
+body.users_show div.photo_container div.photo { width: 180px; height: 180px; margin: 0 auto 20px auto; border-radius: 200px; background-size: cover; }
+body.users_show div.photo_container p.name { color: #ebb313; font-size: 34px; text-align: center; }
+body.users_show p.about { line-height: 64px; margin-bottom: 42px; color: #5d5d5d; font-size: 36px; text-align: center; }
+body.users_show p.about span { line-height: 64px; border-bottom: 1px solid #ebb313; }
+body.users_show table.profile { margin: 0 auto 40px auto; border: 2px solid #d3dae0; }
+body.users_show table.profile tr td, body.users_show table.profile tr th { font-size: 30px; line-height: 60px; border: 2px solid #d3dae0; }
+body.users_show table.profile tr th { width: 200px; background-color: #f2f4f6; text-align: left; padding-left: 20px; }
+body.users_show table.profile tr td { width: 450px; padding-left: 20px; }

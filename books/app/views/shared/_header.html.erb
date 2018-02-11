@@ -1,6 +1,8 @@
 
 <header>
-	<h1><%= image_tag 'header/logo.png', :alt => 'MapPop マップポップ' %></h1>
+	<h1>
+		<%= link_to image_tag('header/logo.png', { :border => '0', :alt => 'MapPop マップポップ'}), :controller => "home", :action => "index" %>
+	</h1>
 
 	<a href="javascript:void(0);" class="main_menu_btn" >
 		<%= image_tag 'header/menu_btn.png', :alt => 'メニュー開く' %>

@@ -1,28 +1,55 @@
-<h2>プロフィール</h2>
-<p><%= @user[:name] %></p>
-<p><%= @user[:username] %></p>
-<ul>
-  <li>id : <%= @user[:id] %></li>
-  <li>password : <%= @user[:password] %></li>
-  <li>email : <%= @user[:email] %></li>
-  <li>Location : <%= @user[:location] %></li>
-  <li>About    : <%= @user[:about] %></li>
-  <li>
+<div class="photo_container">
+	<% time = Time.now.usec.to_s %>
   	<% if @user.photo.nil? %>
-  		<img src="/docs/user_icon/no_image.jpg" width="100">
+  		<% photo = '/docs/user_icon/no_image.jpg' %>
   	<% else %>
-  		<img src="<%= url_for_public@user.photo %>" width="100">
+  		<% photo = url_for_public@user.photo %>
   	<% end %>
-  </li>
-</ul>
+	<div class="photo" style="background-image:url(<%= photo + '?r=' + time %>);">
+	</div>
+	<p class="name"><%= @user[:name] %></p>
+</div>
 
-	
+<p class="about"><%= @user[:about] %></p>
 
-<%= form_tag({ action: :upload_process }, multipart: true) do %>
+<table class="profile">
+	<tr>
+		<th>名前</th><td><%= @user[:name] %></td>
+	</tr>
+	<tr>
+	<!--<li>id : <%= @user[:id] %></li>-->
+	<!--<li>password : <%= @user[:password] %></li>-->
+	<tr>
+		<th>email</th><td><%= @user[:email] %></td>
+	</tr>
+	<tr>
+		<th>出身地</th><td><%= @user[:location] %></td>
+	</tr>
+</table>
 
-	<label>
-	ファイルを指定：<%= file_field_tag :upfile, size: 50 %>
-	</label>
-	<%= hidden_field_tag :id, @user.id %>
-	<%= submit_tag 'アップロード' %>
-<% end %>
+
+<p class="btn1">
+	<a href="javascript:void(0);" class="edit_profile_btn btn1">プロフィールを編集</a>
+</p>
+
+<div class="modal edit_profile">
+	<div class="bg"></div>
+	<div class="inner">
+
+		<%= form_tag({ action: :upload_process }, multipart: true) do %>
+
+			<label>
+			ファイルを指定：<%= file_field_tag :upfile, size: 50 %>
+			</label>
+			<%= hidden_field_tag :id, @user.id %>
+			<%= submit_tag 'アップロード' %>
+		<% end %>
+
+		<input type="text" class="name">
+		<input type="text" class="location">
+		<textarea class="about"></textarea>
+		<a href="javascript:void(0);" class="btn0 answer_btn c_mb30">コメントする</a>
+
+		<a href="javascript:void(0);" class="close_btn">×</a>
+	</div>
+</div>

@@ -1,8 +1,9 @@
 
 <section class="main_menu">
+	<div class="bg"></div>
 	<ul>
 		<li><%= link_to "トップページ", :controller => "home", :action => "index" %></li>
-		<li><%= link_to "MapPopをみる", :controller => "questions", :action => "index" %></li>
+		<li><%= link_to "地図をみる", :controller => "questions", :action => "index" %></li>
 
 		<% if logged_in? %>
 			<li><a href="/users/<%= session[:user_id] %>">マイページ</a></li>

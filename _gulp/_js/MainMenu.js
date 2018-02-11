@@ -6,6 +6,8 @@ export default class MainMenu{
     this.element = document.getElementsByClassName( 'main_menu' )[0];
     this.closeBtn = this.element.getElementsByClassName( 'close_btn' )[0];
     this.closeBtn.addEventListener( 'click', this.closeBtnClickHandler.bind( this ) );
+    this.bg = this.element.getElementsByClassName( 'bg' )[0];
+    this.bg.addEventListener( 'click', this.closeBtnClickHandler.bind( this ) );
 
   }
 

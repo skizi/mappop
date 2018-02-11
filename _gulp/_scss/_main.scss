@@ -117,8 +117,10 @@
 		input[type="text"],
 		input[type="password"],
 		textarea{
-			width: 450px;
+			width: 440px;
 			height: 60px;
+			font-size: 30px;
+		    padding-left: 10px;
 			border-radius: 10px;
 			float: right;
 		}
@@ -130,20 +132,6 @@
 		.btn0{
 			width:650px;
 			margin-bottom: 50px;
-		}
-	}
-
-	.signup_btn{
-		text-align: center;
-
-		a{
-			line-height: 110%;
-			padding: 0 5px;
-			display: inline-block;
-			border-bottom: 1px solid #f1831b;
-			font-size: 30px;
-			color: #f1831b;
-			text-decoration: none;
 		}
 	}
 
@@ -169,4 +157,68 @@
 
 .popup{
 	cursor:pointer;
+}
+
+
+body.users_show{
+	div.photo_container{
+	    height: 266px;
+        padding-top: 26px;
+	    background-color: #f2f2f2;
+	    margin-bottom: 10px;
+		background-image:url("./mypage/photo_bg.gif");
+		background-repeat:repeat-x;
+		background-position:bottom;
+
+	    div.photo{
+	    	width:180px;
+	    	height:180px;
+	    	margin:0 auto 20px auto;
+	    	border-radius:200px;
+	    	background-size: cover;
+	    }
+
+	    p.name{
+	    	color:#ebb313;
+	    	font-size: 34px;
+	    	text-align: center;
+	    }
+	}
+
+	p.about{
+		line-height: 64px;
+		margin-bottom: 42px;
+		color:#5d5d5d;
+		font-size:36px;
+		text-align: center;
+		
+		span{
+			line-height: 64px;
+			border-bottom:1px solid #ebb313;
+		}
+	}
+
+	table.profile{
+		margin: 0 auto 40px auto;
+		border: 2px solid #d3dae0;
+		
+		tr{
+			td,
+			th{
+				font-size: 30px;
+				line-height: 60px;
+				border: 2px solid #d3dae0;
+			}
+			th{
+				width: 200px;
+				background-color: #f2f4f6;
+				text-align: left;
+				padding-left: 20px;
+			}
+			td{
+				width: 450px;
+				padding-left: 20px;
+			}
+		}
+	}
 }

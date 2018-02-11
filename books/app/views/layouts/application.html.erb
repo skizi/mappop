@@ -11,7 +11,7 @@
     <%= yield :js_css_include %>
 
   </head>
-  <body>
+  <body class="<%= controller.controller_name %>_<%= controller.action_name %>">
 
     <%= render 'shared/header' %>
     <section class="main_content">
