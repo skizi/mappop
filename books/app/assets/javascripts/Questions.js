@@ -405,7 +405,6 @@ var ShowPostModal = function (_Modal) {
             var img = new Image();
             var src = '/docs/user_icon/' + user_id + '.jpg';
             img.setAttribute('src', src);
-            img.setAttribute('width', '30');
             li.appendChild(img);
             img.onerror = function (_img) {
                 _img.setAttribute('src', '/docs/user_icon/no_image.jpg');

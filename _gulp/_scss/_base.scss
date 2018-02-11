@@ -336,10 +336,9 @@ footer{
     .inner{
         background-color: #fff;
         border-radius: 10px;
-        padding: 20px;
-        width: 650px;
-        height: 900px;
-        margin: -450px 0 0 -345px;
+        width: 690px;
+        height: 1054px;
+        margin: -527px 0 0 -345px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -347,13 +346,90 @@ footer{
         background-repeat:no-repeat;
         background-position:right top;
 
-        div{
-            width:100%;
-        }
 
         input,
         textarea{
             width: 100%;
+        }
+
+        div.top{
+            width:auto;
+            margin-bottom: 24px;
+            padding:40px 42px 60px 42px;
+            border-bottom:2px solid #ebb314;
+
+            h2.title{
+                width: 470px;
+                height: 60px;
+                line-height: 60px;
+                margin-bottom: 18px;
+                padding-left: 55px;
+                font-size: 44px;
+                border-bottom: 16px solid #ebb314;
+                background-image:url("./map/icon.png");
+                background-repeat:no-repeat;
+                background-position:left 10px;
+            }
+
+            p.content{
+                min-height: 240px;
+                font-size: 36px;
+                line-height: 60px;
+                background:repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px);
+            }
+        }
+
+        div.bottom{
+            padding:0 42px 38px 42px;
+
+            h2{
+                height:58px;
+                line-height: 58px;
+                margin-bottom: 24px;
+                font-size: 36px;
+                color:#ebb314;
+                border-bottom: 2px dashed #ebb314;
+            }
+
+            ul.comments{
+                height: 220px;
+                margin-bottom: 24px;
+                overflow-x: scroll;
+
+                li{
+                    margin-bottom: 10px;
+                    @include clearfix;
+
+                    img{
+                        width:42px;
+                        margin-right: 12px;
+                        float:left;
+                    }
+                    p{
+                        line-height: 44px;
+                        font-size:24px;
+                        float:left;
+
+                        &.no_comment{
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+
+            textarea{
+                border-radius: 10px;
+                width: 590px;
+                height: 100px;
+                margin-bottom: 10px;
+                padding: 0 10px;
+                font-size: 30px;
+                line-height: 40px;
+            }
+
+            .answer_btn{
+                width: 100%;
+            }
         }
 
         .close_btn{
@@ -371,29 +447,5 @@ footer{
             margin-bottom: 10px;
         }
 
-        .comments{
-            height: 170px;
-            overflow-y: scroll;
-
-            li{
-                margin-bottom: 10px;
-                @include clearfix;
-
-                img{
-                    float:left;
-                }
-
-                p{
-                    height: 30px;
-                    line-height: 30px;
-                    margin-left: 8px;
-                    float: left;
-
-                    &.no_comment{
-                        margin-left: 0;
-                    }
-                }
-            }
-        }
     }
 }

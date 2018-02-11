@@ -656,16 +656,22 @@ footer div.inner div.right { padding-top: 58px; margin-left: 42px; float: left; 
 footer p.copy { text-align: center; }
 
 .modal { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-.modal .inner { background-color: #fff; border-radius: 10px; padding: 20px; width: 650px; height: 900px; margin: -450px 0 0 -345px; position: absolute; top: 50%; left: 50%; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; }
-.modal .inner div { width: 100%; }
+.modal .inner { background-color: #fff; border-radius: 10px; width: 690px; height: 1054px; margin: -527px 0 0 -345px; position: absolute; top: 50%; left: 50%; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; }
 .modal .inner input, .modal .inner textarea { width: 100%; }
+.modal .inner div.top { width: auto; margin-bottom: 24px; padding: 40px 42px 60px 42px; border-bottom: 2px solid #ebb314; }
+.modal .inner div.top h2.title { width: 470px; height: 60px; line-height: 60px; margin-bottom: 18px; padding-left: 55px; font-size: 44px; border-bottom: 16px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 10px; }
+.modal .inner div.top p.content { min-height: 240px; font-size: 36px; line-height: 60px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); }
+.modal .inner div.bottom { padding: 0 42px 38px 42px; }
+.modal .inner div.bottom h2 { height: 58px; line-height: 58px; margin-bottom: 24px; font-size: 36px; color: #ebb314; border-bottom: 2px dashed #ebb314; }
+.modal .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: scroll; }
+.modal .inner div.bottom ul.comments li { margin-bottom: 10px; overflow: hidden; *zoom: 1; }
+.modal .inner div.bottom ul.comments li img { width: 42px; margin-right: 12px; float: left; }
+.modal .inner div.bottom ul.comments li p { line-height: 44px; font-size: 24px; float: left; }
+.modal .inner div.bottom ul.comments li p.no_comment { margin-left: 0; }
+.modal .inner div.bottom textarea { border-radius: 10px; width: 590px; height: 100px; margin-bottom: 10px; padding: 0 10px; font-size: 30px; line-height: 40px; }
+.modal .inner div.bottom .answer_btn { width: 100%; }
 .modal .inner .close_btn { width: 37px; height: 37px; display: block; position: absolute; top: 28px; left: 624px; background-image: url("./menu/close_btn.png"); text-indent: -9999px; }
 .modal .inner .comments_title { margin-bottom: 10px; }
-.modal .inner .comments { height: 170px; overflow-y: scroll; }
-.modal .inner .comments li { margin-bottom: 10px; overflow: hidden; *zoom: 1; }
-.modal .inner .comments li img { float: left; }
-.modal .inner .comments li p { height: 30px; line-height: 30px; margin-left: 8px; float: left; }
-.modal .inner .comments li p.no_comment { margin-left: 0; }
 
 /*  CLASSES  */
 /*============================

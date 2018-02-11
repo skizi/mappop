@@ -19,11 +19,11 @@
 <div class="modal new">
 	<div class="inner">
 		<div class="c_mb30">
-			<label for="question_title">質問タイトル</label>
+			<label for="question_title">タイトル</label>
 			<input type="text" name="title" class="title">
 		</div>
 		<div class="c_mb30">
-			<label for="question_content">質問内容</label>
+			<label for="question_content">内容</label>
 			<textarea name="content" class="content"></textarea>
 		</div>
 
@@ -39,23 +39,17 @@
 
 <div class="modal show">
 	<div class="inner">
-		<div class="c_mb30">
-			<h3>質問タイトル</h3>
-			<p class="title"></p>
-		</div>
-		<div class="c_mb30">
-			<h3>質問内容</h3>
+		<div class="top">
+			<h2 class="title"></h2>
 			<p class="content"></p>
 		</div>
-		<div>
-			<p>この質問にコメントする</p>
-			<textarea name="comment" class="comment"></textarea>
-			<a href="javascript:void(0);" class="btn0 answer_btn c_mb30">回答する</a>
-
-			<h3 class="comments_title">回答一覧</h3>
+		<div class="bottom">
+			<h2>コメント一覧</h2>
 			<ul class="comments">
 				<li></li>
 			</ul>
+			<textarea name="comment" class="comment"></textarea>
+			<a href="javascript:void(0);" class="btn0 answer_btn c_mb30">コメントする</a>
 		</div>
 
 		<a href="javascript:void(0);" class="close_btn">×</a>
