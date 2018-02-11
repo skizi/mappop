@@ -37,6 +37,10 @@
 .howto{
 	height:400px;
 
+	h2.title0{
+	    font-size: 40px;
+	}
+
 	div.steps{
 		@include clearfix;
 		width: 740px;

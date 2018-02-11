@@ -59,20 +59,12 @@
 			<div class="change_profile">
 				<h3 class="title0">プロフィール変更</h3>
 				<%= form_for @user, html: { class: 'c_mb40' } do |f| %>
-					<!--
-					<div class="c_mb40 email clearfix">
-						<%= f.label "email" %>
-						<%= f.text_field :email %>
-					</div>
-					<div class="c_mb40 password clearfix">
-						<%= f.label "パスワード" %>
-						<%= f.password_field :password %>
-					</div>
-					<div class="c_mb40 username clearfix">
-						<%= f.label "ユーザー名" %>
-						<%= f.hidden_field :username %>
-					</div>
-					-->
+					
+					<%= f.hidden_field :email %>
+					<%= f.hidden_field :password %>
+					<%= f.hidden_field :username %>
+					<%= f.hidden_field :photo %>
+
 					<div class="c_mb40 name clearfix">
 						<%= f.label "名前" %>
 						<%= f.text_field :name %>

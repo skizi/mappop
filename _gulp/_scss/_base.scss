@@ -476,6 +476,7 @@ footer{
                 font-size: 36px;
                 line-height: 60px;
                 background:repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px);
+                background-position: 0 -1px;
             }
         }
 
@@ -526,6 +527,7 @@ footer{
                 padding: 0 10px;
                 font-size: 30px;
                 line-height: 40px;
+                float: none;
             }
 
             .answer_btn{

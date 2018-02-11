@@ -675,7 +675,7 @@ footer p.copy { text-align: center; }
 .modal .inner .comments_title { margin-bottom: 10px; }
 .modal.show .inner div.top { width: auto; margin-bottom: 24px; padding: 40px 42px 60px 42px; border-bottom: 2px solid #ebb314; }
 .modal.show .inner div.top h2.title { width: 470px; height: 60px; line-height: 60px; margin-bottom: 18px; padding-left: 55px; font-size: 44px; font-weight: bold; color: #ebb314; border-bottom: 16px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 10px; }
-.modal.show .inner div.top p.content { min-height: 240px; font-size: 36px; line-height: 60px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); }
+.modal.show .inner div.top p.content { min-height: 240px; font-size: 36px; line-height: 60px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); background-position: 0 -1px; }
 .modal.show .inner div.bottom { padding: 0 42px 38px 42px; }
 .modal.show .inner div.bottom h2 { height: 58px; line-height: 58px; margin-bottom: 24px; font-size: 36px; color: #ebb314; border-bottom: 2px dashed #ebb314; }
 .modal.show .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: scroll; -webkit-overflow-scrolling: touch; }
@@ -683,7 +683,7 @@ footer p.copy { text-align: center; }
 .modal.show .inner div.bottom ul.comments li img { width: 42px; margin-right: 12px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 44px; font-size: 24px; float: left; }
 .modal.show .inner div.bottom ul.comments li p.no_comment { margin-left: 0; }
-.modal.show .inner div.bottom textarea { border-radius: 10px; width: 590px; height: 100px; margin-bottom: 10px; padding: 0 10px; font-size: 30px; line-height: 40px; }
+.modal.show .inner div.bottom textarea { border-radius: 10px; width: 590px; height: 100px; margin-bottom: 10px; padding: 0 10px; font-size: 30px; line-height: 40px; float: none; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
 .modal.edit_profile .inner div.container { padding: 40px 42px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
@@ -974,6 +974,7 @@ p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no
 .top_content p:nth-child(3) { margin-bottom: 202px; }
 
 .howto { height: 400px; }
+.howto h2.title0 { font-size: 40px; }
 .howto div.steps { overflow: hidden; *zoom: 1; width: 740px; margin: 0 auto; }
 .howto div.steps div.step { width: 220px; float: left; text-align: center; }
 .howto div.steps div.step img { margin-bottom: 24px; }
