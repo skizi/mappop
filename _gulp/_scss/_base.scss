@@ -68,6 +68,18 @@ input[type="text"]:focus {
   border-color: none;
 }
 
+input[type="text"],
+input[type="password"],
+textarea{
+    width: 440px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    padding-left: 10px;
+    border-radius: 10px;
+    float: right;
+}
+
 
 input[type="checkbox"] {
     -webkit-appearance: none;
@@ -108,6 +120,13 @@ input[type="checkbox"]:checked:after {
     -webkit-transform-origin: left center;
 }
 
+label{
+    height: 66px;
+    line-height: 66px;
+    display: inline-block;
+    font-size: 36px;
+    float: left;
+}
 
 
 .c_mb10{
@@ -198,6 +217,16 @@ input[type="checkbox"]:checked:after {
 .pagination{
     margin-bottom: 50px;
 }
+
+
+.title0{
+    margin-bottom: 60px;
+    padding-top: 50px;
+    color: #ebb313;
+    font-size: 50px;
+    text-align: center;
+}
+
 
 //-----------------header--------------------
 header{
@@ -400,6 +429,27 @@ footer{
             width: 100%;
         }
 
+
+        .close_btn{
+            width:37px;
+            height: 37px;
+            display: block;
+            position:absolute;
+            top:28px;
+            left:624px;
+            background-image:url("./menu/close_btn.png");
+            text-indent: -9999px;
+        }
+
+        .comments_title{
+            margin-bottom: 10px;
+        }
+
+    }
+
+
+    &.show .inner{
+
         div.top{
             width:auto;
             margin-bottom: 24px;
@@ -482,21 +532,64 @@ footer{
                 width: 100%;
             }
         }
+    }
 
-        .close_btn{
-            width:37px;
-            height: 37px;
-            display: block;
-            position:absolute;
-            top:28px;
-            left:624px;
-            background-image:url("./menu/close_btn.png");
-            text-indent: -9999px;
+
+    &.edit_profile .inner{
+
+        div.container{
+            padding: 40px 42px;
+            position:relative;
+
+            div.change_photo{
+                transition-duration: 0.3s;
+                transition-property: opacity;
+            
+                label.photo_file_select_btn{
+                    height:auto;
+                    margin-bottom: 60px;
+                    // width: 100%;
+                    // height: 60px;
+                    // background-color: #ddd;
+                    // border-radius: 10px;
+                    // line-height: 60px;
+                    // border: 1px solid #ababab;
+
+                    input{
+                        //display: none;
+                    }
+                }
+
+            }
+
+            div.change_profile{
+                width: 600px;
+                display: none;
+                transition-duration: 0.3s;
+                transition-property: opacity;
+                position:absolute;
+                top:40px;
+
+                div.clearfix{
+                    @include clearfix;
+                }
+
+                input[type="text"],
+                input[type="password"],
+                textarea{
+                    width: 420px;
+                }
+
+                textarea{
+                    height:200px;
+                }
+            }
+
+            ul.change_menu{
+                li{
+
+                }
+            }
         }
-
-        .comments_title{
-            margin-bottom: 10px;
-        }
-
     }
 }

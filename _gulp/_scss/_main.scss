@@ -37,14 +37,6 @@
 .howto{
 	height:400px;
 
-	h2{
-		margin-bottom: 60px;
-		padding-top:50px;
-		color:#ebb313;
-		font-size:40px;
-		text-align: center;
-	}
-
 	div.steps{
 		@include clearfix;
 		width: 740px;
@@ -92,37 +84,10 @@
     width: 650px;
     margin: 0 auto;
 
-	h2{
-		margin-bottom: 60px;
-		padding-top:50px;
-		color:#ebb313;
-		font-size:50px;
-		text-align: center;
-	}
-
 
 	form{
 		div{
 			@include clearfix;
-		}
-
-		label{
-		    height: 66px;
-		    line-height: 66px;
-		    display: inline-block;
-			font-size: 36px;
-			float: left;
-		}
-
-		input[type="text"],
-		input[type="password"],
-		textarea{
-			width: 440px;
-			height: 60px;
-			font-size: 30px;
-		    padding-left: 10px;
-			border-radius: 10px;
-			float: right;
 		}
 
 		textarea{
