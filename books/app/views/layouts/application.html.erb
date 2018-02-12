@@ -5,7 +5,7 @@
     <%= display_meta_tags(default_meta_tags) %>
 
     <%= stylesheet_link_tag 'all', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <%= javascript_include_tag 'libs', media:'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'Common', media:'all', 'data-turbolinks-track': 'reload' %>
 
     <%= yield :js_css_include %>

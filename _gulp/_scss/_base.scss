@@ -130,27 +130,31 @@ label{
 
 
 .c_mb10{
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .c_mb20{
-    margin-bottom: 20px;
-}
-
-.c_mb40{
-    margin-bottom: 40px;
+    margin-bottom: 20px !important;
 }
 
 .c_mb30{
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
+}
+
+.c_mb40{
+    margin-bottom: 40px !important;
+}
+
+.c_mb30{
+    margin-bottom: 30px !important;
 }
 
 .c_mb80{
-    margin-bottom: 80px;
+    margin-bottom: 80px !important;
 }
 
 .c_mb100{
-    margin-bottom: 100px;
+    margin-bottom: 100px !important;
 }
 
 
@@ -225,6 +229,14 @@ label{
     color: #ebb313;
     font-size: 50px;
     text-align: center;
+}
+
+
+.title1{
+    margin-bottom: 55px;
+    text-align: center;
+    font-size: 32px;
+    color: #8c8c8c;
 }
 
 
@@ -380,6 +392,7 @@ footer{
     }
 
     p.copy{
+        color: #a7a7a7;
         text-align:center;
     }
 }
@@ -504,6 +517,7 @@ footer{
 
                     img{
                         width:42px;
+                        height:42px;
                         margin-right: 12px;
                         float:left;
                     }
@@ -550,6 +564,7 @@ footer{
                 label.photo_file_select_btn{
                     height:auto;
                     margin-bottom: 60px;
+                    float:none;
                     // width: 100%;
                     // height: 60px;
                     // background-color: #ddd;
@@ -560,6 +575,11 @@ footer{
                     input{
                         //display: none;
                     }
+
+                }
+
+                a.photo_upload_btn{
+                    width: 100%;
                 }
 
             }

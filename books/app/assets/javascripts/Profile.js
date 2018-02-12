@@ -15,6 +15,10 @@ var _Util = require('./Util');
 
 var _Util2 = _interopRequireDefault(_Util);
 
+var _ImageManager = require('./ImageManager');
+
+var _ImageManager2 = _interopRequireDefault(_ImageManager);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47,6 +51,15 @@ var EditProfileModal = function (_Modal) {
 
         _this.hide();
 
+        _this.reader = new FileReader();
+        _this.imageManager = new _ImageManager2.default();
+
+        _this.fileInput = document.getElementById('file_photo');
+        _this.fileInput.addEventListener('change', _this.fileChangeHandler.bind(_this));
+
+        _this.uploadBtn = _this.element.getElementsByClassName('photo_upload_btn')[0];
+        _this.uploadBtn.addEventListener('click', _this.uploadBtnClickHandler.bind(_this));
+
         return _this;
     }
 
@@ -64,27 +77,108 @@ var EditProfileModal = function (_Modal) {
             this.changePhoto.style.display = 'block';
             this.changeProfile.style.display = 'none';
         }
+    }, {
+        key: 'fileChangeHandler',
+        value: function fileChangeHandler(e) {
 
-        //--------------------マウスイベント-------------------
-        // submitBtnClickHandler(){
+            if (this.loadFlag) e.preventDefault();
 
-        //     var name = this.name.value;
-        //     var location = this.location.value;
-        //     var about = this.about.value;
-        //     var url = Util.apiHeadUrl + '/comments.json';
-        //     $.ajax({
-        //         url:url,
-        //         type:'POST',
-        //         data:{ content:comment, question_id:question_id, user_id:0 },
-        //         success:function( result ){
-        //           console.log( result );
-        //         },
-        //         error:function( result ){
-        //           console.log( result );
-        //         }.bind( this )
-        //     });
-        // }
+            var file = e.target.files[0];
 
+            //エラーチェック------------
+            var errorFlag = false;
+            var errorMessage = '';
+
+            //容量チェック
+            var size = 5000000;
+            if (file.size > size) {
+                errorMessage = str + '3MB以下のファイルを選択してください';
+                errorFlag = true;
+            }
+
+            if (file.name.indexOf('.jpg') == -1 && file.name.indexOf('.jpeg') == -1 && file.name.indexOf('.png') == -1 && file.name.indexOf('.JPG') == -1 && file.name.indexOf('.PNG') == -1) {
+                errorMessage = '画像はjpegかpngを選択してください';
+                errorFlag = true;
+            }
+
+            //もしエラーフラグが立ってたらreturn
+            if (errorFlag) {
+                this.fileInputRefresh();
+                alert(errorMessage);
+                return;
+            }
+
+            this.file = file;
+        }
+    }, {
+        key: 'fileInputRefresh',
+        value: function fileInputRefresh() {
+
+            this.fileInput.value = '';
+        }
+    }, {
+        key: 'uploadBtnClickHandler',
+        value: function uploadBtnClickHandler() {
+
+            if (!this.file) return;
+
+            this.reader.onload = function (e) {
+
+                var img = new Image();
+                img.setAttribute('src', this.reader.result);
+                this.imageManager.fixExif(img, function (_img) {
+                    this.upload(_img);
+                    this.fileInputRefresh();
+                }.bind(this));
+            }.bind(this);
+            this.reader.readAsDataURL(this.file);
+        }
+    }, {
+        key: 'upload',
+        value: function upload(img) {
+
+            this.loadFlag = true;
+
+            var formData = new FormData();
+            var blob = this.dataURLtoBlob(img.getAttribute('src'));
+            formData.append('upfile', blob, this.file.name);
+            formData.append('id', document.getElementById('user_id').value);
+
+            var url = _Util2.default.apiHeadUrl + '/users/upload_process.json';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    this.loadFlag = false;
+                    this.file = null;
+                }.bind(this),
+                error: function (result) {
+                    this.loadFlag = false;
+                    this.file = null;
+                    if (result.status == 200) {} else {
+                        alert('アップロードエラー\n時間を置いてから試してみてください。');
+                    }
+                }.bind(this)
+            });
+        }
+    }, {
+        key: 'dataURLtoBlob',
+        value: function dataURLtoBlob(dataurl) {
+
+            var bin = atob(dataurl.split("base64,")[1]);
+            var len = bin.length;
+            var barr = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                barr[i] = bin.charCodeAt(i);
+            }
+            return new Blob([barr], {
+                type: 'image/jpeg'
+            });
+        }
     }, {
         key: 'type',
         set: function set(_type) {
@@ -103,7 +197,183 @@ var EditProfileModal = function (_Modal) {
 
 exports.default = EditProfileModal;
 
-},{"./Modal":2,"./Util":4}],2:[function(require,module,exports){
+},{"./ImageManager":2,"./Modal":3,"./Util":5}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ImageManager = function () {
+    function ImageManager() {
+        _classCallCheck(this, ImageManager);
+
+        this.resizeWidth = 200;
+        this.resizeHeight = 200;
+
+        this.resizeCanvas = document.createElement('canvas');
+        this.resizeCanvas.style.display = 'none';
+        // this.resizeCanvas.style.position = 'absolute';
+        // this.resizeCanvas.style.top = '0px';
+        // this.resizeCanvas.style.left = '0px';
+        document.body.appendChild(this.resizeCanvas);
+        this.resizeCtx = this.resizeCanvas.getContext('2d');
+    }
+
+    _createClass(ImageManager, [{
+        key: 'fixExif',
+        value: function fixExif(img, callback) {
+
+            if (img.complete) {
+                this.fixExifStep2(img, callback);
+            } else {
+                var listener = function (_img, _callback) {
+                    _img.removeEventListener('load', _img.listener);
+                    this.fixExifStep2(_img, _callback);
+                }.bind(this, img, callback);
+                img.listener = listener;
+                img.onload = listener;
+            }
+        }
+    }, {
+        key: 'fixExifStep2',
+        value: function fixExifStep2(img, callback) {
+
+            if (img.exifdata) img.exifdata = null;
+            EXIF.getData(img, function (_callback) {
+
+                if (img.exifdata && img.exifdata.Orientation) {
+
+                    //rotation
+                    var orientation = img.exifdata.Orientation;
+
+                    var exifImg = new Image();
+                    exifImg.style.display = 'none';
+                    document.body.appendChild(exifImg);
+
+                    var mpImg = new MegaPixImage(img);
+                    mpImg.render(exifImg[0], { orientation: orientation, quality: 1, maxWidth: this.resizeWidth, maxHeight: this.resizeHeight }, function (_img, _callback) {
+                        _callback(_img);
+                    }.bind(this, exifImg[0], _callback));
+                } else {
+
+                    document.body.appendChild(img);
+                    var w = img.width;
+                    var h = img.height;
+                    img.style.display = 'none';
+                    var src = img.getAttribute('src');
+
+                    if (w > this.resizeWidth || h > this.resizeHeight) {
+                        var ratioX = this.resizeWidth / w;
+                        var ratioY = this.resizeHeight / h;
+                        // w *= ratioX;
+                        // h *= ratioX;
+                        // if( ratioY < ratioX ){
+                        //     w *= ratioY;
+                        //     h *= ratioY;
+                        // }
+
+                        src = this.resizeImg(img, this.resizeWidth, this.resizeHeight, 'image/jpeg', 'minSizeFit');
+                    }
+                    document.body.removeChild(img);
+                    img = null;
+
+                    img = new Image();
+                    img.setAttribute('src', src);
+                    _callback(img);
+                }
+            }.bind(this, callback));
+        }
+    }, {
+        key: 'resizeImg',
+        value: function resizeImg(img, w, h, imgType, resizeType) {
+
+            if (!imgType) imgType = 'image/jpeg';
+
+            this.resizeCanvas.setAttribute('width', w);
+            this.resizeCanvas.setAttribute('height', h);
+
+            var canvasW = w;
+            var canvasH = h;
+
+            this.resizeCtx.fillStyle = "rgba( 0, 0, 0, 0 )";
+            this.resizeCtx.fillRect(0, 0, canvasW, canvasH);
+
+            //'fit'の場合は縦横をwとhのサイズに縮める形で縮小
+            var imgW = img.width;
+            var imgH = img.height;
+            if (resizeType == 'maxSizeFit') {
+                //縦横大きい方を基準に縮小
+
+                var wRatio = imgW / canvasW;
+                var hRatio = imgH / canvasH;
+                var maxHFlag = false;
+                if (wRatio < hRatio) maxHFlag = true;
+
+                if (maxHFlag) {
+                    var canvasRatio = canvasH / imgH;
+                    var w = imgW * canvasRatio;
+                    var h = canvasH;
+                } else {
+                    var canvasRatio = canvasW / imgW;
+                    var w = canvasW;
+                    var h = imgH * canvasRatio;
+                }
+            } else if (resizeType == 'minSizeFit') {
+                //縦横小さい方を基準に縮小
+
+                var wRatio = imgW / canvasW;
+                var hRatio = imgH / canvasH;
+                var maxHFlag = false;
+                if (wRatio < hRatio) maxHFlag = true;
+
+                if (maxHFlag) {
+                    var canvasRatio = canvasW / imgW;
+                } else {
+                    var canvasRatio = canvasH / imgH;
+                }
+
+                var w = imgW * canvasRatio;
+                var h = imgH * canvasRatio;
+            } else if (resizeType == 'xFit') {
+                //横を基準に縮小
+                var canvasRatio = canvasW / imgW;
+                var w = canvasW;
+                var h = imgH * canvasRatio;
+            }
+
+            var x = (canvasW - w) * .5;
+            var y = (canvasH - h) * .5;
+            var imgAdjustPos = {
+                x: x,
+                y: y,
+                w: w,
+                h: h
+            };
+
+            //canvasに画像を描画
+            this.resizeCtx.drawImage(img, imgAdjustPos.x, imgAdjustPos.y, imgAdjustPos.w, imgAdjustPos.h);
+
+            return this.resizeCanvas.toDataURL(imgType, 1);
+        }
+    }]);
+
+    return ImageManager;
+}();
+
+exports.default = ImageManager;
+
+},{"./Util":5}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -160,7 +430,7 @@ var Modal = function () {
 
 exports.default = Modal;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -174,6 +444,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 document.addEventListener("DOMContentLoaded", function () {
+
   new Profile();
 });
 
@@ -187,6 +458,9 @@ var Profile = function () {
     this.editBtn = document.getElementsByClassName('edit_profile_btn')[0];
     this.editBtn.addEventListener('click', this.editBtnClickHandler.bind(this));
     this.editProfileModal = new _EditProfileModal2.default();
+
+    this.about = document.querySelector('.main_content p.about');
+    this.adjustAboutText();
   }
 
   _createClass(Profile, [{
@@ -203,12 +477,61 @@ var Profile = function () {
       this.editProfileModal.type = 'profile';
       this.editProfileModal.show();
     }
+
+    //プロフィール文の整形
+    //一行18文字以内、各行をspanで囲む
+
+  }, {
+    key: 'adjustAboutText',
+    value: function adjustAboutText() {
+
+      //改行が３回以上の場合は３行目に全て連結する
+      var strs = this.about.innerHTML.split('\n');
+      if (!strs[1]) strs[1] = '';
+      if (!strs[2]) strs[2] = '';
+      if (strs.length > 3) {
+        for (var i = 3; i < strs.length; i++) {
+          strs[2] += strs[i];
+        }
+      }
+
+      //一行に18文字以上の場合は次の行に加える
+      var cacheStr = '';
+      for (var i = 0; i < 3; i++) {
+        strs[i] = cacheStr + strs[i];
+        if (strs[i].length > 18 && i != 2) {
+          cacheStr = strs[i];
+          cacheStr = cacheStr.slice(17);
+          strs[i] = strs[i].slice(0, 17);
+        }
+      }
+
+      //一行に18文字以上の場合は前の行に加える
+      cacheStr = '';
+      for (i = 2; i > -1; i--) {
+        strs[i] = strs[i] + cacheStr;
+        if (strs[i].length > 18) {
+          cacheStr = strs[i];
+          cacheStr = cacheStr.slice(0, strs[i].length - 18);
+          strs[i] = strs[i].slice(strs[i].length - 18);
+        }
+      }
+
+      //文字を改行ごとにspanで囲む
+      var html = '';
+      for (var i = 0; i < 3; i++) {
+        var str = '<span>' + strs[i] + '</span>';
+        if (i != 2) str = str + '<br>';
+        html += str;
+      }
+      this.about.innerHTML = html;
+    }
   }]);
 
   return Profile;
 }();
 
-},{"./EditProfileModal":1}],4:[function(require,module,exports){
+},{"./EditProfileModal":1}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -217,4 +540,4 @@ module.exports = {
 
 };
 
-},{}]},{},[3]);
+},{}]},{},[4]);

@@ -14,6 +14,7 @@
 	<p class="name"><%= @user[:name] %></p>
 </div>
 
+
 <p class="about"><%= @user[:about] %></p>
 
 <table class="profile">
@@ -47,8 +48,9 @@
 					<label for="file_photo" class="photo_file_select_btn">
 						<%= file_field_tag :upfile, size: 50, id: 'file_photo' %>
 					</label>
-					<%= hidden_field_tag :id, @user.id %>
-					<%= submit_tag 'アップロード', class: 'photo_upload_btn btn0' %>
+					<%= hidden_field_tag :user_id, @user.id %>
+					<!--<%= submit_tag 'アップロード', class: 'photo_upload_btn btn0' %>-->
+					<a href="javascript:void(0);" class="photo_upload_btn btn0">アップロード</a>
 				<% end %>
 
 				<p class="btn1">
@@ -67,15 +69,15 @@
 
 					<div class="c_mb40 name clearfix">
 						<%= f.label "名前" %>
-						<%= f.text_field :name %>
+						<%= f.text_field :name, maxlength: '20' %>
 					</div>
 					<div class="c_mb40 location clearfix">
 						<%= f.label "出身地" %>
-						<%= f.text_field :location %>
+						<%= f.text_field :location, maxlength: '20' %>
 					</div>
 					<div class="c_mb40 about clearfix">
 						<%= f.label "自己紹介" %>
-						<%= f.text_area :about %>
+						<%= f.text_area :about, maxlength: '50' %>
 					</div>
 					<%= f.submit "変更", class:"submit_btn btn0" %>
 				<% end %>
