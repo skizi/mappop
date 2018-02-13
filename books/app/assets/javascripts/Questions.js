@@ -2,6 +2,56 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Loading = function () {
+    function Loading() {
+        _classCallCheck(this, Loading);
+
+        this.element = document.getElementsByClassName('loading_cover')[0];
+    }
+
+    _createClass(Loading, [{
+        key: 'show',
+        value: function show() {
+
+            this.element.style.display = 'block';
+            this.element.style.opacity = 0;
+            setTimeout(function () {
+                this.element.style.opacity = 1;
+            }.bind(this), 100);
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+
+            this.element.style.opacity = 0;
+            setTimeout(function () {
+                this.element.style.display = 'none';
+            }.bind(this), 300);
+        }
+    }]);
+
+    return Loading;
+}();
+
+exports.default = Loading;
+
+},{"./Util":7}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
@@ -88,7 +138,7 @@ var Map = function () {
 
 exports.default = Map;
 
-},{"./Util":6}],2:[function(require,module,exports){
+},{"./Util":7}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -145,7 +195,7 @@ var Modal = function () {
 
 exports.default = Modal;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -216,7 +266,7 @@ var NewPostModal = function (_Modal) {
           content: content,
           lat: this.lat,
           lng: this.lng,
-          user_id: 0
+          user_id: app.user_id
         },
         success: function (result) {
           console.log(result);
@@ -238,7 +288,7 @@ var NewPostModal = function (_Modal) {
 
 exports.default = NewPostModal;
 
-},{"./Modal":2,"./Util":6}],4:[function(require,module,exports){
+},{"./Modal":3,"./Util":7}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -306,7 +356,7 @@ var Questions = function () {
 var questions = new Questions();
 app.initMap = questions.initMap.bind(questions);
 
-},{"./Map":1,"./NewPostModal":3,"./ShowPostModal":5}],5:[function(require,module,exports){
+},{"./Map":2,"./NewPostModal":4,"./ShowPostModal":6}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -322,6 +372,10 @@ var _Modal3 = _interopRequireDefault(_Modal2);
 var _Util = require('./Util');
 
 var _Util2 = _interopRequireDefault(_Util);
+
+var _Loading = require('./Loading');
+
+var _Loading2 = _interopRequireDefault(_Loading);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -346,6 +400,8 @@ var ShowPostModal = function (_Modal) {
         _this.answerBtn = document.querySelector('.modal.show .answer_btn');
         _this.answerBtn.addEventListener('click', _this.answerBtnClickHandler.bind(_this));
 
+        _this.loading = new _Loading2.default();
+
         _this.hide();
 
         return _this;
@@ -358,26 +414,36 @@ var ShowPostModal = function (_Modal) {
         key: 'answerBtnClickHandler',
         value: function answerBtnClickHandler() {
 
+            this.loading.show();
+
             var comment = this.comment.value;
             var question_id = this.questionId;
             var url = _Util2.default.apiHeadUrl + '/comments.json';
+            var data = {
+                content: comment,
+                question_id: question_id,
+                user_id: app.user_id
+            };
             $.ajax({
                 url: url,
                 type: 'POST',
-                data: { content: comment, question_id: question_id, user_id: 0 },
-                success: function success(result) {
+                data: data,
+                success: function (result) {
                     console.log(result);
-                },
+                    this.comment.value = '';
+                    this.loading.hide();
+                }.bind(this),
                 error: function (result) {
                     console.log(result);
+                    this.comment.value = '';
+                    this.loading.hide();
                 }.bind(this)
             });
 
             var noComment = this.comments.getElementsByClassName('no_comment')[0];
             if (noComment) this.comments.removeChild(noComment);
 
-            this.addComment(comment, 0);
-            this.comment.value = '';
+            this.addComment(comment, app.user_id);
         }
 
         //---------------------
@@ -445,13 +511,14 @@ var ShowPostModal = function (_Modal) {
 
 exports.default = ShowPostModal;
 
-},{"./Modal":2,"./Util":6}],6:[function(require,module,exports){
+},{"./Loading":1,"./Modal":3,"./Util":7}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://localhost:3000'
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 
-},{}]},{},[4]);
+},{}]},{},[5]);

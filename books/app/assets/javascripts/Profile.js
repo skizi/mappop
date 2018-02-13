@@ -19,6 +19,10 @@ var _ImageManager = require('./ImageManager');
 
 var _ImageManager2 = _interopRequireDefault(_ImageManager);
 
+var _Loading = require('./Loading');
+
+var _Loading2 = _interopRequireDefault(_Loading);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33,13 +37,9 @@ var EditProfileModal = function (_Modal) {
     function EditProfileModal() {
         _classCallCheck(this, EditProfileModal);
 
-        // this.name = document.querySelector( '.modal.edit_profile .name' );
-        // this.location = document.querySelector( '.modal.edit_profile .location' );
-        // this.about = document.querySelector( '.modal.edit_profile .about' );
-        // this.submitBtn = document.querySelector( '.modal.edit_profile .submit_btn' );
-        // this.submitBtn.addEventListener( 'click', this.submitBtnClickHandler.bind( this ) );
-
         var _this = _possibleConstructorReturn(this, (EditProfileModal.__proto__ || Object.getPrototypeOf(EditProfileModal)).call(this, '.modal.edit_profile'));
+
+        _this.enabledFlag = true;
 
         _this.changePhoto = _this.element.getElementsByClassName('change_photo')[0];
         _this.changeProfile = _this.element.getElementsByClassName('change_profile')[0];
@@ -56,9 +56,14 @@ var EditProfileModal = function (_Modal) {
 
         _this.fileInput = document.getElementById('file_photo');
         _this.fileInput.addEventListener('change', _this.fileChangeHandler.bind(_this));
+        _this.fileInput.addEventListener('click', _this.fileChangeClickHandler.bind(_this));
 
         _this.uploadBtn = _this.element.getElementsByClassName('photo_upload_btn')[0];
         _this.uploadBtn.addEventListener('click', _this.uploadBtnClickHandler.bind(_this));
+
+        _this.photoContainer = document.querySelector('.photo_container .photo');
+
+        _this.loading = new _Loading2.default();
 
         return _this;
     }
@@ -76,6 +81,15 @@ var EditProfileModal = function (_Modal) {
 
             this.changePhoto.style.display = 'block';
             this.changeProfile.style.display = 'none';
+        }
+    }, {
+        key: 'fileChangeClickHandler',
+        value: function fileChangeClickHandler(e) {
+
+            if (!this.enabledFlag) {
+                e.preventDefault();
+                return false;
+            }
         }
     }, {
         key: 'fileChangeHandler',
@@ -120,7 +134,18 @@ var EditProfileModal = function (_Modal) {
         key: 'uploadBtnClickHandler',
         value: function uploadBtnClickHandler() {
 
-            if (!this.file) return;
+            if (!this.enabledFlag) return;
+            if (this.fileInput.value == '') {
+                alert('画像を選択して下さい');
+                return;
+            }
+
+            if (this.loadFlag) {
+                alert('画像アップロード中です。\nお待ちください。');
+                return;
+            }
+            this.loading.show();
+            this.loadFlag = true;
 
             this.reader.onload = function (e) {
 
@@ -137,8 +162,6 @@ var EditProfileModal = function (_Modal) {
         key: 'upload',
         value: function upload(img) {
 
-            this.loadFlag = true;
-
             var formData = new FormData();
             var blob = this.dataURLtoBlob(img.getAttribute('src'));
             formData.append('upfile', blob, this.file.name);
@@ -153,14 +176,13 @@ var EditProfileModal = function (_Modal) {
                 processData: false,
                 contentType: false,
                 success: function (result) {
-                    this.loadFlag = false;
-                    this.file = null;
+                    this.uploadComp();
                 }.bind(this),
                 error: function (result) {
-                    this.loadFlag = false;
-                    this.file = null;
-                    if (result.status == 200) {} else {
-                        alert('アップロードエラー\n時間を置いてから試してみてください。');
+                    if (result.status == 200) {
+                        this.uploadComp();
+                    } else {
+                        this.uploadComp('error');
                     }
                 }.bind(this)
             });
@@ -180,6 +202,29 @@ var EditProfileModal = function (_Modal) {
             });
         }
     }, {
+        key: 'uploadComp',
+        value: function uploadComp(type) {
+
+            if (type == 'error') {
+                alert('アップロードエラー\n時間を置いてから試してみてください。');
+            } else {
+
+                setTimeout(function () {
+                    this.hide();
+                }.bind(this), 600);
+                this.photoContainer.style.backgroundImage = 'url(' + this.reader.result + ')';
+
+                this.enabledFlag = false;
+                setTimeout(function () {
+                    this.enabledFlag = true;
+                }.bind(this), 900);
+            }
+
+            this.loadFlag = false;
+            this.file = null;
+            this.loading.hide();
+        }
+    }, {
         key: 'type',
         set: function set(_type) {
 
@@ -197,7 +242,7 @@ var EditProfileModal = function (_Modal) {
 
 exports.default = EditProfileModal;
 
-},{"./ImageManager":2,"./Modal":3,"./Util":5}],2:[function(require,module,exports){
+},{"./ImageManager":2,"./Loading":3,"./Modal":4,"./Util":6}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -373,7 +418,57 @@ var ImageManager = function () {
 
 exports.default = ImageManager;
 
-},{"./Util":5}],3:[function(require,module,exports){
+},{"./Util":6}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Loading = function () {
+    function Loading() {
+        _classCallCheck(this, Loading);
+
+        this.element = document.getElementsByClassName('loading_cover')[0];
+    }
+
+    _createClass(Loading, [{
+        key: 'show',
+        value: function show() {
+
+            this.element.style.display = 'block';
+            this.element.style.opacity = 0;
+            setTimeout(function () {
+                this.element.style.opacity = 1;
+            }.bind(this), 100);
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+
+            this.element.style.opacity = 0;
+            setTimeout(function () {
+                this.element.style.display = 'none';
+            }.bind(this), 300);
+        }
+    }]);
+
+    return Loading;
+}();
+
+exports.default = Loading;
+
+},{"./Util":6}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -430,7 +525,7 @@ var Modal = function () {
 
 exports.default = Modal;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -531,13 +626,14 @@ var Profile = function () {
   return Profile;
 }();
 
-},{"./EditProfileModal":1}],5:[function(require,module,exports){
+},{"./EditProfileModal":1}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://localhost:3000'
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 
-},{}]},{},[4]);
+},{}]},{},[5]);

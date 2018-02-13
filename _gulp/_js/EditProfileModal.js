@@ -2,6 +2,7 @@
 import Modal from './Modal';
 import Util from './Util';
 import ImageManager from './ImageManager';
+import Loading from './Loading';
 
 
 export default class EditProfileModal extends Modal{
@@ -10,11 +11,7 @@ export default class EditProfileModal extends Modal{
 
         super( '.modal.edit_profile' );
 
-        // this.name = document.querySelector( '.modal.edit_profile .name' );
-        // this.location = document.querySelector( '.modal.edit_profile .location' );
-        // this.about = document.querySelector( '.modal.edit_profile .about' );
-        // this.submitBtn = document.querySelector( '.modal.edit_profile .submit_btn' );
-        // this.submitBtn.addEventListener( 'click', this.submitBtnClickHandler.bind( this ) );
+        this.enabledFlag = true;
 
         this.changePhoto = this.element.getElementsByClassName( 'change_photo' )[0];
         this.changeProfile = this.element.getElementsByClassName( 'change_profile' )[0];
@@ -31,9 +28,16 @@ export default class EditProfileModal extends Modal{
 
         this.fileInput = document.getElementById( 'file_photo' );
         this.fileInput.addEventListener( 'change', this.fileChangeHandler.bind(this) );
+        this.fileInput.addEventListener( 'click', this.fileChangeClickHandler.bind(this) );
+        
 
         this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
         this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
+
+
+        this.photoContainer = document.querySelector( '.photo_container .photo' );
+
+        this.loading = new Loading();
 
     }
 
@@ -66,6 +70,14 @@ export default class EditProfileModal extends Modal{
     }
 
 
+    fileChangeClickHandler( e ){
+
+        if( !this.enabledFlag ){
+            e.preventDefault();
+            return false;
+        }
+
+    }
 
 
     fileChangeHandler( e ){
@@ -117,7 +129,18 @@ export default class EditProfileModal extends Modal{
 
     uploadBtnClickHandler(){
 
-        if( !this.file ) return;
+        if( !this.enabledFlag ) return;
+        if( this.fileInput.value == '' ){
+            alert( '画像を選択して下さい' );
+            return;
+        }
+
+        if( this.loadFlag ){
+            alert( '画像アップロード中です。\nお待ちください。' );
+            return;
+        }
+        this.loading.show();
+        this.loadFlag = true;
 
         this.reader.onload = function(e) {
 
@@ -136,8 +159,6 @@ export default class EditProfileModal extends Modal{
 
     upload( img ){
 
-        this.loadFlag = true;
-
         var formData = new FormData();
         var blob = this.dataURLtoBlob( img.getAttribute( 'src' ) );
         formData.append( 'upfile', blob, this.file.name );
@@ -152,16 +173,13 @@ export default class EditProfileModal extends Modal{
             processData: false,
             contentType: false,
             success:function( result ){
-                this.loadFlag = false;
-                this.file = null;
+                this.uploadComp();
             }.bind( this ),
             error:function( result ){
-                this.loadFlag = false;
-                this.file = null;
                 if( result.status == 200 ){
-
+                    this.uploadComp();
                 }else{
-                    alert( 'アップロードエラー\n時間を置いてから試してみてください。' );
+                    this.uploadComp( 'error' );
                 }
             }.bind( this )
         });
@@ -179,6 +197,30 @@ export default class EditProfileModal extends Modal{
         return new Blob([barr], {
             type: 'image/jpeg',
         });
+    
+    }
+
+
+    uploadComp( type ){
+
+        if( type == 'error' ){
+            alert( 'アップロードエラー\n時間を置いてから試してみてください。' );
+        }else{
+
+            setTimeout(function(){
+                this.hide();
+            }.bind( this ), 600)
+            this.photoContainer.style.backgroundImage = 'url(' + this.reader.result + ')';
+
+            this.enabledFlag = false;
+            setTimeout(function(){
+                this.enabledFlag = true;
+            }.bind( this ), 900);
+        }
+
+        this.loadFlag = false;
+        this.file = null;
+        this.loading.hide();
     
     }
 

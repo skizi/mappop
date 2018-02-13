@@ -1,6 +1,7 @@
 
 import Modal from './Modal';
 import Util from './Util';
+import Loading from './Loading';
 
 export default class ShowPostModal extends Modal{
 
@@ -15,6 +16,8 @@ export default class ShowPostModal extends Modal{
         this.answerBtn = document.querySelector( '.modal.show .answer_btn' );
         this.answerBtn.addEventListener( 'click', this.answerBtnClickHandler.bind( this ) );
 
+        this.loading = new Loading();
+
     	this.hide();
 
     }
@@ -23,26 +26,36 @@ export default class ShowPostModal extends Modal{
     //--------------------マウスイベント-------------------
     answerBtnClickHandler(){
 
+        this.loading.show();
+
         var comment = this.comment.value;
         var question_id = this.questionId;
         var url = Util.apiHeadUrl + '/comments.json';
+        var data = {
+            content:comment,
+            question_id:question_id,
+            user_id:app.user_id
+        };
         $.ajax({
             url:url,
             type:'POST',
-            data:{ content:comment, question_id:question_id, user_id:0 },
+            data:data,
             success:function( result ){
-              console.log( result );
-            },
+                console.log( result );
+                this.comment.value = '';
+                this.loading.hide();
+            }.bind( this ),
             error:function( result ){
-              console.log( result );
+                console.log( result );
+                this.comment.value = '';
+                this.loading.hide();
             }.bind( this )
         });
 
         var noComment = this.comments.getElementsByClassName( 'no_comment' )[0];
         if( noComment ) this.comments.removeChild( noComment );
 
-        this.addComment( comment, 0 );
-        this.comment.value = '';
+        this.addComment( comment, app.user_id );
 
     }
 

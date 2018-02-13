@@ -14,14 +14,14 @@ export default class MainMenu{
 
   show(){
 
-    this.element.style.transform = 'translateX(0px)';
+    this.element.style.transform = 'translateX(0%)';
 
   }
 
 
   hide(){
 
-    this.element.style.transform = 'translateX(-750px)';
+    this.element.style.transform = 'translateX(-100%)';
 
   }
 

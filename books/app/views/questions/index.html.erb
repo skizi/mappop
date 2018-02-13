@@ -1,37 +1,39 @@
 <% content_for :js_css_include do %>
 	<script>
-		var app = {};
+		var app = {
+			<% if logged_in? %>
+			user_id:<%= current_user.id %>
+			<% end %>
+		};
 		function initMap(){
 		  app.initMap();
 		}
 	</script>
 	<%= javascript_include_tag 'Questions', media:'all', 'data-turbolinks-track': 'reload' %>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbL29XjQJ8Qrovfqi_xDRJz88MbmSBREQ&callback=initMap"
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9_vyxRZFpNPIvOXBwtEtW6g4JBovU3PU&callback=initMap"
 	    async defer></script>
 <% end %>
 
 <div class="map_container">
 	<div class="map"></div>
-	<a href="javascript:void(0);" class="btn0">質問を投稿</a>
+	<a href="javascript:void(0);" class="btn0">質問を投稿する</a>
 </div>
 
 
 <div class="modal new">
 	<div class="bg"></div>
 	<div class="inner">
+		<h2 class="title0">新規投稿</h2>
 		<div class="c_mb30">
 			<label for="question_title">タイトル</label>
 			<input type="text" name="title" class="title">
 		</div>
-		<div class="c_mb30">
-			<label for="question_content">内容</label>
+		<div class="c_mb30 textarea_container">
+			<label for="question_content">投稿内容</label>
 			<textarea name="content" class="content"></textarea>
 		</div>
 
-		<label for="question_user_id">User</label>
-		<input type="text" class="c_mb30" name="user_id" id="question_user_id">
-
-		<input type="submit" name="commit" value="Create Question" class="btn0 submit_btn c_mcenter" data-disable-with="Create Question">
+		<input type="submit" name="commit" value="投稿する" class="btn0 submit_btn c_mcenter" data-disable-with="Create Question">
 
 		<a href="javascript:void(0);" class="close_btn">×</a>
 	</div>

@@ -12,27 +12,44 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 document.addEventListener("DOMContentLoaded", function () {
-  new Common();
+		new Common();
 });
 
 var Common = function () {
-  function Common() {
-    _classCallCheck(this, Common);
+		function Common() {
+				_classCallCheck(this, Common);
 
-    this.mainMenuBtn = document.getElementsByClassName('main_menu_btn')[0];
-    this.mainMenuBtn.addEventListener('click', this.mainMenuBtnClickHandler.bind(this));
-    this.mainMenu = new _MainMenu2.default();
-  }
+				this.mainMenuBtn = document.getElementsByClassName('main_menu_btn')[0];
+				this.mainMenuBtn.addEventListener('click', this.mainMenuBtnClickHandler.bind(this));
+				this.mainMenu = new _MainMenu2.default();
 
-  _createClass(Common, [{
-    key: 'mainMenuBtnClickHandler',
-    value: function mainMenuBtnClickHandler() {
+				//拡大禁止
+				// var inputs = document.getElementsByTagName( 'input' );
+				// for( var i = 0; i < inputs.length; i++ ){
+				// 	if( inputs[i].getAttribute( 'type' ) == 'text' ){
+				// 		inputs[i].addEventListener('touchstart', event => {
+				// 			event.preventDefault();
+				// 		}, false);
+				// 	}
+				// }
 
-      this.mainMenu.show();
-    }
-  }]);
+				// var textareas = document.getElementsByTagName( 'textarea' );
+				// for( var i = 0; i < textareas.length; i++ ){
+				// 	textareas[i].addEventListener('touchstart', event => {
+				// 		event.preventDefault();
+				// 	}, false);
+				// }
+		}
 
-  return Common;
+		_createClass(Common, [{
+				key: 'mainMenuBtnClickHandler',
+				value: function mainMenuBtnClickHandler() {
+
+						this.mainMenu.show();
+				}
+		}]);
+
+		return Common;
 }();
 
 },{"./MainMenu":2}],2:[function(require,module,exports){
@@ -61,13 +78,13 @@ var MainMenu = function () {
     key: 'show',
     value: function show() {
 
-      this.element.style.transform = 'translateX(0px)';
+      this.element.style.transform = 'translateX(0%)';
     }
   }, {
     key: 'hide',
     value: function hide() {
 
-      this.element.style.transform = 'translateX(-750px)';
+      this.element.style.transform = 'translateX(-100%)';
     }
   }, {
     key: 'closeBtnClickHandler',

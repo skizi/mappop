@@ -595,7 +595,9 @@ p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no
 /*  BASE STYLE  */
 body, html { width: 100%; height: 100%; }
 
-body { color: #252525; font-family: microsoft yahei, Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif; -webkit-text-size-adjust: 100%; word-wrap: break-word; overflow-x: hidden; }
+html { overflow-y: hidden; }
+
+body { color: #252525; font-family: microsoft yahei, Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif; -webkit-text-size-adjust: 100%; word-wrap: break-word; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
 
 a { -webkit-tap-highlight-color: transparent; }
 a:link { color: #252525; }
@@ -612,6 +614,11 @@ input[type="checkbox"] { -webkit-appearance: none; position: relative; margin-ri
 input[type="checkbox"]:checked:before { position: absolute; left: 1px; top: 17px; display: block; content: ""; width: 10px; height: 4px; background: #252525; -webkit-transform: rotate(45deg); -webkit-transform-origin: right center; }
 
 input[type="checkbox"]:checked:after { display: block; position: absolute; left: 9px; top: 17px; content: ""; width: 19px; height: 4px; background: #252525; -webkit-transform: rotate(-53deg); -webkit-transform-origin: left center; }
+
+/* iOSでのデフォルトスタイルをリセット */
+input[type="submit"], input[type="button"] { border-radius: 0; -webkit-box-sizing: content-box; -webkit-appearance: button; appearance: button; border: none; box-sizing: border-box; }
+input[type="submit"]::-webkit-search-decoration, input[type="button"]::-webkit-search-decoration { display: none; }
+input[type="submit"]::focus, input[type="button"]::focus { outline-offset: -2px; }
 
 label { height: 66px; line-height: 66px; display: inline-block; font-size: 36px; float: left; }
 
@@ -633,11 +640,13 @@ label { height: 66px; line-height: 66px; display: inline-block; font-size: 36px;
 .btn0:active { box-shadow: none; transform: translate(7px, 7px); }
 .btn0:link, .btn0:visited { color: #fff; }
 
+@media screen and (min-width: 751px) { .btn0 { cursor: pointer; }
+  .btn0:hover { box-shadow: none; transform: translate(7px, 7px); } }
 .btn1 { text-align: center; }
 .btn1 a { line-height: 110%; padding: 0 5px; display: inline-block; border-bottom: 1px solid #f1831b; font-size: 30px; color: #f1831b; text-decoration: none; }
 
-.btn1:hover { text-decoration: none; }
-
+@media screen and (min-width: 751px) { .btn1 a { transition-duration: 0.3s; transition-property: opacity; }
+  .btn1 a:hover { opacity: 0.7; } }
 .tweet_container { border-bottom: 1px solid #ddd; padding-bottom: 50px; }
 
 .pagination { margin-bottom: 50px; }
@@ -646,12 +655,17 @@ label { height: 66px; line-height: 66px; display: inline-block; font-size: 36px;
 
 .title1 { margin-bottom: 55px; text-align: center; font-size: 32px; color: #8c8c8c; }
 
-header { width: 750px; height: 132px; background-color: #fff; border-bottom: 6px solid #ebb314; box-sizing: border-box; position: relative; box-shadow: 0px 0px 3px 3px rgba(1, 1, 1, 0.1); }
+header { width: 100%; height: 132px; background-color: #fff; border-bottom: 6px solid #ebb314; box-sizing: border-box; position: relative; box-shadow: 0px 0px 3px 3px rgba(1, 1, 1, 0.1); }
 header h1 { width: 182px; margin: 0 auto; padding-top: 42px; }
 header a.login_btn { width: 200px; height: 72px; line-height: 72px; background-color: #ebb313; display: block; position: absolute; top: 26px; right: 26px; border-radius: 10px; color: #fff; text-align: center; text-decoration: none; font-size: 26px; }
 header a.main_menu_btn { width: 49px; height: 27px; display: block; position: absolute; top: 48px; left: 50px; }
 
-section.main_menu { width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-750px); }
+@media screen and (min-width: 751px) { header a.main_menu_btn { zoom: 0.7; top: 70px; left: 60px; transition-duration: 0.3s; transition-property: opacity; }
+  header a.main_menu_btn:hover { opacity: 0.7; }
+  header h1 { padding-top: 52px; zoom: 0.8; }
+  header a.login_btn { top: 52px; right: 52px; zoom: 0.7; transition-duration: 0.3s; transition-property: opacity; }
+  header a.login_btn:hover { opacity: 0.7; } }
+section.main_menu { width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-100%); }
 section.main_menu div.bg { width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; }
 section.main_menu ul { width: 600px; height: 100%; background-color: #fff; box-shadow: 0px 0px 3px 3px rgba(1, 1, 1, 0.1); background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; position: relative; }
 section.main_menu ul li:first-child { padding-top: 100px; }
@@ -659,30 +673,50 @@ section.main_menu ul li a { height: 128px; line-height: 128px; padding-left: 62p
 section.main_menu ul li.close_btn { width: 37px; height: 37px; position: absolute; top: 28px; left: 540px; }
 section.main_menu ul li.close_btn a { width: 37px; height: 37px; padding-left: 0; background-image: url("./menu/close_btn.png"); text-indent: -9999px; border-bottom: none; }
 
-section.main_content { width: 750px; margin-bottom: 80px; }
+@media screen and (min-width: 751px) { section.main_menu ul { width: 300px; }
+  section.main_menu ul li { height: 50px; }
+  section.main_menu ul li:first-child { padding-top: 150px; }
+  section.main_menu ul li a { height: 50px; line-height: 50px; font-size: 20px; border-bottom: 1px solid #ebb313; transition-duration: 0.3s; transition-property: opacity; }
+  section.main_menu ul li a:hover { opacity: 0.7; }
+  section.main_menu ul li.close_btn { left: 230px; }
+  section.main_menu ul li.close_btn a { transition-duration: 0.3s; transition-property: transform; }
+  section.main_menu ul li.close_btn a:hover { transform: rotate(90deg); opacity: 1; } }
+section.main_content { width: 100%; margin-bottom: 80px; }
 
 body.questions_index section.main_content { margin-bottom: 0; }
 
-footer { width: 750px; padding-bottom: 20px; border-top: 4px solid #ebb314; }
+footer { width: 100%; padding-bottom: 20px; border-top: 4px solid #ebb314; }
 footer div.inner { overflow: hidden; *zoom: 1; min-height: 204px; }
-footer div.inner div.left { width: 324px; margin-left: 50px; padding-top: 58px; float: left; }
+footer div.inner div.left { width: 50%; margin-left: 50px; padding-top: 58px; float: left; }
 footer div.inner div.right { padding-top: 58px; margin-left: 42px; float: left; }
 footer div.inner div.right nav ul li { margin-bottom: 12px; list-style: circle; }
 footer div.inner div.right nav ul li a { color: #a7a7a7; font-size: 20px; text-decoration: none; }
 footer p.copy { color: #a7a7a7; text-align: center; }
+footer p.copy a { text-decoration: none; }
 
+@media screen and (min-width: 751px) { footer div.inner div.left { width: 40%; margin-left: 16%; }
+  footer div.inner div.left, footer div.inner div.right, footer p.copy { zoom: 0.7; }
+  footer div.inner div.left a, footer div.inner div.right a, footer p.copy a { transition-duration: 0.3s; transition-property: opacity; }
+  footer div.inner div.left a:hover, footer div.inner div.right a:hover, footer p.copy a:hover { opacity: 0.7; }
+  footer div.inner { min-height: 160px; }
+  footer div.inner div.right { min-width: 300px; } }
 .modal { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); opacity: 0; display: none; transition-duration: 0.3s; transition-property: opacity; }
 .modal .bg { width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; }
 .modal .inner { background-color: #fff; border-radius: 10px; width: 690px; height: 1054px; margin: -527px 0 0 -345px; position: absolute; top: 50%; left: 50%; opacity: 0; transform: translateY(-20px); background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; transition-duration: 0.3s; transition-property: transform, opacity; }
 .modal .inner input, .modal .inner textarea { width: 100%; }
 .modal .inner .close_btn { width: 37px; height: 37px; display: block; position: absolute; top: 28px; left: 624px; background-image: url("./menu/close_btn.png"); text-indent: -9999px; }
 .modal .inner .comments_title { margin-bottom: 10px; }
+.modal.new .inner { width: 606px; height: 974px; padding: 40px 42px; }
+.modal.new .inner div { overflow: hidden; *zoom: 1; }
+.modal.new .inner div.textarea_container label { float: none; }
+.modal.new .inner input[type="text"], .modal.new .inner textarea { width: 400px; }
+.modal.new .inner textarea { width: 592px; height: 300px; display: block; float: none; }
 .modal.show .inner div.top { width: auto; margin-bottom: 24px; padding: 40px 42px 60px 42px; border-bottom: 2px solid #ebb314; }
 .modal.show .inner div.top h2.title { width: 470px; height: 60px; line-height: 60px; margin-bottom: 18px; padding-left: 55px; font-size: 44px; font-weight: bold; color: #ebb314; border-bottom: 16px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 10px; }
 .modal.show .inner div.top p.content { min-height: 240px; font-size: 36px; line-height: 60px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); background-position: 0 -1px; }
 .modal.show .inner div.bottom { padding: 0 42px 38px 42px; }
 .modal.show .inner div.bottom h2 { height: 58px; line-height: 58px; margin-bottom: 24px; font-size: 36px; color: #ebb314; border-bottom: 2px dashed #ebb314; }
-.modal.show .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: scroll; -webkit-overflow-scrolling: touch; }
+.modal.show .inner div.bottom ul.comments { height: 220px; margin-bottom: 24px; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
 .modal.show .inner div.bottom ul.comments li { margin-bottom: 10px; overflow: hidden; *zoom: 1; }
 .modal.show .inner div.bottom ul.comments li img { width: 42px; height: 42px; margin-right: 12px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 44px; font-size: 24px; float: left; }
@@ -692,11 +726,17 @@ footer p.copy { color: #a7a7a7; text-align: center; }
 .modal.edit_profile .inner div.container { padding: 40px 42px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
 .modal.edit_profile .inner div.container div.change_photo label.photo_file_select_btn { height: auto; margin-bottom: 60px; float: none; }
+.modal.edit_profile .inner div.container div.change_photo label.photo_file_select_btn input { cursor: pointer; }
 .modal.edit_profile .inner div.container div.change_photo a.photo_upload_btn { width: 100%; }
 .modal.edit_profile .inner div.container div.change_profile { width: 600px; display: none; transition-duration: 0.3s; transition-property: opacity; position: absolute; top: 40px; }
 .modal.edit_profile .inner div.container div.change_profile div.clearfix { overflow: hidden; *zoom: 1; }
 .modal.edit_profile .inner div.container div.change_profile input[type="text"], .modal.edit_profile .inner div.container div.change_profile input[type="password"], .modal.edit_profile .inner div.container div.change_profile textarea { width: 420px; }
 .modal.edit_profile .inner div.container div.change_profile textarea { height: 200px; }
+
+@media screen and (min-width: 751px) { .modal .inner { zoom: 0.7; }
+  .modal .inner .close_btn { transition-duration: 0.3s; transition-property: transform; }
+  .modal .inner .close_btn:hover { transform: rotate(90deg); } }
+.loading_cover { width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; opacity: 0; position: fixed; top: 0px; left: 0px; background-image: url("./loading.gif"); background-repeat: no-repeat; background-position: center center; transition-duration: 0.3s; transition-property: opacity; }
 
 /*  CLASSES  */
 /*============================
@@ -973,34 +1013,52 @@ p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no
 /* clearfix */
 .cf:after, .clearfix:after { content: ""; clear: both; display: block; }
 
-.top_content { width: 100%; height: 550px; background-image: url("./top/map.jpg"); }
-.top_content h2 { font-size: 44px; color: #ebb313; background-color: #fff; display: inline-block; height: 66px; line-height: 66px; padding: 0 10px; margin: 35px 0 16px 116px; }
-.top_content p { font-size: 26px; color: #757575; background-color: #fff; display: inline-block; height: 40px; line-height: 40px; padding: 0 10px; margin: 0 0 10px 116px; }
-.top_content p:nth-child(3) { margin-bottom: 202px; }
+body.home_index .top_content { width: 100%; height: 550px; background-image: url("./top/map.jpg"); background-size: cover; background-position: bottom; }
+body.home_index .top_content div.text_container { width: 678px; margin: 0 auto; }
+body.home_index .top_content div.text_container h2 { font-size: 44px; color: #ebb313; background-color: #fff; display: inline-block; height: 66px; line-height: 66px; padding: 0 10px; margin: 35px 0 16px 0; }
+body.home_index .top_content div.text_container p { font-size: 26px; color: #757575; background-color: #fff; display: inline-block; height: 40px; line-height: 40px; padding: 0 10px; margin: 0 0 10px 0; }
+body.home_index .top_content div.text_container p:nth-child(3) { margin-bottom: 202px; }
+body.home_index .howto h2.title0 { font-size: 40px; }
+body.home_index .howto div.steps { overflow: hidden; *zoom: 1; width: 740px; margin: 0 auto 70px auto; }
+body.home_index .howto div.steps div.step { width: 220px; float: left; text-align: center; }
+body.home_index .howto div.steps div.step img { margin-bottom: 24px; }
+body.home_index .howto div.steps div.step.step1 { margin-right: 15px; }
+body.home_index .howto div.steps div.step.step1 img { margin: 22px 0 30px 0; }
+body.home_index .howto div.steps div.step.step2 { margin-right: 25px; }
+body.home_index .howto div.steps div.step.step2 img { margin: 20px 0 26px 0; }
+body.home_index .howto div.steps div.step h3 { line-height: 220%; }
+body.home_index .howto div.steps div.step h3 span { color: #737373; font-size: 20px; border-bottom: 2px dashed #ebb314; }
+body.home_index .howto p.about_text { line-height: 180%; margin: 0 40px; font-size: 30px; letter-spacing: 1px; }
 
-.howto h2.title0 { font-size: 40px; }
-.howto div.steps { overflow: hidden; *zoom: 1; width: 740px; margin: 0 auto 70px auto; }
-.howto div.steps div.step { width: 220px; float: left; text-align: center; }
-.howto div.steps div.step img { margin-bottom: 24px; }
-.howto div.steps div.step.step1 { margin-right: 15px; }
-.howto div.steps div.step.step1 img { margin: 22px 0 30px 0; }
-.howto div.steps div.step.step2 { margin-right: 25px; }
-.howto div.steps div.step.step2 img { margin: 20px 0 26px 0; }
-.howto div.steps div.step h3 { line-height: 220%; }
-.howto div.steps div.step h3 span { color: #737373; font-size: 20px; border-bottom: 2px dashed #ebb314; }
-.howto p.about_text { line-height: 180%; margin: 0 40px; font-size: 30px; letter-spacing: 1px; }
-
+@media screen and (min-width: 751px) { body.home_index .top_content { height: 390px; }
+  body.home_index .top_content div.text_container, body.home_index .top_content .btn0 { zoom: 0.7; }
+  body.home_index .howto h2.title0, body.home_index .howto h3.title1, body.home_index .howto div.steps, body.home_index .howto p.about_text { zoom: 0.7; }
+  body.home_index .howto p.about_text { width: 720px; margin: 0 auto; letter-spacing: 2px; } }
 .signup_container, .login_container { width: 650px; margin: 0 auto; }
 .signup_container form div, .login_container form div { overflow: hidden; *zoom: 1; }
 .signup_container form textarea, .login_container form textarea { height: 200px; }
 .signup_container form .btn0, .login_container form .btn0 { width: 650px; margin-bottom: 50px; }
 
-.map_container { width: 750px; height: 1000px; position: relative; }
+@media screen and (min-width: 751px) { .signup_container, .login_container { width: 460px; }
+  .signup_container .title0, .signup_container form, .signup_container .btn1, .login_container .title0, .login_container form, .login_container .btn1 { zoom: 0.7; } }
+.map_container { width: 100%; height: 950px; position: relative; }
 .map_container .map { height: 100%; width: 100%; }
-.map_container .btn0 { position: absolute; left: 36px; bottom: 35px; }
+.map_container .btn0 { margin-left: -339px; position: absolute; left: 50%; bottom: 35px; }
 
-.popup { cursor: pointer; }
+.popup { width: 300px; min-height: 50px; line-height: 50px; font-size: 26px; cursor: pointer; }
 
+body.questions_index header { zoom: 0.5; }
+body.questions_index .map_container { height: 475px; }
+body.questions_index .map_container .btn0 { zoom: 0.5; }
+body.questions_index footer { zoom: 0.5; }
+body.questions_index section.main_menu { zoom: 0.5; }
+body.questions_index .popup { width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; }
+body.questions_index div.modal { zoom: 0.5; }
+
+@media screen and (min-width: 751px) { .map_container { height: 700px; }
+  .map_container .map { width: 100%; height: 100%; zoom: 1; }
+  .map_container .btn0 { zoom: 0.7; }
+  .popup { width: 200px; min-height: 30px; line-height: 30px; font-size: 18px; } }
 body.users_show div.photo_container { height: 266px; padding-top: 26px; background-color: #f2f2f2; margin-bottom: 30px; background-image: url("./mypage/photo_bg.gif"); background-repeat: repeat-x; background-position: bottom; }
 body.users_show div.photo_container div.photo { width: 180px; height: 180px; margin: 0 auto 20px auto; border-radius: 200px; background-size: cover; }
 body.users_show div.photo_container p.name { color: #ebb313; font-size: 34px; text-align: center; }
@@ -1010,3 +1068,8 @@ body.users_show table.profile { margin: 0 auto 40px auto; border: 2px solid #d3d
 body.users_show table.profile tr td, body.users_show table.profile tr th { font-size: 30px; line-height: 60px; border: 2px solid #d3dae0; }
 body.users_show table.profile tr th { width: 200px; background-color: #f2f4f6; text-align: left; padding-left: 20px; }
 body.users_show table.profile tr td { width: 450px; padding-left: 20px; }
+
+@media screen and (min-width: 751px) { body.users_show div.photo_container { height: 190px; }
+  body.users_show div.photo, body.users_show p.name, body.users_show p.about, body.users_show table.profile, body.users_show p.btn1 { zoom: 0.7; }
+  body.users_show div.photo { transition-duration: 0.3s; transition-property: opacity; cursor: pointer; }
+  body.users_show div.photo:hover { opacity: 0.7; } }

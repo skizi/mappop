@@ -44,7 +44,7 @@ export default class NewPostModal extends Modal{
             content:content,
             lat:this.lat,
             lng:this.lng,
-            user_id:0
+            user_id:app.user_id
         },
         success:function( result ){
           console.log( result );
