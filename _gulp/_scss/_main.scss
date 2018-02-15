@@ -198,25 +198,272 @@ body.home_index{
 	cursor:pointer;
 }
 
+
 body.questions_index{
+
+	//width-320px
+	header,
+	section.main_content,
+	footer{	    
+	    width: 320px;
+	}
+
+
 	header{
-	    zoom: 0.5;
+	    height: 54px;
+	    border-bottom: 2px solid #ebb314;
+
+	    a.main_menu_btn{
+		    width: 22px;
+		    top: 20px;
+		    left: 26px;
+
+		    img{
+	    	    width: 100%;
+		    }
+	    }
+
+	    h1{
+	    	width: 78px;
+		    padding-top: 18px;
+
+		    img{
+		    	width:78px;
+		    }
+	    }
+
+	    a.login_btn{
+	    	width: 84px;
+		    height: 30px;
+		    border-radius: 4px;
+		    line-height: 30px;
+		    font-size: 12px;
+		    top: 11px;
+		    right: 11px;
+	    }
 	}
 
 	.map_container{
-	    height: 475px;
+        height: 400px;
 
 	    .btn0{
-    	    zoom: 0.5;
+    	    zoom: 0.33;
 	    }
 	}
 
 	footer{
-	    zoom: 0.5;
+	    div.inner{
+	    	min-height: 87px;
+
+	    	div.left{
+    		    width: auto;
+				margin-left: 21px;
+				padding-top: 24px;
+				img{
+				    width: 78px;
+				}
+	    	}
+
+	    	div.right{
+    		    margin-left: 80px;
+    		    padding-top: 16.6px;
+
+    		    nav ul li{
+		    	    margin-bottom: 7px;
+		    	    list-style: none;
+		    	    position:relative;
+		    	    height: 8px;
+    				line-height: 8px;
+
+		    	    &:after{
+		    	    	content:'';
+		    	    	width: 1px;
+		    	    	height: 1px;
+		    	    	display: block;
+		    	    	background-color: #a7a7a7;
+		    	    	position:absolute;
+		    	    	left:-6.6px;
+		    	    	top: 6px;
+		    	    }
+
+		    	    a{
+	    	    	    font-size: 8px;
+    					line-height: 8px;
+		    	    }
+    		    }
+	    	}
+	    }
+
+	    p.copy{
+	    	font-size: 6.6px;
+	    }
 	}
 
 	section.main_menu{
-	    zoom: 0.5;
+	    zoom: 0.3;
+		ul li a{
+			font-size: 10.6px;
+		}
+	}
+
+
+	.popup{
+		width: 100px;
+		min-height: 16.6px;
+		line-height: 16.6px;
+		font-size: 8.6px;
+	}
+
+	div.modal{
+
+		.inner{
+		    zoom: 0.4;
+		}
+
+	    &.new .inner div.textarea_container{
+	    	overflow:visible;
+	    }
+
+		.title0{
+			font-size: 16.6px;
+		}
+
+		.btn0{
+		    font-size: 16px;
+		}
+
+		label{
+			font-size: 16px;
+		}
+		
+		&.new .inner input[type="text"], .modal.new .inner textarea{
+			font-size: 16px;
+		}
+
+		&.new .inner textarea{
+		    font-size: 16px;
+		}
+
+		&.show .inner{
+			div.top{
+				h2.title{
+					font-size: 17.6px;
+				}
+
+				p.content{
+				    font-size: 14.4px;
+				}
+			}
+			
+			div.bottom{
+				h2{
+					font-size: 14.4px;
+				}
+
+				ul.comments li p{
+					font-size: 9.6px;
+				}
+			}
+		}
+
+
+	}
+
+
+	//width-375px
+	/*
+	header{
+	    height: 66px;
+	    border-bottom: 3px solid #ebb314;
+
+	    a.main_menu_btn{
+		    width: 24px;
+		    top: 24px;
+		    left: 25px;
+
+		    img{
+	    	    width: 100%;
+		    }
+	    }
+
+	    h1{
+	    	width: 90px;
+		    padding-top: 21px;
+
+		    img{
+		    	width:90px;
+		    }
+	    }
+
+	    a.login_btn{
+	    	width: 100px;
+		    height: 36px;
+		    border-radius: 5px;
+		    line-height: 36px;
+		    font-size: 13px;
+		    top: 13px;
+		    right: 13px;
+	    }
+	}
+
+	.map_container{
+        height: 450px;
+
+	    .btn0{
+    	    zoom: 0.33;
+	    }
+	}
+
+	footer{
+	    div.inner{
+	    	min-height: 110px;
+
+	    	div.left{
+    		    width: auto;
+				margin-left: 25px;
+				padding-top: 27px;
+				img{
+				    width: 90px;
+				}
+	    	}
+
+	    	div.right{
+    		    margin-left: 120px;
+    		    padding-top: 25px;
+
+    		    nav ul li{
+		    	    margin-bottom: 0px;
+		    	    list-style: none;
+		    	    position:relative;
+		    	    height: 16px;
+    				line-height: 16px;
+
+		    	    &:after{
+		    	    	content:'';
+		    	    	width: 2px;
+		    	    	height: 2px;
+		    	    	display: block;
+		    	    	background-color: #a7a7a7;
+		    	    	position:absolute;
+		    	    	left:-10px;
+		    	    	top: 8px;
+		    	    }
+
+		    	    a{
+	    	    	    font-size: 10px;
+    					line-height: 16px;
+		    	    }
+    		    }
+	    	}
+	    }
+
+	    p.copy{
+	    	font-size: 10px;
+	    }
+	}
+
+	section.main_menu{
+	    zoom: 0.33;
 	}
 
 
@@ -228,8 +475,9 @@ body.questions_index{
 	}
 
 	div.modal{
-		zoom:0.5;
+		zoom: 0.33;
 	}
+	*/
 }
 
 

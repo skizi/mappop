@@ -12,7 +12,11 @@ export default class Map{
 
     this.map = new google.maps.Map( this.element, {
       center: {lat:35.67848924554223, lng:139.76272863769532 },
-      zoom: 12
+      zoom: 12,
+      fullscreenControl:false,
+      mapTypeControl:false,
+      streetViewControl:false,
+      zoomControl:false
     });
 
     this.popups = [];
