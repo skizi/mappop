@@ -3,14 +3,24 @@ import NewPostModal from './NewPostModal';
 import ShowPostModal from './ShowPostModal';
 
 
+document.addEventListener( "DOMContentLoaded", function(){  
+
+  new Questions();
+
+} );
+
+
+
 class Questions{
 
   constructor(){
 
-    document.addEventListener( "DOMContentLoaded", function(){
+    //document.addEventListener( "DOMContentLoaded", function(){
       this.newPostModal = new NewPostModal();
       this.showPostModal = new ShowPostModal();
-    }.bind( this ) );
+    //}.bind( this ) );
+
+    this.initMap();
 
   }
 
@@ -46,5 +56,5 @@ class Questions{
 
 }
 
-var questions = new Questions();
-app.initMap = questions.initMap.bind( questions );
+//var questions = new Questions();
+//app.initMap = questions.initMap.bind( questions );

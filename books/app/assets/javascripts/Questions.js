@@ -73,14 +73,23 @@ var Map = function () {
     this.btn = document.querySelector('.map_container .btn0');
     this.btn.addEventListener('click', this.btnClickHandler.bind(this));
 
-    this.map = new google.maps.Map(this.element, {
-      center: { lat: 35.67848924554223, lng: 139.76272863769532 },
-      zoom: 12,
-      fullscreenControl: false,
-      mapTypeControl: false,
-      streetViewControl: false,
-      zoomControl: false
-    });
+    /*
+     this.map = new google.maps.Map( this.element, {
+       center: {lat:35.67848924554223, lng:139.76272863769532 },
+       zoom: 12,
+       fullscreenControl:false,
+       mapTypeControl:false,
+       streetViewControl:false,
+       zoomControl:false
+     });
+     */
+
+    var latlng = [35.67848924554223, 139.76272863769532];
+    this.map = L.map('leafletMap').setView(latlng, 12);
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(this.map);
 
     this.popups = [];
   }
@@ -108,19 +117,29 @@ var Map = function () {
       var length = results.length;
       for (var i = 0; i < length; i++) {
         var obj = results[i];
-        var content = document.createElement("div");
-        content.className = 'popup';
+
+        //google map
+        // var content = document.createElement("div");
+        // content.className = 'popup';
+        // content.innerHTML = obj.title;
+        // var popup = new google.maps.InfoWindow({
+        // 	content: content,
+        // 	position: { lat:Number( obj.lat ), lng:Number( obj.lng ) },
+        // 	map: this.map,
+        // 	disableAutoPan: false
+        // });
+
+        //leaflet
+        var content = L.DomUtil.create('div', 'popup');
         content.innerHTML = obj.title;
-        var popup = new google.maps.InfoWindow({
-          content: content,
-          position: { lat: Number(obj.lat), lng: Number(obj.lng) },
-          map: this.map,
-          disableAutoPan: false
-        });
+        L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
+
+        var popup = L.popup().setLatLng([Number(obj.lat), Number(obj.lng)]).setContent(content).openOn(this.map);
         this.popups.push(popup);
 
-        google.maps.event.addDomListener(content, 'click', this.popupClickHandler.bind(this, i));
+        //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
       }
+      console.log(L.DomUtil.create);
     }
   }, {
     key: 'popupClickHandler',
@@ -313,14 +332,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+document.addEventListener("DOMContentLoaded", function () {
+
+  new Questions();
+});
+
 var Questions = function () {
   function Questions() {
     _classCallCheck(this, Questions);
 
-    document.addEventListener("DOMContentLoaded", function () {
-      this.newPostModal = new _NewPostModal2.default();
-      this.showPostModal = new _ShowPostModal2.default();
-    }.bind(this));
+    //document.addEventListener( "DOMContentLoaded", function(){
+    this.newPostModal = new _NewPostModal2.default();
+    this.showPostModal = new _ShowPostModal2.default();
+    //}.bind( this ) );
+
+    this.initMap();
   }
 
   _createClass(Questions, [{
@@ -357,8 +383,8 @@ var Questions = function () {
   return Questions;
 }();
 
-var questions = new Questions();
-app.initMap = questions.initMap.bind(questions);
+//var questions = new Questions();
+//app.initMap = questions.initMap.bind( questions );
 
 },{"./Map":2,"./NewPostModal":4,"./ShowPostModal":6}],6:[function(require,module,exports){
 'use strict';

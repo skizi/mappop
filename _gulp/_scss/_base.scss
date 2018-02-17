@@ -571,6 +571,7 @@ footer{
     display: none;
     transition-duration: 0.3s;
     transition-property: opacity;
+    z-index: 1;
 
     .bg{
         width: 100%;

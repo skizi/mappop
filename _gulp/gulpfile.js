@@ -22,7 +22,8 @@ gulp.task('concat_libs', function() {
   gulp.src([
     './_js/libs/jquery.js',
     './_js/libs/exif.js',
-    './_js/libs/megapix-image.js'
+    './_js/libs/megapix-image.js',
+    './_js/libs/leaflet.js'
     ])
     .pipe(plumber())
     .pipe(concat("libs.js"))

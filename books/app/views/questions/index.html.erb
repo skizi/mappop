@@ -7,17 +7,20 @@
 			user_id:<%= current_user.id %>
 			<% end %>
 		};
+		/*
 		function initMap(){
 		  app.initMap();
-		}
+		}*/
 	</script>
 	<%= javascript_include_tag 'Questions', media:'all', 'data-turbolinks-track': 'reload' %>
+	<!--
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9_vyxRZFpNPIvOXBwtEtW6g4JBovU3PU&callback=initMap"
 	    async defer></script>
+	-->
 <% end %>
 
 <div class="map_container">
-	<div class="map"></div>
+	<div class="map" id="leafletMap"></div>
 	<a href="javascript:void(0);" class="btn0">質問を投稿する</a>
 </div>
 
