@@ -86,9 +86,14 @@ var Map = function () {
 
     var latlng = [35.67848924554223, 139.76272863769532];
     this.map = L.map('leafletMap').setView(latlng, 12);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+    //なぜかRetina対応タイルが存在しない
+    //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
+    {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
       maxZoom: 18
+      //detectRetina:true
     }).addTo(this.map);
 
     this.popups = [];
@@ -139,7 +144,6 @@ var Map = function () {
 
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
       }
-      console.log(L.DomUtil.create);
     }
   }, {
     key: 'popupClickHandler',
@@ -152,7 +156,7 @@ var Map = function () {
     value: function btnClickHandler() {
 
       var bounds = this.map.getCenter();
-      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat(), lng: bounds.lng() } } }));
+      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng } } }));
     }
   }]);
 
@@ -346,18 +350,25 @@ var Questions = function () {
     this.showPostModal = new _ShowPostModal2.default();
     //}.bind( this ) );
 
-    this.initMap();
+    //   this.initMap();
+
+    // }
+
+
+    // initMap(){
+
+    this.map = new _Map2.default();
+    this.map.initMap();
+    this.map.element.addEventListener('ysdCallback', this.mapCallBackHandler.bind(this));
+
+    // var zoom = window.innerWidth / 750;
+    // document.querySelector( 'header' ).style.zoom = zoom;
+    //document.querySelector( '.main_content' ).style.zoom = zoom;
+    // document.querySelector( 'footer' ).style.zoom = zoom;
+    // document.querySelector( '.main_menu' ).style.zoom = zoom;
   }
 
   _createClass(Questions, [{
-    key: 'initMap',
-    value: function initMap() {
-
-      this.map = new _Map2.default();
-      this.map.initMap();
-      this.map.element.addEventListener('ysdCallback', this.mapCallBackHandler.bind(this));
-    }
-  }, {
     key: 'mapCallBackHandler',
     value: function mapCallBackHandler(e) {
 

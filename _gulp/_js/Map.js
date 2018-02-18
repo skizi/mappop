@@ -25,9 +25,13 @@ export default class Map{
     this.map = L.map( 'leafletMap' ).setView( latlng, 12 );
 	L.tileLayer(
 		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+		//なぜかRetina対応タイルが存在しない
+		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
 		{
 			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
-			maxZoom: 18
+			maxZoom: 18,
+			//detectRetina:true
 		}
 	).addTo( this.map );
 
@@ -83,7 +87,7 @@ export default class Map{
 
 		//google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
   	}
-console.log(L.DomUtil.create);
+
   }
 
 
@@ -97,7 +101,7 @@ console.log(L.DomUtil.create);
   btnClickHandler(){
 
 	var bounds = this.map.getCenter();
-	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat(), lng:bounds.lng() } } } ) );
+	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
 
   }
 

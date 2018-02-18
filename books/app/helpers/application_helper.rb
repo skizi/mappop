@@ -8,7 +8,7 @@ module ApplicationHelper
 		description: Settings.site.meta.description,
 		keywords: Settings.site.meta.keywords,
 		canonical: Settings.site.root_url,
-	    viewport: 'width=750, initial-scale=0.5, user-scalable=no',
+	    viewport: 'width=375, initial-scale=1, user-scalable=no',
 		og: {
 			title: :title,
 			type: Settings.site.meta.og.type,

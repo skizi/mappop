@@ -1,25 +1,25 @@
 
 	<%= form_for(user) do |f| %>
-		<div class="c_mb40 email">
+		<div class="c_mb20 email">
 			<%= f.label "email" %>
 			<%= f.text_field :email %>
 		</div>
-		<div class="c_mb40 password">
+		<div class="c_mb20 password">
 			<%= f.label "パスワード" %>
 			<%= f.password_field :password %>
 		</div>
-		<div class="c_mb40 name">
+		<div class="c_mb20 name">
 			<%= f.label "名前" %>
 			<%= f.text_field :name %>
 		</div>
 	
 		<%= f.hidden_field :username %>
 
-		<div class="c_mb40 location">
+		<div class="c_mb20 location">
 			<%= f.label "出身地" %>
 			<%= f.text_field :location %>
 		</div>
-		<div class="c_mb40 about">
+		<div class="c_mb20 about">
 			<%= f.label "自己紹介" %>
 			<%= f.text_area :about %>
 		</div>

@@ -77,12 +77,12 @@ input[type="text"]:focus {
 input[type="text"],
 input[type="password"],
 textarea{
-    width: 440px;
-    height: 60px;
-    line-height: 60px;
-    font-size: 30px;
-    padding-left: 10px;
-    border-radius: 10px;
+    width: 220px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    padding-left: 5px;
+    border-radius: 5px;
     float: right;
 }
 
@@ -145,10 +145,10 @@ input[type="button"] {
 
 
 label{
-    height: 66px;
-    line-height: 66px;
+    height: 33px;
+    line-height: 33px;
     display: inline-block;
-    font-size: 36px;
+    font-size: 18px;
     float: left;
 }
 
@@ -184,28 +184,25 @@ label{
 
 
 .btn0{
-    width:678px;
-    height: 106px;
-    line-height: 106px;
+    width:339px;
+    height: 53px;
+    line-height: 53px;
     margin: 0 auto;
     display: block;
     background-color:#ebb314;
     color:#fff;
-    font-size:48px;
+    font-size:24px;
     text-align: center;
     text-decoration: none;
     box-shadow: 1px 1px 0px #bc8e10,
                 2px 2px 0px #bc8e10,
                 3px 3px 0px #bc8e10,
-                4px 4px 0px #bc8e10,
-                5px 5px 0px #bc8e10,
-                6px 6px 0px #bc8e10,
-                7px 7px 0px #bc8e10;
+                4px 4px 0px #bc8e10;
     border: none;
 
     &:active{
         box-shadow:none;
-        transform:translate(7px,7px);
+        transform:translate(4px,4px);
     }
 
     &:link,
@@ -233,10 +230,10 @@ label{
 
     a{
         line-height: 110%;
-        padding: 0 5px;
+        padding: 0 2px;
         display: inline-block;
         border-bottom: 1px solid #f1831b;
-        font-size: 30px;
+        font-size: 15px;
         color: #f1831b;
         text-decoration: none;
     }
@@ -266,61 +263,69 @@ label{
 
 
 .title0{
-    margin-bottom: 60px;
-    padding-top: 50px;
+    margin-bottom: 30px;
+    padding-top: 25px;
     color: #ebb313;
-    font-size: 50px;
+    font-size: 25px;
     text-align: center;
 }
 
 
 .title1{
-    margin-bottom: 55px;
+    margin-bottom: 27px;
     text-align: center;
-    font-size: 32px;
+    font-size: 16px;
     color: #8c8c8c;
 }
 
 
 //-----------------header--------------------
 header{
-    width:100%;
-    height:132px;
+    width:375px;
+    height:66px;
     background-color:#fff;
-    border-bottom:6px solid #ebb314;
+    border-bottom:3px solid #ebb314;
     box-sizing:border-box;
     position:relative;
     box-shadow:0px 0px 3px 3px rgba(1,1,1,0.1);
 
     h1{
-        width: 182px;
+        width: 91px;
         margin: 0 auto;
-        padding-top: 42px;
+        padding-top: 21px;
+
+        img{
+            width:100%;
+        }
     }
 
     a.login_btn{
-        width: 200px;
-        height: 72px;
-        line-height: 72px;
+        width: 100px;
+        height: 36px;
+        line-height: 36px;
         background-color: #ebb313;
         display: block;
         position: absolute;
-        top: 26px;
-        right: 26px;
-        border-radius: 10px;
+        top: 13px;
+        right: 13px;
+        border-radius: 5px;
         color: #fff;
         text-align: center;
         text-decoration: none;
-        font-size: 26px;
+        font-size: 13px;
     }
 
     a.main_menu_btn{
-        width: 49px;
-        height: 27px;
+        width: 24px;
+        height: 13px;
         display: block;
         position: absolute;
-        top: 48px;
-        left: 50px;
+        top: 24px;
+        left: 25px;
+
+        img{
+            width:100%;
+        }
     }
 }
 
@@ -328,27 +333,9 @@ header{
 @media screen and (min-width: 751px) {
     
     header{
-        a.main_menu_btn{
-            zoom: 0.7;
-            top: 70px;
-            left: 60px;
-            transition-duration: 0.3s;
-            transition-property: opacity;
-
-            &:hover{
-                opacity: 0.7;
-            }
-        }
-
-        h1{
-            padding-top: 52px;
-            zoom: 0.8;
-        }
+        width:100%;
 
         a.login_btn{
-            top: 52px;
-            right: 52px;
-            zoom:0.7;
             transition-duration: 0.3s;
             transition-property: opacity;
 
@@ -358,6 +345,7 @@ header{
         }
     }
 }
+
 
 section.main_menu{
     width:100%;
@@ -378,44 +366,46 @@ section.main_menu{
     }
 
     ul{
-        width: 600px;
+        width: 300px;
         height: 100%;
         background-color: #fff;
         box-shadow: 0px 0px 3px 3px rgba(1,1,1,0.1);
         background-image:url("./menu/close_btn_bg.png");
         background-repeat:no-repeat;
         background-position:right top;
+        background-size: 81px;
         position:relative;
 
         li{
             &:first-child{
-                padding-top:100px;
+                padding-top:50px;
             }
 
             a{
-                height: 128px;
-                line-height: 128px;
-                padding-left: 62px;
+                height: 64px;
+                line-height: 64px;
+                padding-left: 31px;
                 display: block;
                 color: #ebb313;
                 text-decoration: none;
-                border-bottom: 2px solid #ebb313;
-                font-size: 32px;
+                border-bottom: 1px solid #ebb313;
+                font-size: 16px;
             }
         }
 
         li.close_btn{
-            width:37px;
-            height: 37px;
+            width:18px;
+            height: 18px;
             position:absolute;
-            top:28px;
-            left:540px;
+            top:14px;
+            left:270px;
 
             a{
-                width:37px;
-                height: 37px;
+                width:18px;
+                height: 18px;
                 padding-left: 0;
                 background-image:url("./menu/close_btn.png");
+                background-size:100%;
                 text-indent: -9999px;
                 border-bottom: none;
             }
@@ -434,13 +424,12 @@ section.main_menu{
                 height: 50px;
 
                 &:first-child{
-                    padding-top: 150px;
+                    padding-top: 100px;
                 }
 
                 a{
                     height: 50px;
                     line-height: 50px;
-                    font-size: 20px;
                     border-bottom: 1px solid #ebb313;
 
                     transition-duration: 0.3s;
@@ -452,7 +441,8 @@ section.main_menu{
                 }
 
                 &.close_btn{
-                    left: 230px;
+                    top: 10px;
+                    left: 270px;
 
                     a{
                         transition-duration: 0.3s;
@@ -471,43 +461,65 @@ section.main_menu{
 }
 
 section.main_content{
-    width: 100%;
+    width:375px;
     margin-bottom: 80px;
 }
 
-body.questions_index section.main_content{
+@media screen and (min-width: 751px) {
+section.main_content{
+    width:100%;
     margin-bottom: 0;
+}
 }
 
 footer{
-    width: 100%;
-    padding-bottom: 20px;
-    border-top:4px solid #ebb314;
+    width:375px;
+    padding-bottom: 10px;
+    border-top:2px solid #ebb314;
 
     div.inner{
         @include clearfix;
-        min-height: 204px;
+        min-height: 102px;
 
         div.left{
             width: 50%;
-            margin-left:50px;
-            padding-top:58px;
+            margin-left:25px;
+            padding-top:29px;
             float:left;
+
+            img{
+                width:91px;
+            }
         }
 
         div.right{
-            padding-top:58px;
-            margin-left: 42px;
+            padding-top:29px;
+            margin-left: 21px;
             float:left;
 
             nav ul{
                 li{
-                    margin-bottom: 12px;
-                    list-style: circle;
+                    margin-bottom: 0px;
+                    list-style: none;
+                    position:relative;
+                    height: 16px;
+                    line-height: 16px;
+                    z-index: -1;
+
+                    &:after{
+                        content:'';
+                        width: 2px;
+                        height: 2px;
+                        display: block;
+                        background-color: #a7a7a7;
+                        position:absolute;
+                        left:-10px;
+                        top: 8px;
+                    }
 
                     a{
                         color:#a7a7a7;
-                        font-size:20px;
+                        font-size:10px;
                         text-decoration: none;
                     }  
                 }
@@ -521,6 +533,7 @@ footer{
 
         a{
             text-decoration: none;
+            font-size:10px;
         }
     }
 }
@@ -528,6 +541,8 @@ footer{
 @media screen and (min-width: 751px) {
 
     footer{
+        width:100%;
+
         div.inner div.left{
             width: 40%;
             margin-left: 16%;
@@ -536,7 +551,6 @@ footer{
         div.inner div.left,
         div.inner div.right,
         p.copy{
-            zoom:0.7;
 
             a{
                 transition-duration: 0.3s;
@@ -549,7 +563,7 @@ footer{
         }
 
         div.inner{
-            min-height: 160px;
+            min-height: 140px;
 
             div.right{
                 min-width: 300px;
@@ -571,7 +585,6 @@ footer{
     display: none;
     transition-duration: 0.3s;
     transition-property: opacity;
-    z-index: 1;
 
     .bg{
         width: 100%;
@@ -583,21 +596,21 @@ footer{
 
     .inner{
         background-color: #fff;
-        border-radius: 10px;
-        width: 690px;
-        height: 1054px;
-        margin: -527px 0 0 -345px;
+        border-radius: 5px;
+        width: 345px;
+        height: 527px;
+        margin: -263px 0 0 -172px;
         position: absolute;
         top: 50%;
         left: 50%;
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-10px);
         background-image:url("./menu/close_btn_bg.png");
         background-repeat:no-repeat;
         background-position:right top;
+        background-size:81px;
         transition-duration: 0.3s;
         transition-property: transform, opacity;
-
 
         input,
         textarea{
@@ -606,32 +619,34 @@ footer{
 
 
         .close_btn{
-            width:37px;
-            height: 37px;
+            width:18px;
+            height: 18px;
             display: block;
             position:absolute;
-            top:28px;
-            left:624px;
+            top:14px;
+            left:312px;
             background-image:url("./menu/close_btn.png");
             text-indent: -9999px;
+            background-size:18px;
         }
 
         .comments_title{
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
     }
 
 
     &.new .inner{
-        width: 606px;
-        height: 974px;
-        padding:40px 42px;
+        width: 303px;
+        height: 487px;
+        padding:20px 21px;
 
         div{
             @include clearfix;
 
             &.textarea_container{
+                width: 310px;
                 label{
                     float: none;
                 }
@@ -640,12 +655,12 @@ footer{
 
         input[type="text"],
         textarea{
-            width: 400px;
+            width: 200px;
         }
 
         textarea{
-            width: 592px;
-            height: 300px;
+            width: 296px;
+            height: 150px;
             display: block;
             float: none;
         }
@@ -657,66 +672,67 @@ footer{
 
         div.top{
             width:auto;
-            margin-bottom: 24px;
-            padding:40px 42px 60px 42px;
-            border-bottom:2px solid #ebb314;
+            margin-bottom: 12px;
+            padding:20px 21px 30px 21px;
+            border-bottom:1px solid #ebb314;
 
             h2.title{
-                width: 470px;
-                height: 60px;
-                line-height: 60px;
-                margin-bottom: 18px;
-                padding-left: 55px;
-                font-size: 44px;
+                width: 235px;
+                height: 30px;
+                line-height: 30px;
+                margin-bottom: 9px;
+                padding-left: 27px;
+                font-size: 22px;
                 font-weight: bold;
                 color: #ebb314;
-                border-bottom: 16px solid #ebb314;
+                border-bottom: 8px solid #ebb314;
                 background-image:url("./map/icon.png");
                 background-repeat:no-repeat;
-                background-position:left 10px;
+                background-position:left 5px;
+                background-size: 22px;
             }
 
             p.content{
-                min-height: 240px;
-                font-size: 36px;
-                line-height: 60px;
+                min-height: 120px;
+                font-size: 18px;
+                line-height: 30px;
                 background:repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px);
                 background-position: 0 -1px;
             }
         }
 
         div.bottom{
-            padding:0 42px 38px 42px;
+            padding:0 21px 19px 21px;
 
             h2{
-                height:58px;
-                line-height: 58px;
-                margin-bottom: 24px;
-                font-size: 36px;
+                height:29px;
+                line-height: 29px;
+                margin-bottom: 12px;
+                font-size: 18px;
                 color:#ebb314;
-                border-bottom: 2px dashed #ebb314;
+                border-bottom: 1px dashed #ebb314;
             }
 
             ul.comments{
-                height: 220px;
-                margin-bottom: 24px;
+                height: 110px;
+                margin-bottom: 12px;
                 overflow-x: hidden;
                 overflow-y: scroll;
                 -webkit-overflow-scrolling: touch;
 
                 li{
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
                     @include clearfix;
 
                     img{
-                        width:42px;
-                        height:42px;
-                        margin-right: 12px;
+                        width:21px;
+                        height:21px;
+                        margin-right: 6px;
                         float:left;
                     }
                     p{
-                        line-height: 44px;
-                        font-size:24px;
+                        line-height: 22px;
+                        font-size:12px;
                         float:left;
 
                         &.no_comment{
@@ -727,13 +743,13 @@ footer{
             }
 
             textarea{
-                border-radius: 10px;
-                width: 590px;
-                height: 100px;
-                margin-bottom: 10px;
-                padding: 0 10px;
-                font-size: 30px;
-                line-height: 40px;
+                border-radius: 5px;
+                width: 295px;
+                height: 50px;
+                margin-bottom: 5px;
+                padding: 0 5px;
+                font-size: 15px;
+                line-height: 20px;
                 float: none;
             }
 
@@ -747,7 +763,7 @@ footer{
     &.edit_profile .inner{
 
         div.container{
-            padding: 40px 42px;
+            padding: 20px 21px;
             position:relative;
 
             div.change_photo{
@@ -756,17 +772,11 @@ footer{
             
                 label.photo_file_select_btn{
                     height:auto;
-                    margin-bottom: 60px;
+                    margin-bottom: 30px;
                     float:none;
-                    // width: 100%;
-                    // height: 60px;
-                    // background-color: #ddd;
-                    // border-radius: 10px;
-                    // line-height: 60px;
-                    // border: 1px solid #ababab;
 
                     input{
-                        //display: none;
+                        font-size: 16px;
                         cursor:pointer;
                     }
 
@@ -779,12 +789,12 @@ footer{
             }
 
             div.change_profile{
-                width: 600px;
+                width: 300px;
                 display: none;
                 transition-duration: 0.3s;
                 transition-property: opacity;
                 position:absolute;
-                top:40px;
+                top:20px;
 
                 div.clearfix{
                     @include clearfix;
@@ -793,11 +803,11 @@ footer{
                 input[type="text"],
                 input[type="password"],
                 textarea{
-                    width: 420px;
+                    width: 210px;
                 }
 
                 textarea{
-                    height:200px;
+                    height:100px;
                 }
             }
 
@@ -815,7 +825,6 @@ footer{
 @media screen and (min-width: 751px) {
 
     .modal .inner{
-        zoom: 0.7;
 
         .close_btn{
             transition-duration:0.3s;

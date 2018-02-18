@@ -20,17 +20,23 @@ class Questions{
       this.showPostModal = new ShowPostModal();
     //}.bind( this ) );
 
-    this.initMap();
+  //   this.initMap();
 
-  }
+  // }
 
 
-  initMap(){
+  // initMap(){
 
     this.map = new Map();
     this.map.initMap();
     this.map.element.addEventListener( 'ysdCallback', this.mapCallBackHandler.bind( this ) );
-  
+    
+    // var zoom = window.innerWidth / 750;
+    // document.querySelector( 'header' ).style.zoom = zoom;
+    //document.querySelector( '.main_content' ).style.zoom = zoom;
+    // document.querySelector( 'footer' ).style.zoom = zoom;
+    // document.querySelector( '.main_menu' ).style.zoom = zoom;
+
   }
 
 
