@@ -9,7 +9,10 @@ export default class ShowPostModal extends Modal{
 
         super( '.modal.show' );
 
-        this.title = document.querySelector( '.modal.show .title' );
+        this.title = document.querySelector( '.modal.show .title .title_text' );
+        this.likeBtn = document.querySelector( '.modal.show .like_btn' );
+        this.likeBtn.addEventListener( 'click', this.likeBtnClickHandler.bind( this ) );
+        this.likeBtnCount = document.querySelector( '.modal.show .like_btn .count' );
         this.content = document.querySelector( '.modal.show .content' );
         this.comment = document.querySelector( '.modal.show .comment' );
         this.comments = document.querySelector( '.modal.show .comments' );
@@ -23,7 +26,53 @@ export default class ShowPostModal extends Modal{
     }
 
 
+    show(){
+
+        this.element.style.display = 'block';
+        setTimeout(function(){
+            this.inner.style.transform = 'translateX(0%)';
+        }.bind( this ), 100);
+
+    }
+
+
+    hide(){
+
+        this.inner.style.transform = 'translateX(-100%)';
+        setTimeout(function(){
+            this.element.style.display = 'none';
+        }.bind( this ), 300);
+
+    }
+
+
     //--------------------マウスイベント-------------------
+    likeBtnClickHandler(){
+
+        var url = Util.apiHeadUrl + '/likes.json';
+        var data = {
+            question_id:this.questionId,
+            user_id:app.user_id
+        };
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:data,
+            success:function( result ){
+                console.log( result );
+                this.likeBtnCount.innerHTML = Number( this.likeBtnCount.innerHTML ) + 1;
+            }.bind( this ),
+            error:function( result ){
+                console.log( result );
+                if( result.question_id ){
+                    this.likeBtnCount.innerHTML = Number( this.likeBtnCount.innerHTML ) + 1;
+                }
+            }.bind( this )
+        });
+
+    }
+
+
     answerBtnClickHandler(){
 
         this.loading.show();
@@ -63,7 +112,7 @@ export default class ShowPostModal extends Modal{
     //---------------------
 
     //質問タイトルと、質問テキストを配置
-    setText( title, content, questionId, comments ){
+    setText( title, content, questionId, comments, likes ){
 
         this.title.innerHTML = title;
         this.content.innerHTML = content;
@@ -74,6 +123,8 @@ export default class ShowPostModal extends Modal{
         }else{
             this.addComments( comments );
         }
+
+        this.setLikeCount( likes );
 
     }
 
@@ -107,6 +158,15 @@ export default class ShowPostModal extends Modal{
         var p = document.createElement( 'p' );
         p.innerHTML = content;
         li.appendChild( p );
+
+    }
+
+
+    setLikeCount( likes ){
+
+        if( !likes ) return;
+
+        this.likeBtnCount.innerHTML = likes.length;
 
     }
 

@@ -377,7 +377,7 @@ var Questions = function () {
 
         case 'popupClick':
           this.showPostModal.refresh();
-          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id, obj.data.comments);
+          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id, obj.data.comments, obj.data.likes);
           this.showPostModal.show();
           break;
 
@@ -434,7 +434,10 @@ var ShowPostModal = function (_Modal) {
 
         var _this = _possibleConstructorReturn(this, (ShowPostModal.__proto__ || Object.getPrototypeOf(ShowPostModal)).call(this, '.modal.show'));
 
-        _this.title = document.querySelector('.modal.show .title');
+        _this.title = document.querySelector('.modal.show .title .title_text');
+        _this.likeBtn = document.querySelector('.modal.show .like_btn');
+        _this.likeBtn.addEventListener('click', _this.likeBtnClickHandler.bind(_this));
+        _this.likeBtnCount = document.querySelector('.modal.show .like_btn .count');
         _this.content = document.querySelector('.modal.show .content');
         _this.comment = document.querySelector('.modal.show .comment');
         _this.comments = document.querySelector('.modal.show .comments');
@@ -448,10 +451,53 @@ var ShowPostModal = function (_Modal) {
         return _this;
     }
 
-    //--------------------マウスイベント-------------------
-
-
     _createClass(ShowPostModal, [{
+        key: 'show',
+        value: function show() {
+
+            this.element.style.display = 'block';
+            setTimeout(function () {
+                this.inner.style.transform = 'translateX(0%)';
+            }.bind(this), 100);
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+
+            this.inner.style.transform = 'translateX(-100%)';
+            setTimeout(function () {
+                this.element.style.display = 'none';
+            }.bind(this), 300);
+        }
+
+        //--------------------マウスイベント-------------------
+
+    }, {
+        key: 'likeBtnClickHandler',
+        value: function likeBtnClickHandler() {
+
+            var url = _Util2.default.apiHeadUrl + '/likes.json';
+            var data = {
+                question_id: this.questionId,
+                user_id: app.user_id
+            };
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    this.likeBtnCount.innerHTML = Number(this.likeBtnCount.innerHTML) + 1;
+                }.bind(this),
+                error: function (result) {
+                    console.log(result);
+                    if (result.question_id) {
+                        this.likeBtnCount.innerHTML = Number(this.likeBtnCount.innerHTML) + 1;
+                    }
+                }.bind(this)
+            });
+        }
+    }, {
         key: 'answerBtnClickHandler',
         value: function answerBtnClickHandler() {
 
@@ -493,7 +539,7 @@ var ShowPostModal = function (_Modal) {
 
     }, {
         key: 'setText',
-        value: function setText(title, content, questionId, comments) {
+        value: function setText(title, content, questionId, comments, likes) {
 
             this.title.innerHTML = title;
             this.content.innerHTML = content;
@@ -504,6 +550,8 @@ var ShowPostModal = function (_Modal) {
             } else {
                 this.addComments(comments);
             }
+
+            this.setLikeCount(likes);
         }
 
         //コメント一覧を配置
@@ -539,6 +587,14 @@ var ShowPostModal = function (_Modal) {
             li.appendChild(p);
         }
     }, {
+        key: 'setLikeCount',
+        value: function setLikeCount(likes) {
+
+            if (!likes) return;
+
+            this.likeBtnCount.innerHTML = likes.length;
+        }
+    }, {
         key: 'refresh',
         value: function refresh() {
 
@@ -557,8 +613,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	//apiHeadUrl : 'http://localhost:3000'
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://160.16.62.37:8080'
 
 };
 

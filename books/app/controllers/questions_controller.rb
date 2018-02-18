@@ -24,10 +24,10 @@ class QuestionsController < ApplicationController
 
   def all
     # @questions = Question.all
-    @questions = Question.includes(:comments).all
+    @questions = Question.includes([ :comments, :likes ]).all
     respond_to do |format|
       format.html{ render :all }
-      format.json{ render json: @questions.to_json(:include => :comments) }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ) }
     end
   end
 

@@ -93,15 +93,15 @@ export default class Map{
 
   popupClickHandler( index ){
 
-	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'popupClick', data:this.results[index] } } } ) );
+	 this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'popupClick', data:this.results[index] } } } ) );
 
   }
 
 
   btnClickHandler(){
 
-	var bounds = this.map.getCenter();
-	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
+  	var bounds = this.map.getCenter();
+  	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
 
   }
 

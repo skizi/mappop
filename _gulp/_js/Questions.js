@@ -47,7 +47,7 @@ class Questions{
 
       case 'popupClick':
         this.showPostModal.refresh();
-        this.showPostModal.setText( obj.data.title, obj.data.content, obj.data.id, obj.data.comments );
+        this.showPostModal.setText( obj.data.title, obj.data.content, obj.data.id, obj.data.comments, obj.data.likes );
         this.showPostModal.show();
         break;
 

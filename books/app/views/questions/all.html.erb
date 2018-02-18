@@ -8,6 +8,7 @@
 	<p>緯度：<%= question.lat %></p>
 	<p>経度：<%= question.lng %></p>
 	<p>user_id：<%= question.user_id %></p>
+	<h3>Comments--</h3>
 	<% unless question.comments.empty? %>
 		<ul>
 		<% question.comments.each do |comment| %>
@@ -15,4 +16,13 @@
 		<% end %>
 		</ul>
 	<% end %>
+	<h3>Likes--</h3>
+	<% unless question.likes.empty? %>
+		<ul>
+		<% question.likes.each do |like| %>
+			<li><%= like.user_id %></li>
+		<% end %>
+		</ul>
+	<% end %>
+	<hr>
 <% end %>

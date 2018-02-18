@@ -713,9 +713,16 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.new .inner div.textarea_container label { float: none; }
 .modal.new .inner input[type="text"], .modal.new .inner textarea { width: 200px; }
 .modal.new .inner textarea { width: 296px; height: 150px; display: block; float: none; }
-.modal.show .inner div.top { width: auto; margin-bottom: 12px; padding: 20px 21px 30px 21px; border-bottom: 1px solid #ebb314; }
-.modal.show .inner div.top h2.title { width: 235px; height: 30px; line-height: 30px; margin-bottom: 9px; padding-left: 27px; font-size: 22px; font-weight: bold; color: #ebb314; border-bottom: 8px solid #ebb314; background-image: url("./map/icon.png"); background-repeat: no-repeat; background-position: left 5px; background-size: 22px; }
-.modal.show .inner div.top p.content { min-height: 120px; font-size: 18px; line-height: 30px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 58px, #ebb314 58px, #ebb314 60px); background-position: 0 -1px; }
+.modal.show { opacity: 1; background-color: transparent; }
+.modal.show .bg { display: none; }
+.modal.show .inner { width: 100%; height: 100%; margin: 0px; left: 0px; top: 0px; border-radius: 0; transform: translateX(-100%); opacity: 1; overflow-y: scroll; -webkit-overflow-scrolling: touch; background-image: none; }
+.modal.show .inner div.top { width: auto; margin-bottom: 12px; padding: 20px 21px 30px 21px; border-bottom: 1px solid #ebb314; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; background-size: 81px; }
+.modal.show .inner div.top h2.title { min-height: 30px; line-height: 30px; margin-bottom: 9px; font-size: 22px; font-weight: bold; color: #ebb314; border-bottom: 8px solid #ebb314; }
+.modal.show .inner div.top h2.title .title_text { width: 255px; display: inline-block; }
+.modal.show .inner div.top h2.title div.like_btn { display: inline-block; cursor: pointer; }
+.modal.show .inner div.top h2.title div.like_btn .count { width: 49px; height: 41px; line-height: 41px; margin-bottom: 4px; padding-top: 6px; display: block; background-image: url("./map/like_btn.png"); background-repeat: no-repeat; text-align: center; color: #fff; font-size: 16px; text-shadow: -2px -1px 0 #a88112, -2px 0px 0 #a88112, -2px 1px 0 #a88112, -1px -2px 0 #a88112, -1px -1px 0 #a88112, -1px 0px 0 #a88112, -1px 1px 0 #a88112, -1px 2px 0 #a88112, 0px -2px 0 #a88112, 0px -1px 0 #a88112, 0px 0px 0 #a88112, 0px 1px 0 #a88112, 0px 2px 0 #a88112, 1px -2px 0 #a88112, 1px -1px 0 #a88112, 1px 0px 0 #a88112, 1px 1px 0 #a88112, 1px 2px 0 #a88112, 2px -1px 0 #a88112, 2px 0px 0 #a88112, 2px 1px 0 #a88112; letter-spacing: 1.5px; }
+.modal.show .inner div.top h2.title div.like_btn .like_btn_text { line-height: 12px; color: #ebb313; font-size: 12px; display: block; text-align: center; }
+.modal.show .inner div.top p.content { min-height: 120px; font-size: 18px; line-height: 30px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 29px, #ebb314 29px, #ebb314 30px); background-position: 0 -1px; }
 .modal.show .inner div.bottom { padding: 0 21px 19px 21px; }
 .modal.show .inner div.bottom h2 { height: 29px; line-height: 29px; margin-bottom: 12px; font-size: 18px; color: #ebb314; border-bottom: 1px dashed #ebb314; }
 .modal.show .inner div.bottom ul.comments { height: 110px; margin-bottom: 12px; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
@@ -723,8 +730,9 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom ul.comments li img { width: 21px; height: 21px; margin-right: 6px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 22px; font-size: 12px; float: left; }
 .modal.show .inner div.bottom ul.comments li p.no_comment { margin-left: 0; }
-.modal.show .inner div.bottom textarea { border-radius: 5px; width: 295px; height: 50px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; }
+.modal.show .inner div.bottom textarea { width: 100%; height: 100px; border-radius: 5px; max-width: 320px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
+.modal.show .inner a.close_btn { left: auto; right: 16px; }
 .modal.edit_profile .inner div.container { padding: 20px 21px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
 .modal.edit_profile .inner div.container div.change_photo label.photo_file_select_btn { height: auto; margin-bottom: 30px; float: none; }
@@ -1317,15 +1325,15 @@ body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-si
 .signup_container form .btn0, .login_container form .btn0 { width: 325px; margin-bottom: 25px; }
 
 @media screen and (min-width: 751px) { .signup_container, .login_container { padding: 20px 0 80px; } }
-.map_container { width: 100%; height: 450px; position: relative; }
-.map_container .map { height: 100%; width: 100%; z-index: 0; }
-.map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
+body.questions_index section.main_content { margin-bottom: 0; }
+body.questions_index .map_container { width: 100%; height: 450px; position: relative; }
+body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
+body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
+body.questions_index .popup { width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; cursor: pointer; }
 
-.popup { width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; cursor: pointer; }
-
-@media screen and (min-width: 751px) { .map_container { height: 700px; }
-  .map_container .map { width: 100%; height: 100%; }
-  .popup { width: 200px; min-height: 30px; line-height: 30px; font-size: 18px; } }
+@media screen and (min-width: 751px) { body.questions_index .map_container { height: 700px; }
+  body.questions_index .map_container .map { width: 100%; height: 100%; }
+  body.questions_index .popup { width: 200px; min-height: 30px; line-height: 30px; font-size: 18px; } }
 body.users_show div.photo_container { height: 133px; padding-top: 13px; background-color: #f2f2f2; margin-bottom: 15px; background-image: url("./mypage/photo_bg.gif"); background-repeat: repeat-x; background-position: bottom; }
 body.users_show div.photo_container div.photo { width: 90px; height: 90px; margin: 0 auto 10px auto; border-radius: 100px; background-size: cover; }
 body.users_show div.photo_container p.name { color: #ebb313; font-size: 17px; text-align: center; }

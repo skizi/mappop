@@ -1,0 +1,15 @@
+
+	<%= form_for(like) do |f| %>
+		<div class="c_mb40 question_id">
+			<%= f.label :question_id %>
+			<%= f.text_field :question_id %>
+		</div>
+
+		<div class="c_mb40 user_id">
+			<%= f.label :user_id %>
+			<%= f.text_field :user_id %>
+		</div>
+
+		<%= f.submit class:"btn0 c_mcenter" %>
+		
+	<% end %>

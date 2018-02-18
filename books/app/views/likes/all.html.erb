@@ -1,0 +1,9 @@
+
+
+<h2 class="title0">いいね一覧</h2>
+
+<% @likes.each do |like| %>
+	<hr>
+	<p>question_id:<%= like.question_id %></p>
+	<p>user_id：<%= like.user_id %></p>
+<% end %>

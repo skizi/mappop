@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   get 'comments/get_comments/:question_id' => 'comments#get_comments'
   get 'comments/new/:user_id' => 'comments#new'
 
+  get 'likes/all'
+  get 'likes/get_likes/:question_id' => 'likes#get_likes'
+  get 'likes/new/:user_id' => 'likes#new'
 
   #記述が上の方のものほど重要度が増す
 
@@ -31,6 +34,7 @@ Rails.application.routes.draw do
   resources :tweets
   resources :users
   resources :comments
+  resources :likes
 
 
   get 'questions/index'
@@ -42,6 +46,8 @@ Rails.application.routes.draw do
   get 'comments/index'
   get 'comments/show'
 
+  get 'likes/index'
+  get 'likes/show'
 
   get 'users/index'
   
