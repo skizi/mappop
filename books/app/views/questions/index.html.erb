@@ -29,13 +29,17 @@
 	<div class="bg"></div>
 	<div class="inner">
 		<h2 class="title0">新規投稿</h2>
-		<div class="c_mb30">
-			<label for="question_title">タイトル</label>
-			<input type="text" name="title" class="title">
+		<div class="c_mb20 title">
+			<label for="questionTitle">タイトル</label>
+			<input type="text" name="title" class="title" id="questionTitle">
 		</div>
-		<div class="c_mb30 textarea_container">
-			<label for="question_content">投稿内容</label>
-			<textarea name="content" class="content"></textarea>
+		<div class="c_mb20 textarea">
+			<label for="questionContent">投稿内容</label>
+			<textarea name="content" class="content" id="questionContent"></textarea>
+		</div>
+		<div class="c_mb20 photo">
+			<label class="file" for="fileContent">写真添付</label>
+			<input type="file" id="fileContent">
 		</div>
 
 		<input type="submit" name="commit" value="投稿する" class="btn0 submit_btn c_mcenter" data-disable-with="Create Question">

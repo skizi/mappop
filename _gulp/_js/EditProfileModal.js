@@ -1,8 +1,8 @@
 
 import Modal from './Modal';
 import Util from './Util';
-import ImageManager from './ImageManager';
 import Loading from './Loading';
+import FileUploadManager from './FileUploadManager';
 
 
 export default class EditProfileModal extends Modal{
@@ -10,8 +10,6 @@ export default class EditProfileModal extends Modal{
     constructor(){
 
         super( '.modal.edit_profile' );
-
-        this.enabledFlag = true;
 
         this.changePhoto = this.element.getElementsByClassName( 'change_photo' )[0];
         this.changeProfile = this.element.getElementsByClassName( 'change_profile' )[0];
@@ -23,14 +21,9 @@ export default class EditProfileModal extends Modal{
 
     	this.hide();
 
-        this.reader = new FileReader();
-        this.imageManager = new ImageManager();
 
-        this.fileInput = document.getElementById( 'file_photo' );
-        this.fileInput.addEventListener( 'change', this.fileChangeHandler.bind(this) );
-        this.fileInput.addEventListener( 'click', this.fileChangeClickHandler.bind(this) );
-        
-
+        this.fileUploadManager = new FileUploadManager( '#file_photo', 200, 200, this.upload.bind( this ) );
+        this.fileUploadManager.element.addEventListener( 'ysdCallback', this.fileUploadManagerCallBackHandler.bind( this ) );
         this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
         this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
 
@@ -70,89 +63,21 @@ export default class EditProfileModal extends Modal{
     }
 
 
-    fileChangeClickHandler( e ){
-
-        if( !this.enabledFlag ){
-            e.preventDefault();
-            return false;
-        }
-
-    }
-
-
-    fileChangeHandler( e ){
-
-        if( this.loadFlag ) e.preventDefault();
-     
-        var file = e.target.files[0];
-
-
-        //エラーチェック------------
-        var errorFlag = false;
-        var errorMessage = '';
-
-
-        //容量チェック
-        var size = 5000000;
-        if( file.size > size ) {
-            errorMessage = str + '3MB以下のファイルを選択してください';
-            errorFlag = true;
-        }
-
-        if( file.name.indexOf( '.jpg' ) == -1 &&
-            file.name.indexOf( '.jpeg' ) == -1 &&
-            file.name.indexOf( '.png' ) == -1 &&
-            file.name.indexOf( '.JPG' ) == -1 &&
-            file.name.indexOf( '.PNG' ) == -1 ){
-            errorMessage = '画像はjpegかpngを選択してください';
-            errorFlag = true;
-        }
-
-        //もしエラーフラグが立ってたらreturn
-        if( errorFlag ){
-            this.fileInputRefresh();
-            alert( errorMessage );
-            return;
-        }
-
-        this.file = file;
-
-    }
-
-
-    fileInputRefresh(){
-
-        this.fileInput.value = '';
-
-    }
-
-
     uploadBtnClickHandler(){
+        this.fileUploadManager.readFile();
+    }
 
-        if( !this.enabledFlag ) return;
-        if( this.fileInput.value == '' ){
-            alert( '画像を選択して下さい' );
-            return;
+
+    fileUploadManagerCallBackHandler( e ){
+
+        var obj = e.detail.value;
+        switch( obj.type ){
+
+            case 'readerLoadStart':
+                this.loading.show();
+                break;
+
         }
-
-        if( this.loadFlag ){
-            alert( '画像アップロード中です。\nお待ちください。' );
-            return;
-        }
-        this.loading.show();
-        this.loadFlag = true;
-
-        this.reader.onload = function(e) {
-
-            var img = new Image();
-            img.setAttribute( 'src', this.reader.result );
-            this.imageManager.fixExif( img, function( _img ){
-                this.upload( _img );
-                this.fileInputRefresh();
-            }.bind( this ) );
-
-        }.bind( this )
-        this.reader.readAsDataURL( this.file );
 
     }
 
@@ -160,8 +85,8 @@ export default class EditProfileModal extends Modal{
     upload( img ){
 
         var formData = new FormData();
-        var blob = this.dataURLtoBlob( img.getAttribute( 'src' ) );
-        formData.append( 'upfile', blob, this.file.name );
+        var blob = this.fileUploadManager.dataURLtoBlob( img.getAttribute( 'src' ) );
+        formData.append( 'upfile', blob, this.fileUploadManager.file.name );
         formData.append( 'id', document.getElementById( 'user_id' ).value );
 
         var url = Util.apiHeadUrl + '/users/upload_process.json';
@@ -186,21 +111,6 @@ export default class EditProfileModal extends Modal{
     }
 
 
-    dataURLtoBlob( dataurl ){
-
-        var bin = atob(dataurl.split("base64,")[1]);
-        var len = bin.length;
-        var barr = new Uint8Array(len);
-        for (var i = 0; i < len; i++) {
-            barr[i] = bin.charCodeAt(i);
-        }
-        return new Blob([barr], {
-            type: 'image/jpeg',
-        });
-    
-    }
-
-
     uploadComp( type ){
 
         if( type == 'error' ){
@@ -210,11 +120,11 @@ export default class EditProfileModal extends Modal{
             setTimeout(function(){
                 this.hide();
             }.bind( this ), 600)
-            this.photoContainer.style.backgroundImage = 'url(' + this.reader.result + ')';
+            this.photoContainer.style.backgroundImage = 'url(' + this.fileUploadManager.reader.result + ')';
 
-            this.enabledFlag = false;
+            this.fileUploadManager.enabledFlag = false;
             setTimeout(function(){
-                this.enabledFlag = true;
+                this.fileUploadManager.enabledFlag = true;
             }.bind( this ), 900);
         }
 

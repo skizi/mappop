@@ -642,9 +642,11 @@ footer{
         height: 487px;
         padding:20px 21px;
 
-        div{
-            @include clearfix;
+        .title0{
+            margin-bottom: 20px;
+        }
 
+        div{
             &.textarea_container{
                 width: 310px;
                 label{
@@ -653,14 +655,14 @@ footer{
             }
         }
 
-        input[type="text"],
-        textarea{
-            width: 200px;
+        input{        
+            width: 296px;    
+            float: none;
         }
 
         textarea{
             width: 296px;
-            height: 150px;
+            height: 114px;
             display: block;
             float: none;
         }

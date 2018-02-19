@@ -3,10 +3,12 @@ import Util from './Util';
 
 export default class ImageManager{
 
-    constructor(){
+    constructor(　w, h　){
 
         this.resizeWidth = 200;
         this.resizeHeight = 200;
+        if( w ) this.resizeWidth = w;
+        if( h ) this.resizeHeight = h;
 
         this.resizeCanvas = document.createElement( 'canvas' );
         this.resizeCanvas.style.display = 'none';
