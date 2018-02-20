@@ -455,7 +455,7 @@ var Map = function () {
         content.innerHTML = obj.title;
         L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
 
-        var popup = L.popup().setLatLng([Number(obj.lat), Number(obj.lng)]).setContent(content).openOn(this.map);
+        var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false }).setLatLng([Number(obj.lat), Number(obj.lng)]).setContent(content).openOn(this.map);
         this.popups.push(popup);
 
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
@@ -725,7 +725,7 @@ var Questions = function () {
 
         case 'popupClick':
           this.showPostModal.refresh();
-          this.showPostModal.setText(obj.data.title, obj.data.content, obj.data.id, obj.data.comments, obj.data.likes);
+          this.showPostModal.setText(obj.data);
           this.showPostModal.show();
           break;
 
@@ -783,6 +783,7 @@ var ShowPostModal = function (_Modal) {
         var _this = _possibleConstructorReturn(this, (ShowPostModal.__proto__ || Object.getPrototypeOf(ShowPostModal)).call(this, '.modal.show'));
 
         _this.title = document.querySelector('.modal.show .title .title_text');
+        _this.photoContainer = document.querySelector('.modal.show .photo');
         _this.likeBtn = document.querySelector('.modal.show .like_btn');
         _this.likeBtn.addEventListener('click', _this.likeBtnClickHandler.bind(_this));
         _this.likeBtnCount = document.querySelector('.modal.show .like_btn .count');
@@ -887,19 +888,20 @@ var ShowPostModal = function (_Modal) {
 
     }, {
         key: 'setText',
-        value: function setText(title, content, questionId, comments, likes) {
+        value: function setText(data) {
 
-            this.title.innerHTML = title;
-            this.content.innerHTML = content;
-            this.questionId = questionId;
+            this.title.innerHTML = data.title;
+            if (data.photo) this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
+            this.content.innerHTML = data.content;
+            this.questionId = data.id;
 
-            if (comments.length == 0) {
+            if (data.comments.length == 0) {
                 this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
             } else {
-                this.addComments(comments);
+                this.addComments(data.comments);
             }
 
-            this.setLikeCount(likes);
+            this.setLikeCount(data.likes);
         }
 
         //コメント一覧を配置
@@ -961,8 +963,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

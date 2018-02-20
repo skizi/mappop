@@ -23,17 +23,17 @@ export default class Map{
 
     var latlng = [ 35.67848924554223, 139.76272863769532];
     this.map = L.map( 'leafletMap' ).setView( latlng, 12 );
-	L.tileLayer(
-		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  	L.tileLayer(
+  		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
-		//なぜかRetina対応タイルが存在しない
-		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
-		{
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
-			maxZoom: 18,
-			//detectRetina:true
-		}
-	).addTo( this.map );
+  		//なぜかRetina対応タイルが存在しない
+  		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
+  		{
+  			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+  			maxZoom: 18,
+  			//detectRetina:true
+  		}
+  	).addTo( this.map );
 
     this.popups = [];
 
@@ -79,7 +79,7 @@ export default class Map{
 		content.innerHTML = obj.title;
 		L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, i ) );
 
-		var popup = L.popup()
+		var popup = L.popup({ autoPan:false, keepInView:true, autoClose:false, closeOnEscapeKey:false })
 		    .setLatLng([ Number( obj.lat ), Number( obj.lng ) ])
 		    .setContent( content )
 		    .openOn( this.map );

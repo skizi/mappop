@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user[:photo] = "docs/user_icon/no_image.jpg"
 
     respond_to do |format|
       if @user.save
@@ -81,6 +82,7 @@ class UsersController < ApplicationController
   def upload
   end
 
+
   def upload_process
     file = params[:upfile]
     # name = file.original_filename
@@ -92,7 +94,7 @@ class UsersController < ApplicationController
     elsif file.size > 1.megabyte
       result = 'ファイルサイズは1MBまでです。'
     else 
-      File.open("public/docs/user_icon/#{name}", 'wb') { |f| f.write(file.read) }
+      File.open("public/docs/user_icon/#{name}", 'w') { |f| f.write(file.read) }
       result = "#{name}をアップロードしました。"
     end
 

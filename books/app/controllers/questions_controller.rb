@@ -41,14 +41,33 @@ class QuestionsController < ApplicationController
   def create
 
     if params['title']
-      @question = Question.new
-      @question.title = params['title']
-      @question.content = params['content']
-      @question.lat = params['lat']
-      @question.lng = params['lng']
-      @question.user_id = params['user_id']
-      # json_request = JSON.parse(request.body.read)
-      # @question = Question.new(json_request)
+      # 一度saveするかQuestion.createじゃないと
+      # @question[:id]が作られない
+      @question = Question.create(
+        title: params['title'],
+        content: params['content'],
+        lat: params['lat'],
+        lng: params['lng'],
+        user_id: params['user_id']
+      )
+
+      #画像があれば保存
+      if params['upfile']
+        file = params['upfile']
+        name = @question[:id].to_s + '.' + file.original_filename.split('.')[1]
+
+        perms = ['.jpg', '.jpeg', '.gif', '.png']
+        if !perms.include?( File.extname( name ).downcase )
+          result = 'アップロードできるのは画像ファイルのみです'
+        elsif file.size > 1.megabyte
+          result = 'ファイルサイズは1MBまでです。'
+        else 
+          File.open("public/docs/question_photo/#{name}", 'w') { |f| f.write(file.read) }
+          result = "#{name}をアップロードしました。"
+          @question.photo = "docs/question_photo/#{name}"
+        end
+      end
+
     else
       @question = Question.new(question_params)
     end
@@ -71,6 +90,6 @@ class QuestionsController < ApplicationController
 
 
   def question_params
-    params.require(:question).permit(:title, :content, :lat, :lng, :user_id)
+    params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo)
   end
 end

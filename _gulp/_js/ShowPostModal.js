@@ -10,6 +10,7 @@ export default class ShowPostModal extends Modal{
         super( '.modal.show' );
 
         this.title = document.querySelector( '.modal.show .title .title_text' );
+        this.photoContainer = document.querySelector( '.modal.show .photo' );
         this.likeBtn = document.querySelector( '.modal.show .like_btn' );
         this.likeBtn.addEventListener( 'click', this.likeBtnClickHandler.bind( this ) );
         this.likeBtnCount = document.querySelector( '.modal.show .like_btn .count' );
@@ -112,19 +113,20 @@ export default class ShowPostModal extends Modal{
     //---------------------
 
     //質問タイトルと、質問テキストを配置
-    setText( title, content, questionId, comments, likes ){
+    setText( data ){
 
-        this.title.innerHTML = title;
-        this.content.innerHTML = content;
-        this.questionId = questionId;
+        this.title.innerHTML = data.title;
+        if( data.photo ) this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
+        this.content.innerHTML = data.content;
+        this.questionId = data.id;
 
-        if( comments.length == 0 ){
+        if( data.comments.length == 0 ){
             this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
         }else{
-            this.addComments( comments );
+            this.addComments( data.comments );
         }
 
-        this.setLikeCount( likes );
+        this.setLikeCount( data.likes );
 
     }
 
