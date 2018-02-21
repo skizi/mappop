@@ -62,7 +62,7 @@ class QuestionsController < ApplicationController
         elsif file.size > 1.megabyte
           result = 'ファイルサイズは1MBまでです。'
         else 
-          File.open("public/docs/question_photo/#{name}", 'w') { |f| f.write(file.read) }
+          File.open(Rails.root.to_s+"/public/docs/question_photo/#{name}", 'wb') { |f| f.write(file.read) }
           result = "#{name}をアップロードしました。"
           @question.photo = "docs/question_photo/#{name}"
         end

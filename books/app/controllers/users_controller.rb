@@ -94,7 +94,7 @@ class UsersController < ApplicationController
     elsif file.size > 1.megabyte
       result = 'ファイルサイズは1MBまでです。'
     else 
-      File.open("public/docs/user_icon/#{name}", 'w') { |f| f.write(file.read) }
+      File.open(Rails.root.to_s+"/public/docs/user_icon/#{name}", 'wb') { |f| f.write(file.read) }
       result = "#{name}をアップロードしました。"
     end
 
