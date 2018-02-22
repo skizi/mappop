@@ -67,25 +67,17 @@ export default class Map{
   		// var content = document.createElement("div");
   		// content.className = 'popup';
   		// content.innerHTML = obj.title;
-		// var popup = new google.maps.InfoWindow({
-		// 	content: content,
-		// 	position: { lat:Number( obj.lat ), lng:Number( obj.lng ) },
-		// 	map: this.map,
-		// 	disableAutoPan: false
-		// });
+  		// var popup = new google.maps.InfoWindow({
+  		// 	content: content,
+  		// 	position: { lat:Number( obj.lat ), lng:Number( obj.lng ) },
+  		// 	map: this.map,
+  		// 	disableAutoPan: false
+  		// });
 
-		//leaflet
-		var content = L.DomUtil.create( 'div', 'popup' );
-		content.innerHTML = obj.title;
-		L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, i ) );
+  		//leaflet
+      this.addPopup( obj.title, obj.lat, obj.lng, i );
 
-		var popup = L.popup({ autoPan:false, keepInView:true, autoClose:false, closeOnEscapeKey:false })
-		    .setLatLng([ Number( obj.lat ), Number( obj.lng ) ])
-		    .setContent( content )
-		    .openOn( this.map );
-		this.popups.push( popup );
-
-		//google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
+		  //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
   	}
 
   }
@@ -102,6 +94,30 @@ export default class Map{
 
   	var bounds = this.map.getCenter();
   	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
+
+  }
+
+
+  addPopup( title, lat, lng, i ){
+
+    if( i == null ) i = this.popups.length;
+
+    var content = L.DomUtil.create( 'div', 'popup' );
+    content.innerHTML = title;
+    L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, i ) );
+
+    var popup = L.popup({ autoPan:false, keepInView:true, autoClose:false, closeOnEscapeKey:false })
+        .setLatLng([ Number( lat ), Number( lng ) ])
+        .setContent( content )
+        .openOn( this.map );
+    this.popups.push( popup );
+
+  }
+
+
+  pushData( data ){
+
+    this.results.push( data );
 
   }
 

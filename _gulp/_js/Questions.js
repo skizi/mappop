@@ -17,6 +17,7 @@ class Questions{
 
     //document.addEventListener( "DOMContentLoaded", function(){
       this.newPostModal = new NewPostModal();
+      this.newPostModal.element.addEventListener( 'ysdCallback', this.newPostModalCallBackHandler.bind( this ) );
       this.showPostModal = new ShowPostModal();
     //}.bind( this ) );
 
@@ -39,7 +40,7 @@ class Questions{
 
   }
 
-
+  
   mapCallBackHandler( e ){
     
     var obj = e.detail.value;
@@ -52,12 +53,22 @@ class Questions{
         break;
 
       case 'newPost':
-        this.newPostModal.lat = obj.lat;
-        this.newPostModal.lng = obj.lng;
+        this.newPostModal.setLatLng( obj.lat, obj.lng );
         this.newPostModal.show();
         break;
 
     }
+  }
+
+
+  newPostModalCallBackHandler( e ){
+
+    var obj = e.detail.value;
+    if( obj.type == 'addPopup' ){
+      this.map.addPopup( obj.title, obj.lat, obj.lng );
+      this.map.pushData( obj );
+    }
+
   }
 
 }

@@ -115,6 +115,33 @@ export default class ShowPostModal extends Modal{
     //質問タイトルと、質問テキストを配置
     setText( data ){
 
+        this.loadQuestion( data.id );
+
+    }
+
+
+    loadQuestion( id ){
+
+        var url = Util.apiHeadUrl + '/questions/' + id;
+        $.ajax({
+            url:url,
+            type:'GET',
+            dataType: 'json',
+            success:function( result ){
+                this.add( result );
+            }.bind( this ),
+            error:function( result ){
+                if( result.id != null ){
+                    this.add( result );
+                }
+            }.bind( this )
+        });
+
+    }
+
+
+    add( data ){
+
         this.title.innerHTML = data.title;
         if( data.photo ) this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
         this.content.innerHTML = data.content;
@@ -125,8 +152,6 @@ export default class ShowPostModal extends Modal{
         }else{
             this.addComments( data.comments );
         }
-
-        this.setLikeCount( data.likes );
 
     }
 

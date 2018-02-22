@@ -5,10 +5,11 @@ import ImageManager from './ImageManager';
 export default class FileUploadManager{
 
 
-    constructor( inputExpr, w, h, callback, type ){
+    constructor( inputExpr, w, h, callback, type, autoRefreshFlag ){
 
         this.callback = callback;
         this.type = type;
+        this.autoRefreshFlag = autoRefreshFlag;
 
         this.element = document.querySelector( inputExpr );
         this.element.addEventListener( 'change', this.fileChangeHandler.bind(this) );
@@ -34,6 +35,7 @@ export default class FileUploadManager{
     fileChangeHandler( e ){
 
         if( this.loadFlag ) e.preventDefault();
+        if( this.element.value == '' ) return;
      
         var file = e.target.files[0];
 
@@ -101,7 +103,7 @@ export default class FileUploadManager{
             img.setAttribute( 'src', this.reader.result );
             this.imageManager.fixExif( img, function( _img ){
                 this.loadFlag = false;
-                this.fileInputRefresh();
+                if( this.autoRefreshFlag ) this.fileInputRefresh();
                 this.callback( _img );
             }.bind( this ) );
 

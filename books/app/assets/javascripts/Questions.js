@@ -20,11 +20,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FileUploadManager = function () {
-    function FileUploadManager(inputExpr, w, h, callback, type) {
+    function FileUploadManager(inputExpr, w, h, callback, type, autoRefreshFlag) {
         _classCallCheck(this, FileUploadManager);
 
         this.callback = callback;
         this.type = type;
+        this.autoRefreshFlag = autoRefreshFlag;
 
         this.element = document.querySelector(inputExpr);
         this.element.addEventListener('change', this.fileChangeHandler.bind(this));
@@ -50,6 +51,7 @@ var FileUploadManager = function () {
         value: function fileChangeHandler(e) {
 
             if (this.loadFlag) e.preventDefault();
+            if (this.element.value == '') return;
 
             var file = e.target.files[0];
 
@@ -109,7 +111,7 @@ var FileUploadManager = function () {
                 img.setAttribute('src', this.reader.result);
                 this.imageManager.fixExif(img, function (_img) {
                     this.loadFlag = false;
-                    this.fileInputRefresh();
+                    if (this.autoRefreshFlag) this.fileInputRefresh();
                     this.callback(_img);
                 }.bind(this));
             }.bind(this);
@@ -451,12 +453,7 @@ var Map = function () {
         // });
 
         //leaflet
-        var content = L.DomUtil.create('div', 'popup');
-        content.innerHTML = obj.title;
-        L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
-
-        var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false }).setLatLng([Number(obj.lat), Number(obj.lng)]).setContent(content).openOn(this.map);
-        this.popups.push(popup);
+        this.addPopup(obj.title, obj.lat, obj.lng, i);
 
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
       }
@@ -473,6 +470,25 @@ var Map = function () {
 
       var bounds = this.map.getCenter();
       this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng } } }));
+    }
+  }, {
+    key: 'addPopup',
+    value: function addPopup(title, lat, lng, i) {
+
+      if (i == null) i = this.popups.length;
+
+      var content = L.DomUtil.create('div', 'popup');
+      content.innerHTML = title;
+      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
+
+      var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false }).setLatLng([Number(lat), Number(lng)]).setContent(content).openOn(this.map);
+      this.popups.push(popup);
+    }
+  }, {
+    key: 'pushData',
+    value: function pushData(data) {
+
+      this.results.push(data);
     }
   }]);
 
@@ -542,7 +558,7 @@ exports.default = Modal;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -572,93 +588,119 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var NewPostModal = function (_Modal) {
-  _inherits(NewPostModal, _Modal);
+    _inherits(NewPostModal, _Modal);
 
-  function NewPostModal() {
-    _classCallCheck(this, NewPostModal);
+    function NewPostModal() {
+        _classCallCheck(this, NewPostModal);
 
-    var _this = _possibleConstructorReturn(this, (NewPostModal.__proto__ || Object.getPrototypeOf(NewPostModal)).call(this, '.modal.new'));
+        var _this = _possibleConstructorReturn(this, (NewPostModal.__proto__ || Object.getPrototypeOf(NewPostModal)).call(this, '.modal.new'));
 
-    _this.submitBtn = document.querySelector('.submit_btn');
-    _this.submitBtn.addEventListener('click', _this.submit.bind(_this));
+        _this.submitBtn = document.querySelector('.submit_btn');
+        _this.submitBtn.addEventListener('click', _this.submit.bind(_this));
 
-    _this.title = document.querySelector('#questionTitle');
-    _this.content = document.querySelector('#questionContent');
-    _this.lat = 0;
-    _this.lng = 0;
+        _this.title = document.querySelector('#questionTitle');
+        _this.content = document.querySelector('#questionContent');
+        _this.lat = 0;
+        _this.lng = 0;
 
-    _this.fileUploadManager = new _FileUploadManager2.default('#fileContent', 200, 200, function (img) {
-      this.uploadImage = img;
-    }.bind(_this), 'auto');
-    _this.fileUploadManager.element.addEventListener('ysdCallback', _this.fileUploadManagerCallBackHandler.bind(_this));
+        _this.fileUploadManager = new _FileUploadManager2.default('#fileContent', 200, 200, function (img) {
+            this.uploadImage = img;
+        }.bind(_this), 'auto', false);
+        _this.fileUploadManager.element.addEventListener('ysdCallback', _this.fileUploadManagerCallBackHandler.bind(_this));
 
-    _this.hide();
+        _this.hide();
 
-    return _this;
-  }
-
-  _createClass(NewPostModal, [{
-    key: 'fileUploadManagerCallBackHandler',
-    value: function fileUploadManagerCallBackHandler(e) {
-
-      var obj = e.detail.value;
-      switch (obj.type) {
-
-        case 'readerLoadStart':
-          //this.loading.show();
-          break;
-
-      }
+        return _this;
     }
-  }, {
-    key: 'submit',
-    value: function submit() {
 
-      if (this.loadFlag) return;
+    _createClass(NewPostModal, [{
+        key: 'fileUploadManagerCallBackHandler',
+        value: function fileUploadManagerCallBackHandler(e) {
 
-      var title = this.title.value;
-      var content = this.content.value;
-      if (title == '' || content == '') {
-        alert('未入力の箇所があります');
-        return;
-      }
+            var obj = e.detail.value;
+            switch (obj.type) {
 
-      var formData = new FormData();
-      if (this.uploadImage) {
-        var blob = this.fileUploadManager.dataURLtoBlob(this.uploadImage.getAttribute('src'));
-        formData.append('upfile', blob, this.fileUploadManager.file.name);
-      }
-      formData.append('title', title);
-      formData.append('content', content);
-      formData.append('lat', this.lat);
-      formData.append('lng', this.lng);
-      formData.append('user_id', app.user_id);
+                case 'readerLoadStart':
+                    //this.loading.show();
+                    break;
 
-      var url = _Util2.default.apiHeadUrl + '/questions.json';
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (result) {
-          console.log(result);
-          this.loadFlag = false;
-          this.uploadImage = null;
-        }.bind(this),
-        error: function (result) {
-          console.log(result);
-          this.loadFlag = false;
-          this.uploadImage = null;
-        }.bind(this)
-      });
+            }
+        }
+    }, {
+        key: 'setLatLng',
+        value: function setLatLng(lat, lng) {
 
-      this.loadFlag = true;
-      this.hide();
-    }
-  }]);
+            this.lat = lat;
+            this.lng = lng;
+        }
+    }, {
+        key: 'submit',
+        value: function submit() {
 
-  return NewPostModal;
+            if (this.loadFlag) return;
+
+            var title = this.title.value;
+            var content = this.content.value;
+            if (title == '' || content == '') {
+                alert('未入力の箇所があります');
+                return;
+            }
+
+            var photoUrl = '';
+            var formData = new FormData();
+            if (this.uploadImage) {
+                photoUrl = this.uploadImage.getAttribute('src');
+                var blob = this.fileUploadManager.dataURLtoBlob(photoUrl);
+                var name = this.fileUploadManager.file.name;
+                name = name.split('.')[0] + '.jpg';
+                formData.append('upfile', blob, name);
+            }
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('lat', this.lat);
+            formData.append('lng', this.lng);
+            formData.append('user_id', app.user_id);
+
+            var url = _Util2.default.apiHeadUrl + '/questions.json';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: this.uploadComp.bind(this, title, content, photoUrl),
+                error: function (result) {
+                    console.log(result);
+                    this.loadFlag = false;
+                    this.uploadImage = null;
+                }.bind(this)
+            });
+
+            this.loadFlag = true;
+            this.hide();
+        }
+    }, {
+        key: 'uploadComp',
+        value: function uploadComp(title, content, photoUrl, result) {
+
+            this.loadFlag = false;
+            this.uploadImage = null;
+            this.fileUploadManager.fileInputRefresh();
+
+            var data = {
+                type: 'addPopup',
+                title: title,
+                content: content,
+                lat: this.lat,
+                lng: this.lng,
+                photo: photoUrl,
+                comments: []
+            };
+            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: data } }));
+        }
+    }]);
+
+    return NewPostModal;
 }(_Modal3.default);
 
 exports.default = NewPostModal;
@@ -695,6 +737,7 @@ var Questions = function () {
 
     //document.addEventListener( "DOMContentLoaded", function(){
     this.newPostModal = new _NewPostModal2.default();
+    this.newPostModal.element.addEventListener('ysdCallback', this.newPostModalCallBackHandler.bind(this));
     this.showPostModal = new _ShowPostModal2.default();
     //}.bind( this ) );
 
@@ -730,11 +773,20 @@ var Questions = function () {
           break;
 
         case 'newPost':
-          this.newPostModal.lat = obj.lat;
-          this.newPostModal.lng = obj.lng;
+          this.newPostModal.setLatLng(obj.lat, obj.lng);
           this.newPostModal.show();
           break;
 
+      }
+    }
+  }, {
+    key: 'newPostModalCallBackHandler',
+    value: function newPostModalCallBackHandler(e) {
+
+      var obj = e.detail.value;
+      if (obj.type == 'addPopup') {
+        this.map.addPopup(obj.title, obj.lat, obj.lng);
+        this.map.pushData(obj);
       }
     }
   }]);
@@ -890,6 +942,31 @@ var ShowPostModal = function (_Modal) {
         key: 'setText',
         value: function setText(data) {
 
+            this.loadQuestion(data.id);
+        }
+    }, {
+        key: 'loadQuestion',
+        value: function loadQuestion(id) {
+
+            var url = _Util2.default.apiHeadUrl + '/questions/' + id;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    this.add(result);
+                }.bind(this),
+                error: function (result) {
+                    if (result.id != null) {
+                        this.add(result);
+                    }
+                }.bind(this)
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(data) {
+
             this.title.innerHTML = data.title;
             if (data.photo) this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
             this.content.innerHTML = data.content;
@@ -900,8 +977,6 @@ var ShowPostModal = function (_Modal) {
             } else {
                 this.addComments(data.comments);
             }
-
-            this.setLikeCount(data.likes);
         }
 
         //コメント一覧を配置
@@ -963,8 +1038,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

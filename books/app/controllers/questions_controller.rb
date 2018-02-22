@@ -7,7 +7,11 @@ class QuestionsController < ApplicationController
 
 
   def show
-    @question = Question.find(params[:id])
+    @question = Question.find(params['id'])
+    respond_to do |format|
+      format.html{ render :show }
+      format.json{ render json: @question.to_json(:include => [ :comments, :likes ] ) }
+    end
   end
 
 

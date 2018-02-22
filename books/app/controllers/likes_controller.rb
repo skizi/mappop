@@ -32,6 +32,7 @@ class LikesController < ApplicationController
   def new
     @like = Like.new
     @like.user_id = params[:user_id]
+    @like.question_id = params[:question_id]
   end
 
 

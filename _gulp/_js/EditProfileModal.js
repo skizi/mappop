@@ -22,7 +22,7 @@ export default class EditProfileModal extends Modal{
     	this.hide();
 
 
-        this.fileUploadManager = new FileUploadManager( '#file_photo', 200, 200, this.upload.bind( this ) );
+        this.fileUploadManager = new FileUploadManager( '#file_photo', 200, 200, this.upload.bind( this ), 'default', true );
         this.fileUploadManager.element.addEventListener( 'ysdCallback', this.fileUploadManagerCallBackHandler.bind( this ) );
         this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
         this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
@@ -86,7 +86,9 @@ export default class EditProfileModal extends Modal{
 
         var formData = new FormData();
         var blob = this.fileUploadManager.dataURLtoBlob( img.getAttribute( 'src' ) );
-        formData.append( 'upfile', blob, this.fileUploadManager.file.name );
+        var name = this.fileUploadManager.file.name;
+        name = name.split( '.' )[0] + '.jpg';
+        formData.append( 'upfile', blob, name );
         formData.append( 'id', document.getElementById( 'user_id' ).value );
 
         var url = Util.apiHeadUrl + '/users/upload_process.json';

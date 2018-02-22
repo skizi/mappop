@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'questions' => 'questions#index'
   get 'questions/all'
   get 'questions/new/:user_id' => 'questions#new'
+  get 'questions/:id' => 'questions#show'
 
 
   get 'comments/all'
@@ -38,7 +39,6 @@ Rails.application.routes.draw do
 
 
   get 'questions/index'
-  get 'questions/show'
   get 'questions/new'
   get 'questions/save'
 

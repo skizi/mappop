@@ -49,7 +49,7 @@ var EditProfileModal = function (_Modal) {
 
         _this.hide();
 
-        _this.fileUploadManager = new _FileUploadManager2.default('#file_photo', 200, 200, _this.upload.bind(_this));
+        _this.fileUploadManager = new _FileUploadManager2.default('#file_photo', 200, 200, _this.upload.bind(_this), 'default', true);
         _this.fileUploadManager.element.addEventListener('ysdCallback', _this.fileUploadManagerCallBackHandler.bind(_this));
         _this.uploadBtn = _this.element.getElementsByClassName('photo_upload_btn')[0];
         _this.uploadBtn.addEventListener('click', _this.uploadBtnClickHandler.bind(_this));
@@ -99,7 +99,9 @@ var EditProfileModal = function (_Modal) {
 
             var formData = new FormData();
             var blob = this.fileUploadManager.dataURLtoBlob(img.getAttribute('src'));
-            formData.append('upfile', blob, this.fileUploadManager.file.name);
+            var name = this.fileUploadManager.file.name;
+            name = name.split('.')[0] + '.jpg';
+            formData.append('upfile', blob, name);
             formData.append('id', document.getElementById('user_id').value);
 
             var url = _Util2.default.apiHeadUrl + '/users/upload_process.json';
@@ -185,11 +187,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FileUploadManager = function () {
-    function FileUploadManager(inputExpr, w, h, callback, type) {
+    function FileUploadManager(inputExpr, w, h, callback, type, autoRefreshFlag) {
         _classCallCheck(this, FileUploadManager);
 
         this.callback = callback;
         this.type = type;
+        this.autoRefreshFlag = autoRefreshFlag;
 
         this.element = document.querySelector(inputExpr);
         this.element.addEventListener('change', this.fileChangeHandler.bind(this));
@@ -215,6 +218,7 @@ var FileUploadManager = function () {
         value: function fileChangeHandler(e) {
 
             if (this.loadFlag) e.preventDefault();
+            if (this.element.value == '') return;
 
             var file = e.target.files[0];
 
@@ -274,7 +278,7 @@ var FileUploadManager = function () {
                 img.setAttribute('src', this.reader.result);
                 this.imageManager.fixExif(img, function (_img) {
                     this.loadFlag = false;
-                    this.fileInputRefresh();
+                    if (this.autoRefreshFlag) this.fileInputRefresh();
                     this.callback(_img);
                 }.bind(this));
             }.bind(this);
@@ -692,8 +696,8 @@ var Profile = function () {
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 
