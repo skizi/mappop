@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get 'likes/all'
   get 'likes/get_likes/:question_id' => 'likes#get_likes'
-  get 'likes/new/:user_id' => 'likes#new'
+  post 'likes/create/:question_id' => 'likes#create'
 
   #記述が上の方のものほど重要度が増す
 

@@ -37,19 +37,18 @@ class LikesController < ApplicationController
 
 
   def create
-    if params['question_id']
-      @like = Like.new
-      @like.user_id = params['user_id']
-      @like.question_id = params['question_id']
-    else
-      @like = Like.new(like_params)
-    end
-    
+    @like = Like.new
+    @like.user_id = params[:user_id]
+    @like.question_id = params[:question_id]
+    # @like = Like.new
+    # @like.user_id = params['user_id']
+    # @like.question_id = params['question_id']
 
     respond_to do |format|
       if @like.save
         str = 'いいねが投稿完了しました。' + @like.user_id.to_s
-        format.html{ redirect_to @like, notice: str }
+        flash[:notice] = str
+        format.html{ redirect_to @like }
         format.json{ render :show, status: :created, location: @like }
       else
         format.html{ render :new }

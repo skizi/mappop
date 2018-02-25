@@ -640,12 +640,12 @@ label { height: 33px; line-height: 33px; display: inline-block; font-size: 18px;
 .btn0:active { box-shadow: none; transform: translate(4px, 4px); }
 .btn0:link, .btn0:visited { color: #fff; }
 
-@media screen and (min-width: 751px) { .btn0 { cursor: pointer; }
+@media screen and (min-width: 376px) { .btn0 { cursor: pointer; }
   .btn0:hover { box-shadow: none; transform: translate(7px, 7px); } }
 .btn1 { text-align: center; }
 .btn1 a { line-height: 110%; padding: 0 2px; display: inline-block; border-bottom: 1px solid #f1831b; font-size: 15px; color: #f1831b; text-decoration: none; }
 
-@media screen and (min-width: 751px) { .btn1 a { transition-duration: 0.3s; transition-property: opacity; }
+@media screen and (min-width: 376px) { .btn1 a { transition-duration: 0.3s; transition-property: opacity; }
   .btn1 a:hover { opacity: 0.7; } }
 .tweet_container { border-bottom: 1px solid #ddd; padding-bottom: 50px; }
 
@@ -662,7 +662,7 @@ header a.login_btn { width: 100px; height: 36px; line-height: 36px; background-c
 header a.main_menu_btn { width: 24px; height: 13px; display: block; position: absolute; top: 24px; left: 25px; }
 header a.main_menu_btn img { width: 100%; }
 
-@media screen and (min-width: 751px) { header { width: 100%; }
+@media screen and (min-width: 376px) { header { width: 100%; }
   header a.login_btn { transition-duration: 0.3s; transition-property: opacity; }
   header a.login_btn:hover { opacity: 0.7; } }
 section.main_menu { width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-100%); }
@@ -673,7 +673,7 @@ section.main_menu ul li a { height: 64px; line-height: 64px; padding-left: 31px;
 section.main_menu ul li.close_btn { width: 18px; height: 18px; position: absolute; top: 14px; left: 270px; }
 section.main_menu ul li.close_btn a { width: 18px; height: 18px; padding-left: 0; background-image: url("./menu/close_btn.png"); background-size: 100%; text-indent: -9999px; border-bottom: none; }
 
-@media screen and (min-width: 751px) { section.main_menu ul { width: 300px; }
+@media screen and (min-width: 376px) { section.main_menu ul { width: 300px; }
   section.main_menu ul li { height: 50px; }
   section.main_menu ul li:first-child { padding-top: 100px; }
   section.main_menu ul li a { height: 50px; line-height: 50px; border-bottom: 1px solid #ebb313; transition-duration: 0.3s; transition-property: opacity; }
@@ -683,7 +683,7 @@ section.main_menu ul li.close_btn a { width: 18px; height: 18px; padding-left: 0
   section.main_menu ul li.close_btn a:hover { transform: rotate(90deg); opacity: 1; } }
 section.main_content { width: 375px; margin-bottom: 80px; }
 
-@media screen and (min-width: 751px) { section.main_content { width: 100%; margin-bottom: 0; } }
+@media screen and (min-width: 376px) { section.main_content { width: 100%; margin-bottom: 0; } }
 footer { width: 375px; padding-bottom: 10px; border-top: 2px solid #ebb314; }
 footer div.inner { overflow: hidden; *zoom: 1; min-height: 102px; }
 footer div.inner div.left { width: 50%; margin-left: 25px; padding-top: 29px; float: left; }
@@ -695,7 +695,7 @@ footer div.inner div.right nav ul li a { color: #a7a7a7; font-size: 10px; text-d
 footer p.copy { color: #a7a7a7; text-align: center; }
 footer p.copy a { text-decoration: none; font-size: 10px; }
 
-@media screen and (min-width: 751px) { footer { width: 100%; }
+@media screen and (min-width: 376px) { footer { width: 100%; }
   footer div.inner div.left { width: 40%; margin-left: 16%; }
   footer div.inner div.left a, footer div.inner div.right a, footer p.copy a { transition-duration: 0.3s; transition-property: opacity; }
   footer div.inner div.left a:hover, footer div.inner div.right a:hover, footer p.copy a:hover { opacity: 0.7; }
@@ -732,7 +732,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom ul.comments li img { width: 21px; height: 21px; margin-right: 6px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 22px; font-size: 12px; float: left; }
 .modal.show .inner div.bottom ul.comments li p.no_comment { margin-left: 0; }
-.modal.show .inner div.bottom textarea { width: 100%; height: 100px; border-radius: 5px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; box-sizing: border-box; }
+.modal.show .inner div.bottom textarea { width: 100%; max-width: 100%; height: 100px; border-radius: 5px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; box-sizing: border-box; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
 .modal.show .inner a.close_btn { left: auto; right: 16px; }
 .modal.edit_profile .inner div.container { padding: 20px 21px; position: relative; }
@@ -745,7 +745,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.edit_profile .inner div.container div.change_profile input[type="text"], .modal.edit_profile .inner div.container div.change_profile input[type="password"], .modal.edit_profile .inner div.container div.change_profile textarea { width: 210px; }
 .modal.edit_profile .inner div.container div.change_profile textarea { height: 100px; }
 
-@media screen and (min-width: 751px) { .modal .inner .close_btn { transition-duration: 0.3s; transition-property: transform; }
+@media screen and (min-width: 376px) { .modal .inner .close_btn { transition-duration: 0.3s; transition-property: transform; }
   .modal .inner .close_btn:hover { transform: rotate(90deg); } }
 .loading_cover { width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; opacity: 0; position: fixed; top: 0px; left: 0px; background-image: url("./loading.gif"); background-repeat: no-repeat; background-position: center center; transition-duration: 0.3s; transition-property: opacity; }
 
@@ -1310,7 +1310,7 @@ body.home_index .howto div.steps div.step h3 { line-height: 110%; }
 body.home_index .howto div.steps div.step h3 span { color: #737373; font-size: 10px; border-bottom: 1px dashed #ebb314; }
 body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-size: 15px; letter-spacing: 0.5px; }
 
-@media screen and (min-width: 751px) { body.home_index .top_content { height: 300px; }
+@media screen and (min-width: 376px) { body.home_index .top_content { height: 300px; }
   body.home_index .top_content div.text_container { padding-top: 10px; }
   body.home_index .howto h2.title0 { padding-top: 45px; }
   body.home_index .howto div.steps { width: 620px; padding-bottom: 2px; padding-left: 40px; }
@@ -1326,14 +1326,14 @@ body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-si
 .signup_container form textarea, .login_container form textarea { height: 100px; }
 .signup_container form .btn0, .login_container form .btn0 { width: 325px; margin-bottom: 25px; }
 
-@media screen and (min-width: 751px) { .signup_container, .login_container { padding: 20px 0 80px; } }
+@media screen and (min-width: 376px) { .signup_container, .login_container { padding: 20px 0 80px; } }
 body.questions_index section.main_content { margin-bottom: 0; }
 body.questions_index .map_container { width: 100%; height: 450px; position: relative; }
 body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
 body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
 body.questions_index .popup { width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; cursor: pointer; }
 
-@media screen and (min-width: 751px) { body.questions_index .map_container { height: 700px; }
+@media screen and (min-width: 376px) { body.questions_index .map_container { height: 700px; }
   body.questions_index .map_container .map { width: 100%; height: 100%; }
   body.questions_index .popup { width: 200px; min-height: 30px; line-height: 30px; font-size: 18px; } }
 body.users_show div.photo_container { height: 133px; padding-top: 13px; background-color: #f2f2f2; margin-bottom: 15px; background-image: url("./mypage/photo_bg.gif"); background-repeat: repeat-x; background-position: bottom; }
@@ -1346,7 +1346,7 @@ body.users_show table.profile tr td, body.users_show table.profile tr th { font-
 body.users_show table.profile tr th { width: 100px; background-color: #f2f4f6; text-align: left; padding-left: 10px; }
 body.users_show table.profile tr td { width: 225px; padding-left: 10px; }
 
-@media screen and (min-width: 751px) { body.users_show section.main_content { padding-bottom: 80px; }
+@media screen and (min-width: 376px) { body.users_show section.main_content { padding-bottom: 80px; }
   body.users_show div.photo_container { height: 150px; margin-bottom: 40px; padding-top: 24px; }
   body.users_show div.photo { margin: 0 auto 20px auto; transition-duration: 0.3s; transition-property: opacity; cursor: pointer; }
   body.users_show div.photo:hover { opacity: 0.7; } }

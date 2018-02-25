@@ -38,6 +38,9 @@ class Questions{
     // document.querySelector( 'footer' ).style.zoom = zoom;
     // document.querySelector( '.main_menu' ).style.zoom = zoom;
 
+    this.resize();
+    window.onresize = this.resize.bind( this );
+
   }
 
   
@@ -68,6 +71,16 @@ class Questions{
       this.map.addPopup( obj.title, obj.lat, obj.lng );
       this.map.pushData( obj );
     }
+
+  }
+
+
+  resize(){
+
+    clearTimeout( this.resizeTimeOutId );
+    this.resizeTimeOutId = setTimeout(function(){
+      this.map.resize();
+    }.bind( this ), 100 );
 
   }
 

@@ -50,7 +50,7 @@ export default class ShowPostModal extends Modal{
     //--------------------マウスイベント-------------------
     likeBtnClickHandler(){
 
-        var url = Util.apiHeadUrl + '/likes.json';
+        var url = Util.apiHeadUrl + '/likes/create/' + this.questionId + '.json';
         var data = {
             question_id:this.questionId,
             user_id:app.user_id
@@ -58,6 +58,7 @@ export default class ShowPostModal extends Modal{
         $.ajax({
             url:url,
             type:'POST',
+            dataType: 'json',
             data:data,
             success:function( result ){
                 console.log( result );
@@ -89,6 +90,7 @@ export default class ShowPostModal extends Modal{
         $.ajax({
             url:url,
             type:'POST',
+            dataType: 'json',
             data:data,
             success:function( result ){
                 console.log( result );
@@ -114,6 +116,15 @@ export default class ShowPostModal extends Modal{
 
     //質問タイトルと、質問テキストを配置
     setText( data ){
+        
+        this.questionId = data.id;
+
+        this.loadFlag = true;
+        if( this.nowId == data.id ){
+            this.loadFlag = false;
+            return;
+        }
+        this.nowId = data.id;
 
         this.loadQuestion( data.id );
 
@@ -129,10 +140,12 @@ export default class ShowPostModal extends Modal{
             dataType: 'json',
             success:function( result ){
                 this.add( result );
+                this.loadFlag = false;
             }.bind( this ),
             error:function( result ){
                 if( result.id != null ){
                     this.add( result );
+                    this.loadFlag = false;
                 }
             }.bind( this )
         });
@@ -143,15 +156,20 @@ export default class ShowPostModal extends Modal{
     add( data ){
 
         this.title.innerHTML = data.title;
-        if( data.photo ) this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
+        if( data.photo ){
+            this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
+        }else{
+            this.photoContainer.innerHTML = '';
+        }
         this.content.innerHTML = data.content;
-        this.questionId = data.id;
 
         if( data.comments.length == 0 ){
             this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
         }else{
             this.addComments( data.comments );
         }
+
+        this.setLikeCount( data.likes );
 
     }
 

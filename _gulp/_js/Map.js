@@ -30,10 +30,14 @@ export default class Map{
   		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
   		{
   			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+        minZoom: 3,
   			maxZoom: 18,
   			//detectRetina:true
   		}
   	).addTo( this.map );
+
+    //移動範囲を限定させる
+    this.map.setMaxBounds( new L.LatLngBounds([ -90, -180 ], [ 90, 180]) );
 
     this.popups = [];
 
@@ -92,7 +96,11 @@ export default class Map{
 
   btnClickHandler(){
 
-  	var bounds = this.map.getCenter();
+    var bounds = this.map.getCenter();
+
+//console.log( this.map.getZoom() );
+console.log( this.getSplitAreaId( bounds.lat, bounds.lng ) );
+
   	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
 
   }
@@ -119,6 +127,79 @@ export default class Map{
 
     this.results.push( data );
 
+  }
+
+
+  //地図全体を升目で区切り
+  //latとlngとzoomレベルからから升目のxとyのindex番号を取得する
+  getSplitAreaId( lat, lng ){
+
+    //zoom 0～18
+    var z = this.map.getZoom();
+    var c = this.map.getCenter();
+console.log(z);
+console.log(c);
+
+//console.log( "zoom:" + z );
+
+
+//↓モニターに写っている領域の全体からみたパーセンテージ
+//var perX = ( モニターのmaxLat - モニターのminLat ) / 180
+//
+//↓地図を何文割するかの数値
+//var lengthX = 180 / ( モニターのmaxLat - モニターのminLat )
+//var lengthY = 360 / ( モニターのmaxLng - モニターのminLng )
+
+//ただ、モニターのサイズはデバイスによって違うので、
+//ここでのモニターのサイズは固定で定義するべき 1000 * 1000　ぐらい・・・？
+
+    var p = this.map.getPixelBounds();
+    p.min.x += this.halfWidth - 500;
+    p.min.y += this.halfHeight - 500;
+    p.max.x = p.max.x - this.halfWidth + 500;
+    p.max.y = p.max.y - this.halfHeight + 500;
+    var minLatLng = this.map.unproject( p.min );
+    var maxLatLng = this.map.unproject( p.max );
+
+    var perX = ( c.lng + 180 ) / 360;
+    var perY = ( c.lat + 90 ) / 180;
+    var lengthX = 360 / ( maxLatLng.lng - minLatLng.lng );
+    var lengthY = 180 / ( minLatLng.lat - maxLatLng.lat );
+
+//各倍率のlengthX, lengthYをクライアントの配列に全て保持し、
+//フキダシのlat lngのみサーバーに保存
+
+//現在のマップの中心地が入る升目を調べ
+//その 升目のminとmaxの間に含まれるフキダシを全て表示
+
+
+// this.addPopup( 'topLeft', topLeftLatLng.lat, topLeftLatLng.lng, 9999 );
+// this.addPopup( 'bottomRight', bottomRightLatLng.lat, bottomRightLatLng.lng, 9999 );
+
+    var x = Math.floor(lengthX * perX );
+    if( x == lengthX ) x = lengthX - 1;
+
+    var y = Math.floor( lengthY * perY );
+    if( y == lengthY ) y = lengthY - 1;
+
+    if( c.lat < -90 ) y = 0;
+    if( c.lat > 90 ) y = lengthY - 1;
+    if( c.lng < -180 ) x = 0;
+    if( c.lng > 180 ) x = lengthX - 1;
+
+
+    return { x:x, y:y };
+
+  }
+
+
+  resize(){
+    
+    this.width = this.element.clientWidth;
+    this.height = this.element.clientHeight;
+    this.halfWidth = this.width * 0.5;
+    this.halfHeight = this.height * 0.5;
+  
   }
 
 }
