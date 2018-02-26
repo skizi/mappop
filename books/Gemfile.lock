@@ -97,6 +97,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     public_suffix (3.0.0)
     puma (3.10.0)
+    quadkey (0.2.0)
     rack (2.0.3)
     rack-cors (1.0.2)
     rack-test (0.7.0)
@@ -188,6 +189,7 @@ DEPENDENCIES
   kaminari (~> 0.17.0)
   meta-tags
   puma (~> 3.7)
+  quadkey
   rack-cors
   rails (~> 5.1.4)
   sass-rails (~> 5.0)

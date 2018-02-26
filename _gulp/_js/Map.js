@@ -41,6 +41,17 @@ export default class Map{
 
     this.popups = [];
 
+
+    var min = {
+      lat:35.67,
+      lng:139.76
+    };
+    var max = {
+      lat:35.679,
+      lng:139.763
+    }
+    this.searchLatLng( min, max );
+
   }
 
 
@@ -173,8 +184,10 @@ console.log(c);
 //その 升目のminとmaxの間に含まれるフキダシを全て表示
 
 
-// this.addPopup( 'topLeft', topLeftLatLng.lat, topLeftLatLng.lng, 9999 );
-// this.addPopup( 'bottomRight', bottomRightLatLng.lat, bottomRightLatLng.lng, 9999 );
+this.searchLatLng( minLatLng, maxLatLng );//debug
+
+this.addPopup( 'topLeft', minLatLng.lat, minLatLng.lng, 9999 );
+this.addPopup( 'bottomRight', maxLatLng.lat, maxLatLng.lng, 9999 );
 
     var x = Math.floor(lengthX * perX );
     if( x == lengthX ) x = lengthX - 1;
@@ -189,6 +202,31 @@ console.log(c);
 
 
     return { x:x, y:y };
+
+  }
+
+
+  searchLatLng( min, max ){
+
+    var data = {
+      min_lat:min.lat,
+      max_lat:max.lat,
+      min_lng:min.lng,
+      max_lng:max.lng
+    };
+
+    var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
+    $.ajax({
+        url:url,
+        type:'GET',
+        data:data,
+        success:function( result ){
+          console.log( result );
+        },
+        error:function( result ){
+          console.log( result );
+        }.bind( this )
+    });
 
   }
 

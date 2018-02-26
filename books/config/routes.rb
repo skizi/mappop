@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   get 'questions' => 'questions#index'
   get 'questions/all'
+  get 'questions/search_lat_lng'
   get 'questions/new/:user_id' => 'questions#new'
   get 'questions/:id' => 'questions#show'
 

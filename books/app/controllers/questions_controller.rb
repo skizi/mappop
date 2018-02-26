@@ -27,12 +27,35 @@ class QuestionsController < ApplicationController
 
 
   def all
-    # @questions = Question.all
+
+    #@questions = Question.all
     @questions = Question.includes([ :comments, :likes ]).all
     respond_to do |format|
       format.html{ render :all }
       format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ) }
     end
+  end
+
+
+  def search_lat_lng
+
+    minLat = params['min_lat']
+    maxLat = params['max_lat']
+    minLng = params['min_lng']
+    maxLng = params['max_lng']
+
+    #緯度は画面から見て、縦は上が大きい値、下が小さい値となる
+    latRange = Range.new( maxLat, minLat )
+    lngRange = Range.new( minLng, maxLng )
+    #@questions = Question.quadKey( 35.67848924554223, 139.76272863769532, 15 );
+    @questions = Question.where( lat: latRange, lng: lngRange )
+    #@questions = Question.where( lat: 35.68658125560941..35.700522720414256).where( lng: 139.8128700256348..139.8183631896973 );
+    
+    respond_to do |format|
+      format.html{ render :all }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ) }
+    end
+
   end
 
 
