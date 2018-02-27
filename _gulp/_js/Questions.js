@@ -11,6 +11,7 @@ document.addEventListener( "DOMContentLoaded", function(){
 
 
 
+
 class Questions{
 
   constructor(){
@@ -29,7 +30,6 @@ class Questions{
   // initMap(){
 
     this.map = new Map();
-    this.map.initMap();
     this.map.element.addEventListener( 'ysdCallback', this.mapCallBackHandler.bind( this ) );
     
     // var zoom = window.innerWidth / 750;

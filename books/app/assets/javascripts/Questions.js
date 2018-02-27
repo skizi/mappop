@@ -402,6 +402,9 @@ var Map = function () {
      });
      */
 
+    //ドラッグ後に、この半径内に存在する質問をサーバーから取得する
+    this.searchRadius = 500;
+
     var latlng = [35.67848924554223, 139.76272863769532];
     this.map = L.map('leafletMap').setView(latlng, 12);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -418,39 +421,148 @@ var Map = function () {
     //移動範囲を限定させる
     this.map.setMaxBounds(new L.LatLngBounds([-90, -180], [90, 180]));
 
-    this.popups = [];
+    this.popups = {};
 
-    var min = {
-      lat: 35.67,
-      lng: 139.76
-    };
-    var max = {
-      lat: 35.679,
-      lng: 139.763
-    };
-    this.searchLatLng(min, max);
+    this.oldIndexs = [];
+    this.map.on('moveend', this.mapMoved.bind(this));
+    // this.map.on( 'load', function(){
+    // }.bind( this ) );
+
+    window.onload = this.checkNewQuestions.bind(this);
   }
 
   _createClass(Map, [{
-    key: 'initMap',
-    value: function initMap() {
+    key: 'mapMoved',
+    value: function mapMoved() {
 
-      var url = _Util2.default.apiHeadUrl + '/questions/all.json';
+      this.checkNewQuestions();
+    }
+  }, {
+    key: 'checkNewQuestions',
+    value: function checkNewQuestions() {
+
+      var c = this.map.getCenter();
+      var now = this.getSplitAreaId(c.lat, c.lng);
+      var hasFlag = this.hasOldIndex(now);
+      console.log(now.x, now.y);
+      if (!hasFlag) {
+        this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, now.x, now.y)); //debug
+        this.oldIndexs.push({ x: now.x, y: now.y });
+      }
+
+      //２マスはなれたポップアップたちを削除
+      var length = this.oldIndexs.length;
+      for (var i = length - 1; i > -1; i--) {
+        var old = this.oldIndexs[i];
+        var distX = Math.abs(old.x - now.x);
+        var distY = Math.abs(old.y - now.y);
+        if (distX + distY > 1) {
+          console.log("remove!" + old.x + ',' + old.y);
+          this.removePopups(old.x, old.y);
+          this.oldIndexs.splice(i, 1);
+        }
+      }
+    }
+  }, {
+    key: 'hasOldIndex',
+    value: function hasOldIndex(now) {
+
+      var flag = false;
+      var length = this.oldIndexs.length;
+      for (var i = 0; i < length; i++) {
+        if (this.oldIndexs[i].x == now.x && this.oldIndexs[i].y == now.y) {
+          flag = true;
+        }
+      }
+
+      return flag;
+    }
+
+    //地図全体を升目で区切り
+    //latとlngとzoomレベルからから升目のxとyのindex番号を取得する
+
+  }, {
+    key: 'getSplitAreaId',
+    value: function getSplitAreaId(lat, lng) {
+
+      //↓モニターに写っている領域の全体からみたパーセンテージ
+      //var perX = ( モニターのmaxLat - モニターのminLat ) / 180
+      //
+      //↓地図を何文割するかの数値
+      //var lengthX = 180 / ( モニターのmaxLat - モニターのminLat )
+      //var lengthY = 360 / ( モニターのmaxLng - モニターのminLng )
+
+      //ただ、モニターのサイズはデバイスによって違うので、
+      //ここでのモニターのサイズは固定で定義するべき 1000 * 1000　ぐらい・・・？
+
+      var p = this.map.getPixelBounds();
+      p.min.x += this.halfWidth - this.searchRadius;
+      p.min.y += this.halfHeight - this.searchRadius;
+      p.max.x = p.max.x - this.halfWidth + this.searchRadius;
+      p.max.y = p.max.y - this.halfHeight + this.searchRadius;
+      var minLatLng = this.map.unproject(p.min);
+      var maxLatLng = this.map.unproject(p.max);
+
+      var perX = (lng + 180) / 360;
+      var perY = (lat + 90) / 180;
+      var lengthX = 360 / (maxLatLng.lng - minLatLng.lng);
+      var lengthY = 180 / (minLatLng.lat - maxLatLng.lat);
+
+      //各倍率のlengthX, lengthYをクライアントの配列に全て保持し、
+      //フキダシのlat lngのみサーバーに保存
+
+      //現在のマップの中心地が入る升目を調べ
+      //その 升目のminとmaxの間に含まれるフキダシを全て表示
+
+
+      // this.addPopup( 'topLeft', minLatLng.lat, minLatLng.lng, 9999 );
+      // this.addPopup( 'bottomRight', maxLatLng.lat, maxLatLng.lng, 9999 );
+
+      var x = Math.floor(lengthX * perX);
+      if (x == lengthX) x = lengthX - 1;
+
+      var y = Math.floor(lengthY * perY);
+      if (y == lengthY) y = lengthY - 1;
+
+      if (lat < -90) y = 0;
+      if (lat > 90) y = lengthY - 1;
+      if (lng < -180) x = 0;
+      if (lng > 180) x = lengthX - 1;
+
+      return { x: x, y: y, minLatLng: minLatLng, maxLatLng: maxLatLng };
+    }
+  }, {
+    key: 'getQuestions',
+    value: function getQuestions(min, max, callback) {
+
+      var data = {
+        min_lat: min.lat,
+        max_lat: max.lat,
+        min_lng: min.lng,
+        max_lng: max.lng
+      };
+
+      var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
       $.ajax({
         url: url,
         type: 'GET',
-        data: {},
-        success: this.jsonLoadComp.bind(this),
-        error: function (result) {
-          console.log(result);
-        }.bind(this)
+        data: data,
+        success: function (_callback, result) {
+          _callback(result);
+        }.bind(this, callback),
+        error: function (_callback, result) {
+          if (result && result.length) _callback(result);
+        }.bind(this, callback)
       });
     }
   }, {
     key: 'jsonLoadComp',
-    value: function jsonLoadComp(results) {
+    value: function jsonLoadComp(x, y, results) {
 
-      this.results = results;
+      var key = x + ',' + y;
+      this.popups[key] = [];
+
+      this.questions = results;
       var length = results.length;
       for (var i = 0; i < length; i++) {
         var obj = results[i];
@@ -467,16 +579,43 @@ var Map = function () {
         // });
 
         //leaflet
-        this.addPopup(obj.title, obj.lat, obj.lng, i);
-
+        var popup = this.createPopup(obj.title, obj.lat, obj.lng, i);
+        this.popups[key].push(popup);
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
       }
+      console.log("add!:" + key);
+    }
+  }, {
+    key: 'createPopup',
+    value: function createPopup(title, lat, lng, i) {
+
+      var content = L.DomUtil.create('div', 'popup');
+      content.innerHTML = title;
+      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
+
+      var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(lat), Number(lng)]).setContent(content).openOn(this.map);
+
+      return popup;
+    }
+  }, {
+    key: 'removePopups',
+    value: function removePopups(x, y) {
+
+      var key = x + ',' + y;
+      var length = this.popups[key].length;
+      for (var i = 0; i < length; i++) {
+        var content = this.popups[key][i].getContent();
+        L.DomEvent.off(content, 'click', this.popupClickHandler.bind(this));
+        this.popups[key][i].remove();
+      }
+
+      this.popups[key] = null;
     }
   }, {
     key: 'popupClickHandler',
     value: function popupClickHandler(index) {
 
-      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'popupClick', data: this.results[index] } } }));
+      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'popupClick', data: this.questions[index] } } }));
     }
   }, {
     key: 'btnClickHandler',
@@ -485,117 +624,14 @@ var Map = function () {
       var bounds = this.map.getCenter();
 
       //console.log( this.map.getZoom() );
-      console.log(this.getSplitAreaId(bounds.lat, bounds.lng));
 
       this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng } } }));
-    }
-  }, {
-    key: 'addPopup',
-    value: function addPopup(title, lat, lng, i) {
-
-      if (i == null) i = this.popups.length;
-
-      var content = L.DomUtil.create('div', 'popup');
-      content.innerHTML = title;
-      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
-
-      var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false }).setLatLng([Number(lat), Number(lng)]).setContent(content).openOn(this.map);
-      this.popups.push(popup);
     }
   }, {
     key: 'pushData',
     value: function pushData(data) {
 
-      this.results.push(data);
-    }
-
-    //地図全体を升目で区切り
-    //latとlngとzoomレベルからから升目のxとyのindex番号を取得する
-
-  }, {
-    key: 'getSplitAreaId',
-    value: function getSplitAreaId(lat, lng) {
-
-      //zoom 0～18
-      var z = this.map.getZoom();
-      var c = this.map.getCenter();
-      console.log(z);
-      console.log(c);
-
-      //console.log( "zoom:" + z );
-
-
-      //↓モニターに写っている領域の全体からみたパーセンテージ
-      //var perX = ( モニターのmaxLat - モニターのminLat ) / 180
-      //
-      //↓地図を何文割するかの数値
-      //var lengthX = 180 / ( モニターのmaxLat - モニターのminLat )
-      //var lengthY = 360 / ( モニターのmaxLng - モニターのminLng )
-
-      //ただ、モニターのサイズはデバイスによって違うので、
-      //ここでのモニターのサイズは固定で定義するべき 1000 * 1000　ぐらい・・・？
-
-      var p = this.map.getPixelBounds();
-      p.min.x += this.halfWidth - 500;
-      p.min.y += this.halfHeight - 500;
-      p.max.x = p.max.x - this.halfWidth + 500;
-      p.max.y = p.max.y - this.halfHeight + 500;
-      var minLatLng = this.map.unproject(p.min);
-      var maxLatLng = this.map.unproject(p.max);
-
-      var perX = (c.lng + 180) / 360;
-      var perY = (c.lat + 90) / 180;
-      var lengthX = 360 / (maxLatLng.lng - minLatLng.lng);
-      var lengthY = 180 / (minLatLng.lat - maxLatLng.lat);
-
-      //各倍率のlengthX, lengthYをクライアントの配列に全て保持し、
-      //フキダシのlat lngのみサーバーに保存
-
-      //現在のマップの中心地が入る升目を調べ
-      //その 升目のminとmaxの間に含まれるフキダシを全て表示
-
-
-      this.searchLatLng(minLatLng, maxLatLng); //debug
-
-      this.addPopup('topLeft', minLatLng.lat, minLatLng.lng, 9999);
-      this.addPopup('bottomRight', maxLatLng.lat, maxLatLng.lng, 9999);
-
-      var x = Math.floor(lengthX * perX);
-      if (x == lengthX) x = lengthX - 1;
-
-      var y = Math.floor(lengthY * perY);
-      if (y == lengthY) y = lengthY - 1;
-
-      if (c.lat < -90) y = 0;
-      if (c.lat > 90) y = lengthY - 1;
-      if (c.lng < -180) x = 0;
-      if (c.lng > 180) x = lengthX - 1;
-
-      return { x: x, y: y };
-    }
-  }, {
-    key: 'searchLatLng',
-    value: function searchLatLng(min, max) {
-
-      var data = {
-        min_lat: min.lat,
-        max_lat: max.lat,
-        min_lng: min.lng,
-        max_lng: max.lng
-      };
-
-      var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: data,
-        success: function success(result) {
-          console.log(result);
-        },
-        error: function (result) {
-          console.log(result);
-        }.bind(this)
-      });
+      this.questions.push(data);
     }
   }, {
     key: 'resize',
@@ -865,7 +901,6 @@ var Questions = function () {
     // initMap(){
 
     this.map = new _Map2.default();
-    this.map.initMap();
     this.map.element.addEventListener('ysdCallback', this.mapCallBackHandler.bind(this));
 
     // var zoom = window.innerWidth / 750;
@@ -1184,8 +1219,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 
