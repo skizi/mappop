@@ -43,10 +43,12 @@ export default class Map{
     this.map.setMaxBounds( new L.LatLngBounds([ -90, -180 ], [ 90, 180]) );
 
     this.popups = {};
+    this.allPopupLength = 0;
 
 
     this.oldIndexs = [];
     this.map.on( 'moveend', this.mapMoved.bind( this ) );
+    this.map.on( 'zoomstart', this.mapZoom.bind( this ) );
     // this.map.on( 'load', function(){
     // }.bind( this ) );
 
@@ -62,12 +64,19 @@ export default class Map{
   }
 
 
+  mapZoom(){
+
+    this.oldIndexs = [];
+    this.removePopups( 0, 0, true );
+
+  }
+
+
   checkNewQuestions(){
 
     var c = this.map.getCenter();
     var now = this.getSplitAreaId( c.lat, c.lng );
     var hasFlag = this.hasOldIndex( now );
-    console.log( now.x, now.y );
     if( !hasFlag ){
       this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, now.x, now.y ) );//debug
       this.oldIndexs.push( { x:now.x, y:now.y } );
@@ -79,7 +88,7 @@ export default class Map{
       var old = this.oldIndexs[i];
       var distX = Math.abs( old.x - now.x );
       var distY = Math.abs( old.y - now.y );
-      if( distX + distY > 1 ){
+      if( distX + distY > 2 ){
         console.log( "remove!" + old.x + ',' + old.y );
         this.removePopups( old.x, old.y );
         this.oldIndexs.splice( i, 1 );
@@ -118,18 +127,15 @@ export default class Map{
     //ただ、モニターのサイズはデバイスによって違うので、
     //ここでのモニターのサイズは固定で定義するべき 1000 * 1000　ぐらい・・・？
 
-    var p = this.map.getPixelBounds();
-    p.min.x += this.halfWidth - this.searchRadius;
-    p.min.y += this.halfHeight - this.searchRadius;
-    p.max.x = p.max.x - this.halfWidth + this.searchRadius;
-    p.max.y = p.max.y - this.halfHeight + this.searchRadius;
-    var minLatLng = this.map.unproject( p.min );
-    var maxLatLng = this.map.unproject( p.max );
 
+    if( !this.latLngDist ) this.latLngDist = this.getLatLngDist(); 
+    var w = this.latLngDist.x;
+    var h = this.latLngDist.y;
+    
     var perX = ( lng + 180 ) / 360;
     var perY = ( lat + 90 ) / 180;
-    var lengthX = 360 / ( maxLatLng.lng - minLatLng.lng );
-    var lengthY = 180 / ( minLatLng.lat - maxLatLng.lat );
+    var lengthX = 360 / w;
+    var lengthY = 180 / h;
 
     //各倍率のlengthX, lengthYをクライアントの配列に全て保持し、
     //フキダシのlat lngのみサーバーに保存
@@ -137,9 +143,6 @@ export default class Map{
     //現在のマップの中心地が入る升目を調べ
     //その 升目のminとmaxの間に含まれるフキダシを全て表示
 
-
-    // this.addPopup( 'topLeft', minLatLng.lat, minLatLng.lng, 9999 );
-    // this.addPopup( 'bottomRight', maxLatLng.lat, maxLatLng.lng, 9999 );
 
     var x = Math.floor(lengthX * perX );
     if( x == lengthX ) x = lengthX - 1;
@@ -153,7 +156,20 @@ export default class Map{
     if( lng > 180 ) x = lengthX - 1;
 
 
-    return { x:x, y:y, minLatLng:minLatLng, maxLatLng:maxLatLng };
+var _x = w * x - 180;
+var _y = h * y - 90;
+var _minLatLng = L.latLng( _y+h, _x );
+var _maxLatLng = L.latLng( _y, _x+w );
+// console.log( "minLatLng----" );
+// console.log( _minLatLng.lat, _minLatLng.lng );
+
+// console.log( "origin----" );
+// console.log( lat, lng );
+
+// console.log( "maxLatLng----" );
+// console.log( _maxLatLng.lat, _maxLatLng.lng );
+
+    return { x:x, y:y, minLatLng:_minLatLng, maxLatLng:_maxLatLng };
 
   }
 
@@ -162,21 +178,24 @@ export default class Map{
 
     var data = {
       min_lat:min.lat,
-      max_lat:max.lat,
       min_lng:min.lng,
+      max_lat:max.lat,
       max_lng:max.lng
     };
 
     var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
-    $.ajax({
+    if( this.nowAjax ) this.nowAjax.abort();
+    this.nowAjax = $.ajax({
         url:url,
         type:'GET',
         data:data,
         success:function( _callback, result ){
           _callback( result );
+          this.nowAjax = null;
         }.bind( this, callback ),
         error:function( _callback, result ){
           if( result && result.length ) _callback( result );
+          this.nowAjax = null;
         }.bind( this, callback )
     });
 
@@ -188,39 +207,40 @@ export default class Map{
     var key = x + ',' + y;
     this.popups[ key ] = [];
 
-  	this.questions = results;
   	var length = results.length;
   	for( var i = 0; i < length; i++ ){
-  		var obj = results[i];
+  		var data = results[i];
 
   		//google map
   		// var content = document.createElement("div");
   		// content.className = 'popup';
-  		// content.innerHTML = obj.title;
+  		// content.innerHTML = data.title;
   		// var popup = new google.maps.InfoWindow({
   		// 	content: content,
-  		// 	position: { lat:Number( obj.lat ), lng:Number( obj.lng ) },
+  		// 	position: { lat:Number( data.lat ), lng:Number( data.lng ) },
   		// 	map: this.map,
   		// 	disableAutoPan: false
   		// });
 
   		//leaflet
-      var popup = this.createPopup( obj.title, obj.lat, obj.lng, i );
+      var popup = this.createPopup( data );
+      popup.data = data;
       this.popups[ key ].push( popup );
 		  //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
   	}
+    this.allPopupLength += length;
 console.log( "add!:" + key );
   }
 
 
-  createPopup( title, lat, lng, i ){
+  createPopup( data ){
 
     var content = L.DomUtil.create( 'div', 'popup' );
-    content.innerHTML = title;
-    L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, i ) );
+    content.innerHTML = data.title;
+    L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, data ) );
 
     var popup = L.popup({ autoPan:false, keepInView:true, autoClose:false, closeOnEscapeKey:false, closeOnClick:false })
-        .setLatLng([ Number( lat ), Number( lng ) ])
+        .setLatLng([ Number( data.lat ), Number( data.lng ) ])
         .setContent( content )
         .openOn( this.map );
 
@@ -229,24 +249,41 @@ console.log( "add!:" + key );
   }
 
 
-  removePopups( x, y ){
+  removePopups( x, y, allDeleteFlag ){
 
-    var key = x + ',' + y;
+    if( allDeleteFlag ){
+      for( var key in this.popups ){
+        this.removeBoundsPopup( key );
+      }
+    }else{
+      var key = x + ',' + y;
+      if( !this.popups[ key ] ) return;
+      this.removeBoundsPopup( key );
+    }
+
+  }
+
+
+  removeBoundsPopup( key ){
+
     var length = this.popups[ key ].length;
     for( var i = 0; i < length; i++ ){
       var content = this.popups[ key ][i].getContent();
       L.DomEvent.off( content, 'click', this.popupClickHandler.bind( this ) );
       this.popups[ key ][i].remove();
+      this.allPopupLength--;
     }
 
-    this.popups[ key ] = null;
+    if( this.allPopupLength < 0 ) this.allPopupLength = 0;
+
+    delete this.popups[ key ];
 
   }
 
 
-  popupClickHandler( index ){
+  popupClickHandler( data ){
 
-	 this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'popupClick', data:this.questions[index] } } } ) );
+	 this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'popupClick', data:data } } } ) );
 
   }
 
@@ -255,16 +292,31 @@ console.log( "add!:" + key );
 
     var bounds = this.map.getCenter();
 
-//console.log( this.map.getZoom() );
-
   	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
 
   }
 
 
-  pushData( data ){
+  //画面サイズに合ったlat lngの幅・高さを取得
+  getLatLngDist(){
 
-    this.questions.push( data );
+      //map上のpixel値を取得後・・・
+      var p = this.map.getPixelBounds();
+      // p.min.x += this.halfWidth - this.searchRadius;
+      // p.min.y += this.halfHeight - 300;
+      // p.max.x = p.max.x - this.halfWidth + this.searchRadius;
+      // p.max.y = p.max.y - this.halfHeight + 300;
+
+      var minLatLng = this.map.unproject( p.min );
+      var maxLatLng = this.map.unproject( p.max );
+  console.log( "pixel h:" + ( p.max.y - p.min.y ) );
+
+      var x = ( maxLatLng.lng - minLatLng.lng );
+      var y = ( minLatLng.lat - maxLatLng.lat );
+      var latLngDist = { x:x, y:y };
+      console.log( "h:" + x );
+
+      return latLngDist;
 
   }
 
@@ -275,6 +327,8 @@ console.log( "add!:" + key );
     this.height = this.element.clientHeight;
     this.halfWidth = this.width * 0.5;
     this.halfHeight = this.height * 0.5;
+
+    this.latLngDist = this.getLatLngDist();
   
   }
 

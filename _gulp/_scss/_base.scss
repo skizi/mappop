@@ -797,10 +797,11 @@ footer{
                             line-height: 22px;
                             font-size:12px;
                             float:left;
+                        }
 
-                            &.no_comment{
-                                margin-left: 0;
-                            }
+
+                        &.no_comment p{
+                            margin-left: 0;
                         }
                     }
                 }

@@ -113,10 +113,12 @@ export default class ShowPostModal extends Modal{
 
 
     //---------------------
-
     //質問タイトルと、質問テキストを配置
     setText( data ){
-        
+
+        this.add( data );
+        return;
+
         this.questionId = data.id;
 
         this.loadFlag = true;
@@ -158,13 +160,12 @@ export default class ShowPostModal extends Modal{
         this.title.innerHTML = data.title;
         if( data.photo ){
             this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
-        }else{
-            this.photoContainer.innerHTML = '';
         }
+
         this.content.innerHTML = data.content;
 
         if( data.comments.length == 0 ){
-            this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
+            this.comments.innerHTML = '<li class="no_comment"><p>コメントがありません</p></li>';
         }else{
             this.addComments( data.comments );
         }
@@ -218,6 +219,10 @@ export default class ShowPostModal extends Modal{
 
     refresh(){
 
+        this.title.innerHTML = '';
+        this.photoContainer.innerHTML = '';        
+        this.content.innerHTML = '';
+        this.likeBtnCount.innerHTML = '';
         this.comment.value = '';
         this.comments.innerHTML = '';
 

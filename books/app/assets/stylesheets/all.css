@@ -731,7 +731,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom ul.comments li { margin-bottom: 5px; overflow: hidden; *zoom: 1; }
 .modal.show .inner div.bottom ul.comments li img { width: 21px; height: 21px; margin-right: 6px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 22px; font-size: 12px; float: left; }
-.modal.show .inner div.bottom ul.comments li p.no_comment { margin-left: 0; }
+.modal.show .inner div.bottom ul.comments li.no_comment p { margin-left: 0; }
 .modal.show .inner div.bottom textarea { width: 100%; max-width: 100%; height: 100px; border-radius: 5px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; box-sizing: border-box; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
 .modal.show .inner a.close_btn { left: auto; right: 16px; }

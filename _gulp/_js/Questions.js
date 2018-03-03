@@ -68,8 +68,7 @@ class Questions{
 
     var obj = e.detail.value;
     if( obj.type == 'addPopup' ){
-      this.map.addPopup( obj.title, obj.lat, obj.lng );
-      this.map.pushData( obj );
+      this.map.createPopup( obj );
     }
 
   }

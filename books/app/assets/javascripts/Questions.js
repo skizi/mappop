@@ -422,9 +422,11 @@ var Map = function () {
     this.map.setMaxBounds(new L.LatLngBounds([-90, -180], [90, 180]));
 
     this.popups = {};
+    this.allPopupLength = 0;
 
     this.oldIndexs = [];
     this.map.on('moveend', this.mapMoved.bind(this));
+    this.map.on('zoomstart', this.mapZoom.bind(this));
     // this.map.on( 'load', function(){
     // }.bind( this ) );
 
@@ -438,13 +440,19 @@ var Map = function () {
       this.checkNewQuestions();
     }
   }, {
+    key: 'mapZoom',
+    value: function mapZoom() {
+
+      this.oldIndexs = [];
+      this.removePopups(0, 0, true);
+    }
+  }, {
     key: 'checkNewQuestions',
     value: function checkNewQuestions() {
 
       var c = this.map.getCenter();
       var now = this.getSplitAreaId(c.lat, c.lng);
       var hasFlag = this.hasOldIndex(now);
-      console.log(now.x, now.y);
       if (!hasFlag) {
         this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, now.x, now.y)); //debug
         this.oldIndexs.push({ x: now.x, y: now.y });
@@ -456,7 +464,7 @@ var Map = function () {
         var old = this.oldIndexs[i];
         var distX = Math.abs(old.x - now.x);
         var distY = Math.abs(old.y - now.y);
-        if (distX + distY > 1) {
+        if (distX + distY > 2) {
           console.log("remove!" + old.x + ',' + old.y);
           this.removePopups(old.x, old.y);
           this.oldIndexs.splice(i, 1);
@@ -495,18 +503,15 @@ var Map = function () {
       //ただ、モニターのサイズはデバイスによって違うので、
       //ここでのモニターのサイズは固定で定義するべき 1000 * 1000　ぐらい・・・？
 
-      var p = this.map.getPixelBounds();
-      p.min.x += this.halfWidth - this.searchRadius;
-      p.min.y += this.halfHeight - this.searchRadius;
-      p.max.x = p.max.x - this.halfWidth + this.searchRadius;
-      p.max.y = p.max.y - this.halfHeight + this.searchRadius;
-      var minLatLng = this.map.unproject(p.min);
-      var maxLatLng = this.map.unproject(p.max);
+
+      if (!this.latLngDist) this.latLngDist = this.getLatLngDist();
+      var w = this.latLngDist.x;
+      var h = this.latLngDist.y;
 
       var perX = (lng + 180) / 360;
       var perY = (lat + 90) / 180;
-      var lengthX = 360 / (maxLatLng.lng - minLatLng.lng);
-      var lengthY = 180 / (minLatLng.lat - maxLatLng.lat);
+      var lengthX = 360 / w;
+      var lengthY = 180 / h;
 
       //各倍率のlengthX, lengthYをクライアントの配列に全て保持し、
       //フキダシのlat lngのみサーバーに保存
@@ -514,9 +519,6 @@ var Map = function () {
       //現在のマップの中心地が入る升目を調べ
       //その 升目のminとmaxの間に含まれるフキダシを全て表示
 
-
-      // this.addPopup( 'topLeft', minLatLng.lat, minLatLng.lng, 9999 );
-      // this.addPopup( 'bottomRight', maxLatLng.lat, maxLatLng.lng, 9999 );
 
       var x = Math.floor(lengthX * perX);
       if (x == lengthX) x = lengthX - 1;
@@ -529,7 +531,20 @@ var Map = function () {
       if (lng < -180) x = 0;
       if (lng > 180) x = lengthX - 1;
 
-      return { x: x, y: y, minLatLng: minLatLng, maxLatLng: maxLatLng };
+      var _x = w * x - 180;
+      var _y = h * y - 90;
+      var _minLatLng = L.latLng(_y + h, _x);
+      var _maxLatLng = L.latLng(_y, _x + w);
+      // console.log( "minLatLng----" );
+      // console.log( _minLatLng.lat, _minLatLng.lng );
+
+      // console.log( "origin----" );
+      // console.log( lat, lng );
+
+      // console.log( "maxLatLng----" );
+      // console.log( _maxLatLng.lat, _maxLatLng.lng );
+
+      return { x: x, y: y, minLatLng: _minLatLng, maxLatLng: _maxLatLng };
     }
   }, {
     key: 'getQuestions',
@@ -537,21 +552,24 @@ var Map = function () {
 
       var data = {
         min_lat: min.lat,
-        max_lat: max.lat,
         min_lng: min.lng,
+        max_lat: max.lat,
         max_lng: max.lng
       };
 
       var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
-      $.ajax({
+      if (this.nowAjax) this.nowAjax.abort();
+      this.nowAjax = $.ajax({
         url: url,
         type: 'GET',
         data: data,
         success: function (_callback, result) {
           _callback(result);
+          this.nowAjax = null;
         }.bind(this, callback),
         error: function (_callback, result) {
           if (result && result.length) _callback(result);
+          this.nowAjax = null;
         }.bind(this, callback)
       });
     }
@@ -562,60 +580,77 @@ var Map = function () {
       var key = x + ',' + y;
       this.popups[key] = [];
 
-      this.questions = results;
       var length = results.length;
       for (var i = 0; i < length; i++) {
-        var obj = results[i];
+        var data = results[i];
 
         //google map
         // var content = document.createElement("div");
         // content.className = 'popup';
-        // content.innerHTML = obj.title;
+        // content.innerHTML = data.title;
         // var popup = new google.maps.InfoWindow({
         // 	content: content,
-        // 	position: { lat:Number( obj.lat ), lng:Number( obj.lng ) },
+        // 	position: { lat:Number( data.lat ), lng:Number( data.lng ) },
         // 	map: this.map,
         // 	disableAutoPan: false
         // });
 
         //leaflet
-        var popup = this.createPopup(obj.title, obj.lat, obj.lng, i);
+        var popup = this.createPopup(data);
+        popup.data = data;
         this.popups[key].push(popup);
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
       }
+      this.allPopupLength += length;
       console.log("add!:" + key);
     }
   }, {
     key: 'createPopup',
-    value: function createPopup(title, lat, lng, i) {
+    value: function createPopup(data) {
 
       var content = L.DomUtil.create('div', 'popup');
-      content.innerHTML = title;
-      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, i));
+      content.innerHTML = data.title;
+      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, data));
 
-      var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(lat), Number(lng)]).setContent(content).openOn(this.map);
+      var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(data.lat), Number(data.lng)]).setContent(content).openOn(this.map);
 
       return popup;
     }
   }, {
     key: 'removePopups',
-    value: function removePopups(x, y) {
+    value: function removePopups(x, y, allDeleteFlag) {
 
-      var key = x + ',' + y;
+      if (allDeleteFlag) {
+        for (var key in this.popups) {
+          this.removeBoundsPopup(key);
+        }
+      } else {
+        var key = x + ',' + y;
+        if (!this.popups[key]) return;
+        this.removeBoundsPopup(key);
+      }
+    }
+  }, {
+    key: 'removeBoundsPopup',
+    value: function removeBoundsPopup(key) {
+
       var length = this.popups[key].length;
       for (var i = 0; i < length; i++) {
         var content = this.popups[key][i].getContent();
         L.DomEvent.off(content, 'click', this.popupClickHandler.bind(this));
         this.popups[key][i].remove();
+        this.allPopupLength--;
       }
 
-      this.popups[key] = null;
+      if (this.allPopupLength < 0) this.allPopupLength = 0;
+
+      delete this.popups[key];
     }
   }, {
     key: 'popupClickHandler',
-    value: function popupClickHandler(index) {
+    value: function popupClickHandler(data) {
 
-      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'popupClick', data: this.questions[index] } } }));
+      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'popupClick', data: data } } }));
     }
   }, {
     key: 'btnClickHandler',
@@ -623,15 +658,32 @@ var Map = function () {
 
       var bounds = this.map.getCenter();
 
-      //console.log( this.map.getZoom() );
-
       this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng } } }));
     }
-  }, {
-    key: 'pushData',
-    value: function pushData(data) {
 
-      this.questions.push(data);
+    //画面サイズに合ったlat lngの幅・高さを取得
+
+  }, {
+    key: 'getLatLngDist',
+    value: function getLatLngDist() {
+
+      //map上のpixel値を取得後・・・
+      var p = this.map.getPixelBounds();
+      // p.min.x += this.halfWidth - this.searchRadius;
+      // p.min.y += this.halfHeight - 300;
+      // p.max.x = p.max.x - this.halfWidth + this.searchRadius;
+      // p.max.y = p.max.y - this.halfHeight + 300;
+
+      var minLatLng = this.map.unproject(p.min);
+      var maxLatLng = this.map.unproject(p.max);
+      console.log("pixel h:" + (p.max.y - p.min.y));
+
+      var x = maxLatLng.lng - minLatLng.lng;
+      var y = minLatLng.lat - maxLatLng.lat;
+      var latLngDist = { x: x, y: y };
+      console.log("h:" + x);
+
+      return latLngDist;
     }
   }, {
     key: 'resize',
@@ -641,6 +693,8 @@ var Map = function () {
       this.height = this.element.clientHeight;
       this.halfWidth = this.width * 0.5;
       this.halfHeight = this.height * 0.5;
+
+      this.latLngDist = this.getLatLngDist();
     }
   }]);
 
@@ -939,8 +993,7 @@ var Questions = function () {
 
       var obj = e.detail.value;
       if (obj.type == 'addPopup') {
-        this.map.addPopup(obj.title, obj.lat, obj.lng);
-        this.map.pushData(obj);
+        this.map.createPopup(obj);
       }
     }
   }, {
@@ -1100,12 +1153,14 @@ var ShowPostModal = function (_Modal) {
         }
 
         //---------------------
-
         //質問タイトルと、質問テキストを配置
 
     }, {
         key: 'setText',
         value: function setText(data) {
+
+            this.add(data);
+            return;
 
             this.questionId = data.id;
 
@@ -1146,13 +1201,12 @@ var ShowPostModal = function (_Modal) {
             this.title.innerHTML = data.title;
             if (data.photo) {
                 this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
-            } else {
-                this.photoContainer.innerHTML = '';
             }
+
             this.content.innerHTML = data.content;
 
             if (data.comments.length == 0) {
-                this.comments.innerHTML = '<li><p class="no_comment">コメントがありません</p></li>';
+                this.comments.innerHTML = '<li class="no_comment"><p>コメントがありません</p></li>';
             } else {
                 this.addComments(data.comments);
             }
@@ -1204,6 +1258,10 @@ var ShowPostModal = function (_Modal) {
         key: 'refresh',
         value: function refresh() {
 
+            this.title.innerHTML = '';
+            this.photoContainer.innerHTML = '';
+            this.content.innerHTML = '';
+            this.likeBtnCount.innerHTML = '';
             this.comment.value = '';
             this.comments.innerHTML = '';
         }
