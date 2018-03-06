@@ -183,6 +183,14 @@ label{
 
 
 
+.danger{
+    margin-bottom: 30px;
+    text-align: center;
+    color:#ff0000;
+    font-size:14px;
+}
+
+
 .btn0{
     width:339px;
     height: 53px;
@@ -710,12 +718,29 @@ footer{
                     color: #ebb314;
                     border-bottom: 8px solid #ebb314;
 
-                    .title_text{
-                        width: 255px;
+                    .title_user_icon{
+                        width:30px;
+                        height:30px;
                         display: inline-block;
+                        position: relative;
+                        top: -4px;
+
+                        a{
+                            transition-duration: 0.3s;
+                            transition-property: opacity;
+
+                            &:hover{
+                                opacity: 0.8;
+                            }
+
+                            img{
+                                width:30px;
+                            }
+                        }
                     }
 
                     div.like_btn{
+                        margin-right: 10px;
                         display: inline-block;
                         cursor:pointer;
 
@@ -787,11 +812,20 @@ footer{
                         margin-bottom: 5px;
                         @include clearfix;
 
-                        img{
-                            width:21px;
-                            height:21px;
-                            margin-right: 6px;
-                            float:left;
+                        a{
+                            transition-duration: 0.3s;
+                            transition-property: opacity;
+
+                            &:hover{
+                                opacity: 0.8;
+                            }
+                            
+                            img{
+                                width:21px;
+                                height:21px;
+                                margin-right: 6px;
+                                float:left;
+                            }
                         }
                         p{
                             line-height: 22px;

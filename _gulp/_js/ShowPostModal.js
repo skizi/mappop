@@ -9,7 +9,10 @@ export default class ShowPostModal extends Modal{
 
         super( '.modal.show' );
 
-        this.title = document.querySelector( '.modal.show .title .title_text' );
+        this.title = document.querySelector( '.modal.show h2.title' );
+        this.titleText = document.querySelector( '.modal.show .title_text' );
+        this.titleUserIconAtag = document.querySelector( '.modal.show .title_user_icon a' );
+        this.titleUserIcon;
         this.photoContainer = document.querySelector( '.modal.show .photo' );
         this.likeBtn = document.querySelector( '.modal.show .like_btn' );
         this.likeBtn.addEventListener( 'click', this.likeBtnClickHandler.bind( this ) );
@@ -60,17 +63,20 @@ export default class ShowPostModal extends Modal{
             type:'POST',
             dataType: 'json',
             data:data,
-            success:function( result ){
-                console.log( result );
-                this.likeBtnCount.innerHTML = Number( this.likeBtnCount.innerHTML ) + 1;
-            }.bind( this ),
+            success:this.postLikeComp.bind( this, data ),
             error:function( result ){
                 console.log( result );
-                if( result.question_id ){
-                    this.likeBtnCount.innerHTML = Number( this.likeBtnCount.innerHTML ) + 1;
-                }
             }.bind( this )
         });
+
+    }
+
+
+    postLikeComp( data, result ){
+        
+        console.log( result );
+        this.likeBtnCount.innerHTML = Number( this.likeBtnCount.innerHTML ) + 1;
+        this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'addLike', data:data } } } ) );
 
     }
 
@@ -92,11 +98,7 @@ export default class ShowPostModal extends Modal{
             type:'POST',
             dataType: 'json',
             data:data,
-            success:function( result ){
-                console.log( result );
-                this.comment.value = '';
-                this.loading.hide();
-            }.bind( this ),
+            success:this.postAnswerComp.bind( this, data ),
             error:function( result ){
                 console.log( result );
                 this.comment.value = '';
@@ -104,10 +106,19 @@ export default class ShowPostModal extends Modal{
             }.bind( this )
         });
 
+    }
+
+
+    postAnswerComp( data, result ){
+        
+        console.log( result );
+        this.comment.value = '';
+        this.loading.hide();
+        this.addComment( data.content, app.user_id );
+        this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'addComment', data:data } } } ) );
+
         var noComment = this.comments.getElementsByClassName( 'no_comment' )[0];
         if( noComment ) this.comments.removeChild( noComment );
-
-        this.addComment( comment, app.user_id );
 
     }
 
@@ -117,18 +128,8 @@ export default class ShowPostModal extends Modal{
     setText( data ){
 
         this.add( data );
-        return;
 
         this.questionId = data.id;
-
-        this.loadFlag = true;
-        if( this.nowId == data.id ){
-            this.loadFlag = false;
-            return;
-        }
-        this.nowId = data.id;
-
-        this.loadQuestion( data.id );
 
     }
 
@@ -157,7 +158,11 @@ export default class ShowPostModal extends Modal{
 
     add( data ){
 
-        this.title.innerHTML = data.title;
+        this.titleText.innerHTML = data.title;
+        this.titleUserIcon = this.addUserIcon( data.user_id, this.titleUserIconAtag );
+        var url = '/users/' + data.user_id;
+        this.titleUserIconAtag.setAttribute( 'href', url );
+
         if( data.photo ){
             this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
         }
@@ -192,18 +197,30 @@ export default class ShowPostModal extends Modal{
 
         var li = document.createElement( 'li' );
         this.comments.appendChild( li );
-
-        var img = new Image();
-        var src = '/docs/user_icon/' + user_id + '.jpg';
-        img.setAttribute( 'src', src );
-        li.appendChild( img );
-        img.onerror = function( _img ){
-            _img.setAttribute( 'src', '/docs/user_icon/no_image.jpg' );
-        }.bind( this, img );
+        var a = document.createElement( 'a' );
+        li.appendChild( a );
+        var url = '/users/' + user_id;
+        a.setAttribute( 'href', url );
+        this.addUserIcon( user_id, a );
 
         var p = document.createElement( 'p' );
         p.innerHTML = content;
         li.appendChild( p );
+
+    }
+
+
+    addUserIcon( user_id, parent ){
+
+        var img = new Image();
+        var src = '/docs/user_icon/' + user_id + '.jpg';
+        img.setAttribute( 'src', src );
+        parent.appendChild( img );
+        img.onerror = function( _img ){
+            _img.setAttribute( 'src', '/docs/user_icon/no_image.jpg' );
+        }.bind( this, img );
+
+        return img;
 
     }
 
@@ -219,7 +236,8 @@ export default class ShowPostModal extends Modal{
 
     refresh(){
 
-        this.title.innerHTML = '';
+        if( this.titleUserIcon ) this.titleUserIconAtag.removeChild( this.titleUserIcon );
+        this.titleText.innerHTML = '';
         this.photoContainer.innerHTML = '';        
         this.content.innerHTML = '';
         this.likeBtnCount.innerHTML = '';

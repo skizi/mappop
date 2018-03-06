@@ -78,7 +78,7 @@ export default class Map{
     var now = this.getSplitAreaId( c.lat, c.lng );
     var hasFlag = this.hasOldIndex( now );
     if( !hasFlag ){
-      this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, now.x, now.y ) );//debug
+      this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, now.x, now.y ) );
       this.oldIndexs.push( { x:now.x, y:now.y } );
     }
     
@@ -190,12 +190,12 @@ var _maxLatLng = L.latLng( _y, _x+w );
         type:'GET',
         data:data,
         success:function( _callback, result ){
-          _callback( result );
           this.nowAjax = null;
+          _callback( result );
         }.bind( this, callback ),
         error:function( _callback, result ){
-          if( result && result.length ) _callback( result );
           this.nowAjax = null;
+          //_callback( result );
         }.bind( this, callback )
     });
 
@@ -317,6 +317,41 @@ console.log( "add!:" + key );
       console.log( "h:" + x );
 
       return latLngDist;
+
+  }
+
+
+  setComment( data ){
+
+    var popup = this.getTargetPopup( data.question_id );
+    popup.data.comments.push( data );
+  
+  }
+
+
+  setLike( data ){
+
+    var popup = this.getTargetPopup( data.question_id );
+    popup.data.likes.push( data );
+
+  }
+
+
+  getTargetPopup( question_id ){
+
+    var popup;
+
+    for( var key in this.popups ){
+      var popups = this.popups[key];
+      var length = popups.length;
+      for( var i = 0; i < length; i++ ){
+        if( question_id == popups[i].data.id ){
+          popup = popups[i];
+        }
+      }
+    }
+
+    return popup;
 
   }
 

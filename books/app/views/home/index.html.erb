@@ -1,4 +1,12 @@
+
+<% content_for :js_css_include do %>
+	<%= javascript_include_tag 'Top', media:'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+
+
 <div class="top_content">
+	<div id="leafletMap"></div>
 	<div class="text_container">
 		<h2>さあ、街へ出かけよう。</h2>
 		<p>地図上で街の情報を共有しよう。</p>
@@ -22,14 +30,14 @@
 			<h3><span>Step1 会員登録</span></h3>
 		</div>
 		<div class="step2 step">
-			<%= image_tag 'top/pic1.png', :alt => 'Step1 会員登録' %>
+			<%= image_tag 'top/pic1.png', :alt => 'Step2 街の質問または情報共有をする' %>
 			<h3>
-				<span>Step2 街の質問または</span><br>
+				<span>Step2 街の質問</span><br><span>または</span><br>
 				<span>情報共有をする</span>
 			</h3>
 		</div>
 		<div class="step3 step">
-			<%= image_tag 'top/pic2.png', :alt => 'Step1 会員登録' %>
+			<%= image_tag 'top/pic2.png', :alt => 'Step3 街を楽しむ！' %>
 			<h3><span>Step3 街を楽しむ！</span></h3>
 		</div>
 	</div>

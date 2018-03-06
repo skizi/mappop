@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params['id'])
     respond_to do |format|
       format.html{ render :show }
-      format.json{ render json: @question.to_json(:include => [ :comments, :likes ] ) }
+      format.json{ render json: @question.to_json(:include => [ :comments, :likes ] ), status: :ok }
     end
   end
 
@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
     @questions = Question.includes([ :comments, :likes ]).all
     respond_to do |format|
       format.html{ render :all }
-      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ) }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
     end
   end
 
@@ -48,7 +48,7 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       format.html{ render :all }
-      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ) }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
     end
 
   end
@@ -101,7 +101,7 @@ class QuestionsController < ApplicationController
   		if @question.save
         str = '質問が投稿完了しました。' + @question.user_id.to_s
   			format.html{ redirect_to @question, notice: str }
-  		  format.json{ render :show, status: :created, location: @question }
+  		  format.json{ render :show, status: :ok, location: @question }
       else
   			format.html{ render :new }
         format.json{ render json: @question.errors, status: :unprocessable_entity }

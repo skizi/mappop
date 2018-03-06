@@ -20,6 +20,7 @@ class Questions{
       this.newPostModal = new NewPostModal();
       this.newPostModal.element.addEventListener( 'ysdCallback', this.newPostModalCallBackHandler.bind( this ) );
       this.showPostModal = new ShowPostModal();
+      this.showPostModal.element.addEventListener( 'ysdCallback', this.showPostModalCallBackHandler.bind( this ) );
     //}.bind( this ) );
 
   //   this.initMap();
@@ -69,6 +70,18 @@ class Questions{
     var obj = e.detail.value;
     if( obj.type == 'addPopup' ){
       this.map.createPopup( obj );
+    }
+
+  }
+
+
+  showPostModalCallBackHandler( e ){
+
+    var obj = e.detail.value;
+    if( obj.type == 'addComment' ){
+      this.map.setComment( obj.data );
+    }else if( obj.type == 'addLike' ){
+      this.map.setLike( obj.data );
     }
 
   }

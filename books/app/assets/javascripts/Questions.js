@@ -454,7 +454,7 @@ var Map = function () {
       var now = this.getSplitAreaId(c.lat, c.lng);
       var hasFlag = this.hasOldIndex(now);
       if (!hasFlag) {
-        this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, now.x, now.y)); //debug
+        this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, now.x, now.y));
         this.oldIndexs.push({ x: now.x, y: now.y });
       }
 
@@ -564,12 +564,12 @@ var Map = function () {
         type: 'GET',
         data: data,
         success: function (_callback, result) {
-          _callback(result);
           this.nowAjax = null;
+          _callback(result);
         }.bind(this, callback),
         error: function (_callback, result) {
-          if (result && result.length) _callback(result);
           this.nowAjax = null;
+          //_callback( result );
         }.bind(this, callback)
       });
     }
@@ -684,6 +684,38 @@ var Map = function () {
       console.log("h:" + x);
 
       return latLngDist;
+    }
+  }, {
+    key: 'setComment',
+    value: function setComment(data) {
+
+      var popup = this.getTargetPopup(data.question_id);
+      popup.data.comments.push(data);
+    }
+  }, {
+    key: 'setLike',
+    value: function setLike(data) {
+
+      var popup = this.getTargetPopup(data.question_id);
+      popup.data.likes.push(data);
+    }
+  }, {
+    key: 'getTargetPopup',
+    value: function getTargetPopup(question_id) {
+
+      var popup;
+
+      for (var key in this.popups) {
+        var popups = this.popups[key];
+        var length = popups.length;
+        for (var i = 0; i < length; i++) {
+          if (question_id == popups[i].data.id) {
+            popup = popups[i];
+          }
+        }
+      }
+
+      return popup;
     }
   }, {
     key: 'resize',
@@ -945,6 +977,7 @@ var Questions = function () {
     this.newPostModal = new _NewPostModal2.default();
     this.newPostModal.element.addEventListener('ysdCallback', this.newPostModalCallBackHandler.bind(this));
     this.showPostModal = new _ShowPostModal2.default();
+    this.showPostModal.element.addEventListener('ysdCallback', this.showPostModalCallBackHandler.bind(this));
     //}.bind( this ) );
 
     //   this.initMap();
@@ -994,6 +1027,17 @@ var Questions = function () {
       var obj = e.detail.value;
       if (obj.type == 'addPopup') {
         this.map.createPopup(obj);
+      }
+    }
+  }, {
+    key: 'showPostModalCallBackHandler',
+    value: function showPostModalCallBackHandler(e) {
+
+      var obj = e.detail.value;
+      if (obj.type == 'addComment') {
+        this.map.setComment(obj.data);
+      } else if (obj.type == 'addLike') {
+        this.map.setLike(obj.data);
       }
     }
   }, {
@@ -1050,7 +1094,10 @@ var ShowPostModal = function (_Modal) {
 
         var _this = _possibleConstructorReturn(this, (ShowPostModal.__proto__ || Object.getPrototypeOf(ShowPostModal)).call(this, '.modal.show'));
 
-        _this.title = document.querySelector('.modal.show .title .title_text');
+        _this.title = document.querySelector('.modal.show h2.title');
+        _this.titleText = document.querySelector('.modal.show .title_text');
+        _this.titleUserIconAtag = document.querySelector('.modal.show .title_user_icon a');
+        _this.titleUserIcon;
         _this.photoContainer = document.querySelector('.modal.show .photo');
         _this.likeBtn = document.querySelector('.modal.show .like_btn');
         _this.likeBtn.addEventListener('click', _this.likeBtnClickHandler.bind(_this));
@@ -1103,17 +1150,19 @@ var ShowPostModal = function (_Modal) {
                 type: 'POST',
                 dataType: 'json',
                 data: data,
-                success: function (result) {
-                    console.log(result);
-                    this.likeBtnCount.innerHTML = Number(this.likeBtnCount.innerHTML) + 1;
-                }.bind(this),
+                success: this.postLikeComp.bind(this, data),
                 error: function (result) {
                     console.log(result);
-                    if (result.question_id) {
-                        this.likeBtnCount.innerHTML = Number(this.likeBtnCount.innerHTML) + 1;
-                    }
                 }.bind(this)
             });
+        }
+    }, {
+        key: 'postLikeComp',
+        value: function postLikeComp(data, result) {
+
+            console.log(result);
+            this.likeBtnCount.innerHTML = Number(this.likeBtnCount.innerHTML) + 1;
+            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'addLike', data: data } } }));
         }
     }, {
         key: 'answerBtnClickHandler',
@@ -1134,22 +1183,26 @@ var ShowPostModal = function (_Modal) {
                 type: 'POST',
                 dataType: 'json',
                 data: data,
-                success: function (result) {
-                    console.log(result);
-                    this.comment.value = '';
-                    this.loading.hide();
-                }.bind(this),
+                success: this.postAnswerComp.bind(this, data),
                 error: function (result) {
                     console.log(result);
                     this.comment.value = '';
                     this.loading.hide();
                 }.bind(this)
             });
+        }
+    }, {
+        key: 'postAnswerComp',
+        value: function postAnswerComp(data, result) {
+
+            console.log(result);
+            this.comment.value = '';
+            this.loading.hide();
+            this.addComment(data.content, app.user_id);
+            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'addComment', data: data } } }));
 
             var noComment = this.comments.getElementsByClassName('no_comment')[0];
             if (noComment) this.comments.removeChild(noComment);
-
-            this.addComment(comment, app.user_id);
         }
 
         //---------------------
@@ -1160,18 +1213,8 @@ var ShowPostModal = function (_Modal) {
         value: function setText(data) {
 
             this.add(data);
-            return;
 
             this.questionId = data.id;
-
-            this.loadFlag = true;
-            if (this.nowId == data.id) {
-                this.loadFlag = false;
-                return;
-            }
-            this.nowId = data.id;
-
-            this.loadQuestion(data.id);
         }
     }, {
         key: 'loadQuestion',
@@ -1198,7 +1241,11 @@ var ShowPostModal = function (_Modal) {
         key: 'add',
         value: function add(data) {
 
-            this.title.innerHTML = data.title;
+            this.titleText.innerHTML = data.title;
+            this.titleUserIcon = this.addUserIcon(data.user_id, this.titleUserIconAtag);
+            var url = '/users/' + data.user_id;
+            this.titleUserIconAtag.setAttribute('href', url);
+
             if (data.photo) {
                 this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
             }
@@ -1233,18 +1280,29 @@ var ShowPostModal = function (_Modal) {
 
             var li = document.createElement('li');
             this.comments.appendChild(li);
-
-            var img = new Image();
-            var src = '/docs/user_icon/' + user_id + '.jpg';
-            img.setAttribute('src', src);
-            li.appendChild(img);
-            img.onerror = function (_img) {
-                _img.setAttribute('src', '/docs/user_icon/no_image.jpg');
-            }.bind(this, img);
+            var a = document.createElement('a');
+            li.appendChild(a);
+            var url = '/users/' + user_id;
+            a.setAttribute('href', url);
+            this.addUserIcon(user_id, a);
 
             var p = document.createElement('p');
             p.innerHTML = content;
             li.appendChild(p);
+        }
+    }, {
+        key: 'addUserIcon',
+        value: function addUserIcon(user_id, parent) {
+
+            var img = new Image();
+            var src = '/docs/user_icon/' + user_id + '.jpg';
+            img.setAttribute('src', src);
+            parent.appendChild(img);
+            img.onerror = function (_img) {
+                _img.setAttribute('src', '/docs/user_icon/no_image.jpg');
+            }.bind(this, img);
+
+            return img;
         }
     }, {
         key: 'setLikeCount',
@@ -1258,7 +1316,8 @@ var ShowPostModal = function (_Modal) {
         key: 'refresh',
         value: function refresh() {
 
-            this.title.innerHTML = '';
+            if (this.titleUserIcon) this.titleUserIconAtag.removeChild(this.titleUserIcon);
+            this.titleText.innerHTML = '';
             this.photoContainer.innerHTML = '';
             this.content.innerHTML = '';
             this.likeBtnCount.innerHTML = '';
@@ -1277,8 +1336,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://160.16.62.37:8080',
 
 };
 

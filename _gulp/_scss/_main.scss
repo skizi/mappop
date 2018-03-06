@@ -5,14 +5,24 @@ body.home_index{
 	.top_content{
 		width:100%;
 		height:275px;
-		background-image:url("./top/map.jpg");
-	    background-size: cover;
-	    background-position: bottom;
-	    background-repeat: no-repeat;
+		// background-image:url("./top/map.jpg");
+	 //    background-size: cover;
+	 //    background-position: bottom;
+	 //    background-repeat: no-repeat;
+    	position:relative;
+
+	    #leafletMap{
+	    	width: 100%;
+		    height: 275px;
+	    	position:absolute;
+	    	top:0px;
+    	    z-index: 0;
+	    }
 
 	    div.text_container{
 	    	width:338px;
 	    	margin:0 auto;
+	    	position:relative;
 
 			h2{
 				font-size: 22px;
@@ -39,6 +49,10 @@ body.home_index{
 					margin-bottom: 101px;
 				}
 			}
+		}
+
+		.login_btn {
+			position:relative;
 		}
 	}
 
@@ -89,7 +103,7 @@ body.home_index{
 
 			    	span{
 				    	color:#737373;
-				    	font-size:10px;
+				    	font-size:12px;
 				    	border-bottom: 1px dashed #ebb314;
 				    }
 			    }
@@ -113,6 +127,10 @@ body.home_index{
 	body.home_index{
 		.top_content{
 			height: 300px;
+
+		    #leafletMap{
+			    height: 300px;
+			}
 
 			div.text_container{
 				padding-top: 10px;

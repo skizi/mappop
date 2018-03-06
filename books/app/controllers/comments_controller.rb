@@ -50,7 +50,7 @@ class CommentsController < ApplicationController
       if @comment.save
         str = 'コメントが投稿完了しました。' + @comment.user_id.to_s
         format.html{ redirect_to @comment, notice: str }
-        format.json{ render :show, status: :created, location: @comment }
+        format.json{ render :show, status: :ok, location: @comment }
       else
         format.html{ render :new }
         format.json{ render json: @comment.errors, status: :unprocessable_entity }

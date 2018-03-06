@@ -384,9 +384,9 @@ DEFAULT CLASS
 // http://rapid-progress.net/android-text-bug/
 // http://www.hirokonakahara.com/blog/?p=1524
 // .textFix{background-color:#fff;}
-p,li,dt,dd,h2,h3,h4,span{background: url('../images/spacer.gif') 0 0 no-repeat;}
+p,li,dt,dd,h2,h3,h4,span{background: url('./spacer.gif') 0 0 no-repeat;}
 //上記以外でバグが起こったら下記クラスを利用
-.textFix{background: url('../images/spacer.gif') 0 0 no-repeat !important;}
+.textFix{background: url('./spacer.gif') 0 0 no-repeat !important;}
 
 /* clearfix */
 ///* newest clearfix　forIE8 and newer */

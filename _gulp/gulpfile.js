@@ -35,7 +35,12 @@ gulp.task('concat_libs', function() {
 
 gulp.task('concat', function() {
 
-    var jsFiles = [ 'Questions.js', 'Common.js', 'Profile.js'];
+    var jsFiles = [
+            'Top.js', 
+            'Questions.js',
+            'Common.js',
+            'Profile.js'
+        ];
     jsFiles.forEach(function(fileName) {
         browserify({
                 entries: "./_js/" + fileName,

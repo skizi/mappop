@@ -49,7 +49,7 @@ class LikesController < ApplicationController
         str = 'いいねが投稿完了しました。' + @like.user_id.to_s
         flash[:notice] = str
         format.html{ redirect_to @like }
-        format.json{ render :show, status: :created, location: @like }
+        format.json{ render :show, status: :ok, location: @like }
       else
         format.html{ render :new }
         format.json{ render json: @like.errors, status: :unprocessable_entity }

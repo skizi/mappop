@@ -302,9 +302,9 @@ DEFAULT CLASS
 
 .pB48 { padding-bottom: 48px !important; }
 
-p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no-repeat; }
+p, li, dt, dd, h2, h3, h4, span { background: url("./spacer.gif") 0 0 no-repeat; }
 
-.textFix { background: url("../images/spacer.gif") 0 0 no-repeat !important; }
+.textFix { background: url("./spacer.gif") 0 0 no-repeat !important; }
 
 /* clearfix */
 .cf:after, .clearfix:after { content: ""; clear: both; display: block; }
@@ -577,9 +577,9 @@ DEFAULT CLASS
 
 .pB48 { padding-bottom: 48px !important; }
 
-p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no-repeat; }
+p, li, dt, dd, h2, h3, h4, span { background: url("./spacer.gif") 0 0 no-repeat; }
 
-.textFix { background: url("../images/spacer.gif") 0 0 no-repeat !important; }
+.textFix { background: url("./spacer.gif") 0 0 no-repeat !important; }
 
 /* clearfix */
 .cf:after, .clearfix:after { content: ""; clear: both; display: block; }
@@ -635,6 +635,8 @@ label { height: 33px; line-height: 33px; display: inline-block; font-size: 18px;
 .c_mb80 { margin-bottom: 80px !important; }
 
 .c_mb100 { margin-bottom: 100px !important; }
+
+.danger { margin-bottom: 30px; text-align: center; color: #ff0000; font-size: 14px; }
 
 .btn0 { width: 339px; height: 53px; line-height: 53px; margin: 0 auto; display: block; background-color: #ebb314; color: #fff; font-size: 24px; text-align: center; text-decoration: none; box-shadow: 1px 1px 0px #bc8e10, 2px 2px 0px #bc8e10, 3px 3px 0px #bc8e10, 4px 4px 0px #bc8e10; border: none; }
 .btn0:active { box-shadow: none; transform: translate(4px, 4px); }
@@ -718,8 +720,11 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner { width: 100%; height: 100%; margin: 0px; left: 0px; top: 0px; border-radius: 0; transform: translateX(-100%); opacity: 1; overflow-y: scroll; -webkit-overflow-scrolling: touch; background-image: none; }
 .modal.show .inner div.top { width: auto; margin-bottom: 12px; padding: 20px 21px 30px 21px; border-bottom: 1px solid #ebb314; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; background-size: 81px; }
 .modal.show .inner div.top h2.title { min-height: 30px; line-height: 30px; margin-bottom: 9px; font-size: 22px; font-weight: bold; color: #ebb314; border-bottom: 8px solid #ebb314; }
-.modal.show .inner div.top h2.title .title_text { width: 255px; display: inline-block; }
-.modal.show .inner div.top h2.title div.like_btn { display: inline-block; cursor: pointer; }
+.modal.show .inner div.top h2.title .title_user_icon { width: 30px; height: 30px; display: inline-block; position: relative; top: -4px; }
+.modal.show .inner div.top h2.title .title_user_icon a { transition-duration: 0.3s; transition-property: opacity; }
+.modal.show .inner div.top h2.title .title_user_icon a:hover { opacity: 0.8; }
+.modal.show .inner div.top h2.title .title_user_icon a img { width: 30px; }
+.modal.show .inner div.top h2.title div.like_btn { margin-right: 10px; display: inline-block; cursor: pointer; }
 .modal.show .inner div.top h2.title div.like_btn .count { width: 49px; height: 41px; line-height: 41px; margin-bottom: 4px; padding-top: 6px; display: block; background-image: url("./map/like_btn.png"); background-repeat: no-repeat; text-align: center; color: #fff; font-size: 16px; text-shadow: -2px -1px 0 #a88112, -2px 0px 0 #a88112, -2px 1px 0 #a88112, -1px -2px 0 #a88112, -1px -1px 0 #a88112, -1px 0px 0 #a88112, -1px 1px 0 #a88112, -1px 2px 0 #a88112, 0px -2px 0 #a88112, 0px -1px 0 #a88112, 0px 0px 0 #a88112, 0px 1px 0 #a88112, 0px 2px 0 #a88112, 1px -2px 0 #a88112, 1px -1px 0 #a88112, 1px 0px 0 #a88112, 1px 1px 0 #a88112, 1px 2px 0 #a88112, 2px -1px 0 #a88112, 2px 0px 0 #a88112, 2px 1px 0 #a88112; letter-spacing: 1.5px; }
 .modal.show .inner div.top h2.title div.like_btn .like_btn_text { line-height: 12px; color: #ebb313; font-size: 12px; display: block; text-align: center; }
 .modal.show .inner div.top div.photo { width: 100%; max-height: 200px; overflow: hidden; margin-bottom: 10px; text-align: center; }
@@ -729,7 +734,9 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom h2 { height: 29px; line-height: 29px; margin-bottom: 12px; font-size: 18px; color: #ebb314; border-bottom: 1px dashed #ebb314; }
 .modal.show .inner div.bottom ul.comments { height: 110px; margin-bottom: 12px; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
 .modal.show .inner div.bottom ul.comments li { margin-bottom: 5px; overflow: hidden; *zoom: 1; }
-.modal.show .inner div.bottom ul.comments li img { width: 21px; height: 21px; margin-right: 6px; float: left; }
+.modal.show .inner div.bottom ul.comments li a { transition-duration: 0.3s; transition-property: opacity; }
+.modal.show .inner div.bottom ul.comments li a:hover { opacity: 0.8; }
+.modal.show .inner div.bottom ul.comments li a img { width: 21px; height: 21px; margin-right: 6px; float: left; }
 .modal.show .inner div.bottom ul.comments li p { line-height: 22px; font-size: 12px; float: left; }
 .modal.show .inner div.bottom ul.comments li.no_comment p { margin-left: 0; }
 .modal.show .inner div.bottom textarea { width: 100%; max-width: 100%; height: 100px; border-radius: 5px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; box-sizing: border-box; }
@@ -1285,18 +1292,20 @@ DEFAULT CLASS
 
 .pB48 { padding-bottom: 48px !important; }
 
-p, li, dt, dd, h2, h3, h4, span { background: url("../images/spacer.gif") 0 0 no-repeat; }
+p, li, dt, dd, h2, h3, h4, span { background: url("./spacer.gif") 0 0 no-repeat; }
 
-.textFix { background: url("../images/spacer.gif") 0 0 no-repeat !important; }
+.textFix { background: url("./spacer.gif") 0 0 no-repeat !important; }
 
 /* clearfix */
 .cf:after, .clearfix:after { content: ""; clear: both; display: block; }
 
-body.home_index .top_content { width: 100%; height: 275px; background-image: url("./top/map.jpg"); background-size: cover; background-position: bottom; background-repeat: no-repeat; }
-body.home_index .top_content div.text_container { width: 338px; margin: 0 auto; }
+body.home_index .top_content { width: 100%; height: 275px; position: relative; }
+body.home_index .top_content #leafletMap { width: 100%; height: 275px; position: absolute; top: 0px; z-index: 0; }
+body.home_index .top_content div.text_container { width: 338px; margin: 0 auto; position: relative; }
 body.home_index .top_content div.text_container h2 { font-size: 22px; color: #ebb313; background-color: #fff; display: inline-block; height: 33px; line-height: 33px; padding: 0 5px; margin: 17px 0 8px 0; }
 body.home_index .top_content div.text_container p { font-size: 13px; color: #757575; background-color: #fff; display: inline-block; height: 20px; line-height: 20px; padding: 0 5px; margin: 0 0 5px 0; }
 body.home_index .top_content div.text_container p:nth-child(3) { margin-bottom: 101px; }
+body.home_index .top_content .login_btn { position: relative; }
 body.home_index .howto h2.title0 { font-size: 20px; }
 body.home_index .howto div.steps { overflow: hidden; *zoom: 1; width: 370px; margin: 0 auto 35px auto; }
 body.home_index .howto div.steps div.step { width: 110px; float: left; text-align: center; }
@@ -1307,10 +1316,11 @@ body.home_index .howto div.steps div.step.step2 { margin-right: 12px; }
 body.home_index .howto div.steps div.step.step2 img { width: 53px; margin: 10px 0 13px 0; }
 body.home_index .howto div.steps div.step.step3 img { width: 110px; }
 body.home_index .howto div.steps div.step h3 { line-height: 110%; }
-body.home_index .howto div.steps div.step h3 span { color: #737373; font-size: 10px; border-bottom: 1px dashed #ebb314; }
+body.home_index .howto div.steps div.step h3 span { color: #737373; font-size: 12px; border-bottom: 1px dashed #ebb314; }
 body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-size: 15px; letter-spacing: 0.5px; }
 
 @media screen and (min-width: 376px) { body.home_index .top_content { height: 300px; }
+  body.home_index .top_content #leafletMap { height: 300px; }
   body.home_index .top_content div.text_container { padding-top: 10px; }
   body.home_index .howto h2.title0 { padding-top: 45px; }
   body.home_index .howto div.steps { width: 620px; padding-bottom: 2px; padding-left: 40px; }
