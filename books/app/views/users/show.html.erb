@@ -38,7 +38,6 @@
 </p>
 
 <div class="modal edit_profile">
-	<div class="bg"></div>
 	<div class="inner">
 
 		<div class="container">
@@ -67,21 +66,21 @@
 					<%= f.hidden_field :username %>
 					<%= f.hidden_field :photo %>
 
-					<div class="c_mb40 name clearfix">
+					<div class="c_mb30 name clearfix">
 						<%= f.label "名前" %>
 						<%= f.text_field :name, maxlength: '20' %>
 					</div>
-					<div class="c_mb40 location clearfix">
+					<div class="c_mb30 location clearfix">
 						<%= f.label "出身地" %>
 						<%= f.text_field :location, maxlength: '20' %>
 					</div>
-					<div class="c_mb40 about clearfix">
+					<div class="c_mb30 about clearfix">
 						<%= f.label "自己紹介" %>
 						<%= f.text_area :about, maxlength: '50' %>
 					</div>
 					<%= f.submit "変更", class:"submit_btn btn0" %>
 				<% end %>
-				<p class="btn1">
+				<p class="btn1 c_mb30">
 					<a href="javascript:void(0);" class="change_type_btn">プロフィール画像変更</a>
 				</p>
 			</div>

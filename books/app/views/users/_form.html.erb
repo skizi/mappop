@@ -5,15 +5,15 @@
 	<%= form_for(user) do |f| %>
 		<div class="c_mb20 email">
 			<%= f.label "email" %>
-			<%= f.text_field :email %>
+			<%= f.email_field :email, placeholder:"メールアドレス" %>
 		</div>
 		<div class="c_mb20 password">
 			<%= f.label "パスワード" %>
-			<%= f.password_field :password %>
+			<%= f.password_field :password, placeholder:"パスワード（6文字以上）", minlength:"6" %>
 		</div>
 		<div class="c_mb20 name">
 			<%= f.label "名前" %>
-			<%= f.text_field :name %>
+			<%= f.text_field :name, placeholder:"名前" %>
 		</div>
 	
 		<%= f.hidden_field :username %>

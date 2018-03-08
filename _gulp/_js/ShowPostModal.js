@@ -30,26 +30,6 @@ export default class ShowPostModal extends Modal{
     }
 
 
-    show(){
-
-        this.element.style.display = 'block';
-        setTimeout(function(){
-            this.inner.style.transform = 'translateX(0%)';
-        }.bind( this ), 100);
-
-    }
-
-
-    hide(){
-
-        this.inner.style.transform = 'translateX(-100%)';
-        setTimeout(function(){
-            this.element.style.display = 'none';
-        }.bind( this ), 300);
-
-    }
-
-
     //--------------------マウスイベント-------------------
     likeBtnClickHandler(){
 

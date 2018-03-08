@@ -76,10 +76,13 @@ input[type="text"]:focus {
 
 input[type="text"],
 input[type="password"],
+input[type="email"],
 textarea{
-    width: 220px;
-    height: 30px;
-    line-height: 30px;
+    width: 210px;
+    min-width: 210px;
+    max-width:210px;
+    height: 40px;
+    line-height: 40px;
     font-size: 16px;
     padding-left: 5px;
     border-radius: 5px;
@@ -145,10 +148,12 @@ input[type="button"] {
 
 
 label{
-    height: 33px;
-    line-height: 33px;
+    height: 46px;
+    line-height: 46px;
     display: inline-block;
+    color: #848484;
     font-size: 18px;
+    font-weight: bold;
     float: left;
 }
 
@@ -183,7 +188,8 @@ label{
 
 
 
-.danger{
+.notice{
+    line-height: 180%;
     margin-bottom: 30px;
     text-align: center;
     color:#ff0000;
@@ -272,7 +278,7 @@ label{
 
 .title0{
     margin-bottom: 30px;
-    padding-top: 25px;
+    padding-top: 50px;
     color: #ebb313;
     font-size: 25px;
     text-align: center;
@@ -583,46 +589,48 @@ footer{
 
 //-----------------modal--------------------
 .modal{
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0,0,0,0);
+    display: none;
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    opacity: 0;
-    display: none;
-    transition-duration: 0.3s;
-    transition-property: opacity;
-
-    .bg{
-        width: 100%;
-        height: 100%;
-        position:absolute;
-        top:0px;
-        left:0px;
-    }
 
     .inner{
+        width:100%;
+        height:100%;
+        padding:0px 21px 0px 21px;
+        box-sizing: border-box;
         background-color: #fff;
-        border-radius: 5px;
-        width: 345px;
-        height: 527px;
-        margin: -263px 0 0 -172px;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        opacity: 0;
-        transform: translateY(-10px);
-        background-image:url("./menu/close_btn_bg.png");
-        background-repeat:no-repeat;
-        background-position:right top;
-        background-size:81px;
+        left:0px;
+        top:0px;
         transition-duration: 0.3s;
-        transition-property: transform, opacity;
+        transition-property: transform;
+        transform: translateX(-100%);
+        opacity: 1;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+
 
         input,
         textarea{
             width: 100%;
+        }
+
+
+        &:before{
+            content:'';
+            width:81px;
+            height:81px;
+            position: absolute;
+            right:0px;
+            top:0px;
+            background-image:url("./menu/close_btn_bg.png");
+            background-repeat:no-repeat;
+            background-position:right top;
+            background-size:81px;
         }
 
 
@@ -632,7 +640,7 @@ footer{
             display: block;
             position:absolute;
             top:14px;
-            left:312px;
+            right: 16px;
             background-image:url("./menu/close_btn.png");
             text-indent: -9999px;
             background-size:18px;
@@ -646,73 +654,41 @@ footer{
 
 
     &.new .inner{
-        width: 303px;
-        height: 487px;
-        padding:20px 21px;
-
-        .title0{
-            margin-bottom: 20px;
-        }
 
         div{
-            &.textarea_container{
-                width: 310px;
-                label{
-                    float: none;
-                }
+            label{
+                float: none;
             }
-        }
+            input,
+            textarea{
+                float:none;
+                min-width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
 
-        input{        
-            width: 296px;    
-            float: none;
-        }
-
-        textarea{
-            width: 296px;
-            height: 114px;
-            display: block;
-            float: none;
+            textarea{
+                height: 160px;
+            }
         }
 
     }
 
 
     &.show{
-        opacity: 1;
-        background-color:rgba(0,0,0,0);
-
-        .bg{
-            display: none;
-        }
 
         .inner{
-            width:100%;
-            height:100%;
-            margin:0px;
-            left:0px;
-            top:0px;
-            border-radius: 0;
-            transform: translateX(-100%);
-            opacity: 1;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
-            background-image:none;
 
             div.top{
                 width:auto;
-                margin-bottom: 12px;
-                padding:20px 21px 30px 21px;
+                margin-bottom: 20px;
+                padding:20px 0 30px 0;
                 border-bottom:1px solid #ebb314;
-                background-image:url("./menu/close_btn_bg.png");
-                background-repeat:no-repeat;
-                background-position:right top;
-                background-size:81px;
 
                 h2.title{
                     min-height: 30px;
                     line-height: 30px;
-                    margin-bottom: 9px;
+                    margin-bottom: 20px;
                     font-size: 22px;
                     font-weight: bold;
                     color: #ebb314;
@@ -790,11 +766,10 @@ footer{
             }
 
             div.bottom{
-                padding:0 21px 19px 21px;
+                padding:0 0 19px 0;
 
                 h2{
-                    height:29px;
-                    line-height: 29px;
+                    line-height: 200%;
                     margin-bottom: 12px;
                     font-size: 18px;
                     color:#ebb314;
@@ -842,6 +817,7 @@ footer{
 
                 textarea{
                     width: 100%;
+                    min-width: 100%;
                     max-width: 100%;
                     height: 100px;
                     border-radius: 5px;
@@ -858,10 +834,6 @@ footer{
                 }
             }
 
-            a.close_btn{
-                left: auto;
-                right: 16px;
-            }
         }
     }
 
@@ -875,6 +847,10 @@ footer{
             div.change_photo{
                 transition-duration: 0.3s;
                 transition-property: opacity;
+
+                form{
+                    text-align: center;
+                }
             
                 label.photo_file_select_btn{
                     height:auto;
@@ -895,31 +871,31 @@ footer{
             }
 
             div.change_profile{
-                width: 300px;
+                width:100%;
                 display: none;
                 transition-duration: 0.3s;
                 transition-property: opacity;
-                position:absolute;
-                top:20px;
 
                 div.clearfix{
                     @include clearfix;
                 }
 
+                label{
+                    float:none;
+                }
+
                 input[type="text"],
                 input[type="password"],
                 textarea{
-                    width: 210px;
+                    width: 100%;
+                    min-width: 100%;
+                    max-width: 100%;
+                    display: block;
+                    float:none;
                 }
 
                 textarea{
                     height:100px;
-                }
-            }
-
-            ul.change_menu{
-                li{
-
                 }
             }
         }

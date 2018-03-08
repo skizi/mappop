@@ -39,7 +39,9 @@ gulp.task('concat', function() {
             'Top.js', 
             'Questions.js',
             'Common.js',
-            'Profile.js'
+            'Profile.js',
+            'Signup.js',
+            'Login.js'
         ];
     jsFiles.forEach(function(fileName) {
         browserify({
