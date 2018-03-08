@@ -620,6 +620,13 @@ input[type="submit"], input[type="button"] { border-radius: 0; -webkit-box-sizin
 input[type="submit"]::-webkit-search-decoration, input[type="button"]::-webkit-search-decoration { display: none; }
 input[type="submit"]::focus, input[type="button"]::focus { outline-offset: -2px; }
 
+.file_selector { text-align: center; }
+.file_selector label { width: 80px; height: 80px; background-color: #ebb314; background-image: url("./camera_icon1.png"); background-repeat: no-repeat; background-position: 50% 19px; box-shadow: 1px 1px 0px #bc8e10, 2px 2px 0px #bc8e10, 3px 3px 0px #bc8e10, 4px 4px 0px #bc8e10; position: relative; display: inline-block; overflow: hidden; }
+.file_selector label:active { box-shadow: none; transform: translate(4px, 4px); }
+.file_selector label p { width: 80px; line-height: initial; position: absolute; top: 54px; left: 0px; text-align: center; color: #fff; font-size: 14px; letter-spacing: 2px; }
+.file_selector label input { visibility: hidden; }
+.file_selector div.photo { width: 80px; height: 80px; margin: 0 0 0 15px; display: inline-block; background-position: 50% 50%; background-size: cover; position: relative; top: 2px; }
+
 label { height: 46px; line-height: 46px; display: inline-block; color: #848484; font-size: 18px; font-weight: bold; float: left; }
 
 .c_mb10 { margin-bottom: 10px !important; }
@@ -737,9 +744,10 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
 .modal.edit_profile .inner div.container { padding: 20px 21px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
+.modal.edit_profile .inner div.container div.change_photo img.photo { width: 120px; margin: 0 auto 40px; display: block; border-radius: 200px; border: 3px solid #ebb314; }
 .modal.edit_profile .inner div.container div.change_photo form { text-align: center; }
-.modal.edit_profile .inner div.container div.change_photo label.photo_file_select_btn { height: auto; margin-bottom: 30px; float: none; }
-.modal.edit_profile .inner div.container div.change_photo label.photo_file_select_btn input { font-size: 16px; cursor: pointer; }
+.modal.edit_profile .inner div.container div.change_photo .file_selector { margin-bottom: 30px; }
+.modal.edit_profile .inner div.container div.change_photo .file_selector label { float: none; }
 .modal.edit_profile .inner div.container div.change_photo a.photo_upload_btn { width: 100%; }
 .modal.edit_profile .inner div.container div.change_profile { width: 100%; display: none; transition-duration: 0.3s; transition-property: opacity; }
 .modal.edit_profile .inner div.container div.change_profile div.clearfix { overflow: hidden; *zoom: 1; }

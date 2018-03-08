@@ -147,6 +147,60 @@ input[type="button"] {
 }
 
 
+.file_selector{
+    text-align: center;
+
+    label{
+        width: 80px;
+        height: 80px;
+        background-color: #ebb314;
+        background-image:url("./camera_icon1.png");
+        background-repeat:no-repeat;
+        background-position:50% 19px;
+        box-shadow: 1px 1px 0px #bc8e10,
+                    2px 2px 0px #bc8e10,
+                    3px 3px 0px #bc8e10,
+                    4px 4px 0px #bc8e10;
+        position:relative;
+        display: inline-block;
+        overflow: hidden;
+
+        &:active{
+            box-shadow:none;
+            transform:translate(4px,4px);
+        }
+
+        p{
+            width: 80px;
+            line-height: initial;
+            position: absolute;
+            top: 54px;
+            left: 0px;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        input{
+            visibility: hidden;
+        }
+    }
+
+
+    div.photo{
+        width:80px;
+        height: 80px;
+        margin: 0 0 0 15px;
+        display: inline-block;
+        background-position:50% 50%;
+        background-size:cover;
+        position: relative;
+        top: 2px;
+    }
+}
+
+
 label{
     height: 46px;
     line-height: 46px;
@@ -848,20 +902,23 @@ footer{
                 transition-duration: 0.3s;
                 transition-property: opacity;
 
+                img.photo{
+                    width: 120px;
+                    margin: 0 auto 40px;
+                    display: block;
+                    border-radius: 200px;
+                    border:3px solid #ebb314;
+                }
+
                 form{
                     text-align: center;
                 }
-            
-                label.photo_file_select_btn{
-                    height:auto;
+                
+                .file_selector{
                     margin-bottom: 30px;
-                    float:none;
-
-                    input{
-                        font-size: 16px;
-                        cursor:pointer;
+                    label{
+                        float:none;
                     }
-
                 }
 
                 a.photo_upload_btn{

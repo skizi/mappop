@@ -43,10 +43,18 @@
 		<div class="container">
 			<div class="change_photo">
 				<h3 class="title0">プロフィール画像変更</h3>
+			  	<img src="<%= photo %>" class="photo">
 				<%= form_tag({ action: :upload_process }, multipart: true, class: 'photo c_mb40') do %>
-					<label for="file_photo" class="photo_file_select_btn">
-						<%= file_field_tag :upfile, size: 50, id: 'file_photo' %>
-					</label>
+					<div class="file_selector">
+						<label for="file_photo" class="photo_file_select_btn">
+							<%= file_field_tag :upfile, size: 50, id: 'file_photo' %>
+							<p>写真選択</p>
+						</label>
+
+						<div class="photo" style="background-image:url(<%= photo + '?r=' + time %>);">
+						</div>
+					</div>
+
 					<%= hidden_field_tag :user_id, @user.id %>
 					<!--<%= submit_tag '変更', class: 'photo_upload_btn btn0' %>-->
 					<a href="javascript:void(0);" class="photo_upload_btn btn0">変更</a>
