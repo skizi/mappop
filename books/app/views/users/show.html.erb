@@ -43,21 +43,25 @@
 		<div class="container">
 			<div class="change_photo">
 				<h3 class="title0">プロフィール画像変更</h3>
-			  	<img src="<%= photo %>" class="photo">
+				<div class="photo_circle" style="background-image:url(<%= photo + '?r=' + time %>);">
+				</div>
 				<%= form_tag({ action: :upload_process }, multipart: true, class: 'photo c_mb40') do %>
 					<div class="file_selector">
 						<label for="file_photo" class="photo_file_select_btn">
 							<%= file_field_tag :upfile, size: 50, id: 'file_photo' %>
 							<p>写真選択</p>
 						</label>
-
+						<!--
 						<div class="photo" style="background-image:url(<%= photo + '?r=' + time %>);">
 						</div>
+						-->
 					</div>
 
 					<%= hidden_field_tag :user_id, @user.id %>
 					<!--<%= submit_tag '変更', class: 'photo_upload_btn btn0' %>-->
-					<a href="javascript:void(0);" class="photo_upload_btn btn0">変更</a>
+					<!--
+					<a href="javascript:void(0);" class="photo_upload_btn btn0">保存</a>
+					-->
 				<% end %>
 
 				<p class="btn1">
@@ -86,7 +90,7 @@
 						<%= f.label "自己紹介" %>
 						<%= f.text_area :about, maxlength: '50' %>
 					</div>
-					<%= f.submit "変更", class:"submit_btn btn0" %>
+					<%= f.submit "保存", class:"submit_btn btn0" %>
 				<% end %>
 				<p class="btn1 c_mb30">
 					<a href="javascript:void(0);" class="change_type_btn">プロフィール画像変更</a>

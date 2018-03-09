@@ -20,8 +20,14 @@ export default class NewPostModal extends Modal{
 
         this.fileUploadManager = new FileUploadManager( '#fileContent', 200, 200, function( img ){
             this.uploadImage = img;
+            this.photoContainer.style.backgroundImage = 'url(' + img.getAttribute( 'src' ) + ')';
+            this.photoContainer.style.display = 'inline-block';
         }.bind( this ), 'auto', false );
         this.fileUploadManager.element.addEventListener( 'ysdCallback', this.fileUploadManagerCallBackHandler.bind( this ) );
+
+        this.photoContainer = document.querySelector( '.file_selector .photo' );
+        this.photoDeleteBtn = document.querySelector( '.file_selector .photo .delete_btn' );
+        this.photoDeleteBtn.addEventListener( 'click', this.photoDeleteBtnClickHandler.bind( this ) );
 
         this.hide();
 
@@ -46,6 +52,14 @@ export default class NewPostModal extends Modal{
 
         this.lat = lat;
         this.lng = lng;
+
+    }
+
+
+    photoDeleteBtnClickHandler(){
+
+        this.uploadImage = null;
+        this.photoContainer.style.display = 'none';
 
     }
 

@@ -625,7 +625,8 @@ input[type="submit"]::focus, input[type="button"]::focus { outline-offset: -2px;
 .file_selector label:active { box-shadow: none; transform: translate(4px, 4px); }
 .file_selector label p { width: 80px; line-height: initial; position: absolute; top: 54px; left: 0px; text-align: center; color: #fff; font-size: 14px; letter-spacing: 2px; }
 .file_selector label input { visibility: hidden; }
-.file_selector div.photo { width: 80px; height: 80px; margin: 0 0 0 15px; display: inline-block; background-position: 50% 50%; background-size: cover; position: relative; top: 2px; }
+.file_selector div.photo { width: 80px; height: 80px; margin: 0 0 0 15px; background-position: 50% 50%; background-size: cover; position: relative; top: 2px; border-radius: 10px; display: none; }
+.file_selector div.photo .delete_btn { width: 30px; height: 30px; border-radius: 50px; background-color: rgba(255, 255, 255, 0.5); background-image: url("./map/close_btn.png"); background-repeat: no-repeat; background-position: 50% 50%; position: absolute; top: 5px; right: 5px; }
 
 label { height: 46px; line-height: 46px; display: inline-block; color: #848484; font-size: 18px; font-weight: bold; float: left; }
 
@@ -660,7 +661,7 @@ label { height: 46px; line-height: 46px; display: inline-block; color: #848484; 
 
 .pagination { margin-bottom: 50px; }
 
-.title0 { margin-bottom: 30px; padding-top: 50px; color: #ebb313; font-size: 25px; text-align: center; }
+.title0 { margin-bottom: 30px; padding-top: 50px; color: #ebb313; font-size: 25px; text-align: center; font-weight: bold; }
 
 .title1 { margin-bottom: 27px; text-align: center; font-size: 16px; color: #8c8c8c; }
 
@@ -713,8 +714,8 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal { width: 100%; height: 100%; background-color: transparent; display: none; position: fixed; top: 0px; left: 0px; }
 .modal .inner { width: 100%; height: 100%; padding: 0px 21px 0px 21px; box-sizing: border-box; background-color: #fff; position: absolute; left: 0px; top: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-100%); opacity: 1; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
 .modal .inner input, .modal .inner textarea { width: 100%; }
-.modal .inner:before { content: ''; width: 81px; height: 81px; position: absolute; right: 0px; top: 0px; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; background-size: 81px; }
-.modal .inner .close_btn { width: 18px; height: 18px; display: block; position: absolute; top: 14px; right: 16px; background-image: url("./menu/close_btn.png"); text-indent: -9999px; background-size: 18px; }
+.modal .inner:before { content: ''; width: 100px; height: 100px; position: absolute; right: 0px; top: 0px; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; background-size: 100px; }
+.modal .inner .close_btn { width: 30px; height: 30px; display: block; position: absolute; top: 13px; right: 13px; background-image: url("./menu/close_btn.png"); text-indent: -9999px; background-size: 30px; }
 .modal .inner .comments_title { margin-bottom: 5px; }
 .modal.new .inner div label { float: none; }
 .modal.new .inner div input, .modal.new .inner div textarea { float: none; min-width: 100%; max-width: 100%; box-sizing: border-box; }
@@ -729,7 +730,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.top h2.title div.like_btn .count { width: 49px; height: 41px; line-height: 41px; margin-bottom: 4px; padding-top: 6px; display: block; background-image: url("./map/like_btn.png"); background-repeat: no-repeat; text-align: center; color: #fff; font-size: 16px; text-shadow: -2px -1px 0 #a88112, -2px 0px 0 #a88112, -2px 1px 0 #a88112, -1px -2px 0 #a88112, -1px -1px 0 #a88112, -1px 0px 0 #a88112, -1px 1px 0 #a88112, -1px 2px 0 #a88112, 0px -2px 0 #a88112, 0px -1px 0 #a88112, 0px 0px 0 #a88112, 0px 1px 0 #a88112, 0px 2px 0 #a88112, 1px -2px 0 #a88112, 1px -1px 0 #a88112, 1px 0px 0 #a88112, 1px 1px 0 #a88112, 1px 2px 0 #a88112, 2px -1px 0 #a88112, 2px 0px 0 #a88112, 2px 1px 0 #a88112; letter-spacing: 1.5px; }
 .modal.show .inner div.top h2.title div.like_btn .like_btn_text { line-height: 12px; color: #ebb313; font-size: 12px; display: block; text-align: center; }
 .modal.show .inner div.top div.photo { width: 100%; max-height: 200px; overflow: hidden; margin-bottom: 10px; text-align: center; }
-.modal.show .inner div.top div.photo img { height: 100%; }
+.modal.show .inner div.top div.photo img { height: 100%; border-radius: 10px; }
 .modal.show .inner div.top p.content { min-height: 120px; font-size: 18px; line-height: 30px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 29px, #ebb314 29px, #ebb314 30px); background-position: 0 -1px; }
 .modal.show .inner div.bottom { padding: 0 0 19px 0; }
 .modal.show .inner div.bottom h2 { line-height: 200%; margin-bottom: 12px; font-size: 18px; color: #ebb314; border-bottom: 1px dashed #ebb314; }
@@ -744,7 +745,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
 .modal.edit_profile .inner div.container { padding: 20px 21px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
-.modal.edit_profile .inner div.container div.change_photo img.photo { width: 120px; margin: 0 auto 40px; display: block; border-radius: 200px; border: 3px solid #ebb314; }
+.modal.edit_profile .inner div.container div.change_photo div.photo_circle { width: 180px; height: 180px; margin: 0 auto 35px; display: block; border-radius: 200px; border: 3px solid #fff; background-size: cover; background-repeat: no-repeat; box-shadow: 0px 0px 2px 2px rgba(1, 1, 1, 0.1); }
 .modal.edit_profile .inner div.container div.change_photo form { text-align: center; }
 .modal.edit_profile .inner div.container div.change_photo .file_selector { margin-bottom: 30px; }
 .modal.edit_profile .inner div.container div.change_photo .file_selector label { float: none; }
@@ -1350,7 +1351,7 @@ body.questions_index .popup { width: 150px; min-height: 25px; line-height: 25px;
   body.questions_index .map_container .map { width: 100%; height: 100%; }
   body.questions_index .popup { width: 200px; min-height: 30px; line-height: 30px; font-size: 18px; } }
 body.users_show div.photo_container { height: 133px; padding-top: 13px; background-color: #f2f2f2; margin-bottom: 15px; background-image: url("./mypage/photo_bg.gif"); background-repeat: repeat-x; background-position: bottom; }
-body.users_show div.photo_container div.photo { width: 90px; height: 90px; margin: 0 auto 10px auto; border-radius: 100px; background-size: cover; background-position: center; }
+body.users_show div.photo_container div.photo { width: 90px; height: 90px; margin: 0 auto 10px auto; border-radius: 100px; background-size: cover; background-position: center; border: 2px solid #fff; box-shadow: 0px 0px 2px 2px rgba(1, 1, 1, 0.1); }
 body.users_show div.photo_container p.name { color: #ebb313; font-size: 17px; text-align: center; }
 body.users_show p.about { line-height: 32px; margin-bottom: 16px; color: #5d5d5d; font-size: 18px; text-align: center; }
 body.users_show p.about span { line-height: 15px; display: inline-block; border-bottom: 1px solid #ebb313; padding: 0 2px; }

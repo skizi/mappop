@@ -70,7 +70,13 @@ export default class FileUploadManager{
 
         this.file = file;
 
-        if( this.type == 'auto' ) this.readFile();
+        this.reader.onload = function(e) {
+            this.img = new Image();
+            this.img.setAttribute( 'src', this.reader.result );
+            this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'imgLoadComp', img:this.img } } } ) );
+            if( this.type == 'auto' ) this.readFile();
+        }.bind( this )
+        this.reader.readAsDataURL( this.file );
 
     }
 
@@ -95,20 +101,13 @@ export default class FileUploadManager{
             return;
         }
         this.loadFlag = true;
-        this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'readerLoadStart' } } } ) );
+        this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'startExif' } } } ) );
         
-        this.reader.onload = function(e) {
-
-            var img = new Image();
-            img.setAttribute( 'src', this.reader.result );
-            this.imageManager.fixExif( img, function( _img ){
-                this.loadFlag = false;
-                if( this.autoRefreshFlag ) this.fileInputRefresh();
-                this.callback( _img );
-            }.bind( this ) );
-
-        }.bind( this )
-        this.reader.readAsDataURL( this.file );
+        this.imageManager.fixExif( this.img, function( _img ){
+            this.loadFlag = false;
+            if( this.autoRefreshFlag ) this.fileInputRefresh();
+            this.callback( _img );
+        }.bind( this ) );
 
     }
 

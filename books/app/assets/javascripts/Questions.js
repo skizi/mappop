@@ -80,7 +80,13 @@ var FileUploadManager = function () {
 
             this.file = file;
 
-            if (this.type == 'auto') this.readFile();
+            this.reader.onload = function (e) {
+                this.img = new Image();
+                this.img.setAttribute('src', this.reader.result);
+                this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'imgLoadComp', img: this.img } } }));
+                if (this.type == 'auto') this.readFile();
+            }.bind(this);
+            this.reader.readAsDataURL(this.file);
         }
     }, {
         key: 'fileInputRefresh',
@@ -103,19 +109,13 @@ var FileUploadManager = function () {
                 return;
             }
             this.loadFlag = true;
-            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'readerLoadStart' } } }));
+            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'startExif' } } }));
 
-            this.reader.onload = function (e) {
-
-                var img = new Image();
-                img.setAttribute('src', this.reader.result);
-                this.imageManager.fixExif(img, function (_img) {
-                    this.loadFlag = false;
-                    if (this.autoRefreshFlag) this.fileInputRefresh();
-                    this.callback(_img);
-                }.bind(this));
-            }.bind(this);
-            this.reader.readAsDataURL(this.file);
+            this.imageManager.fixExif(this.img, function (_img) {
+                this.loadFlag = false;
+                if (this.autoRefreshFlag) this.fileInputRefresh();
+                this.callback(_img);
+            }.bind(this));
         }
     }, {
         key: 'dataURLtoBlob',
@@ -833,8 +833,14 @@ var NewPostModal = function (_Modal) {
 
         _this.fileUploadManager = new _FileUploadManager2.default('#fileContent', 200, 200, function (img) {
             this.uploadImage = img;
+            this.photoContainer.style.backgroundImage = 'url(' + img.getAttribute('src') + ')';
+            this.photoContainer.style.display = 'inline-block';
         }.bind(_this), 'auto', false);
         _this.fileUploadManager.element.addEventListener('ysdCallback', _this.fileUploadManagerCallBackHandler.bind(_this));
+
+        _this.photoContainer = document.querySelector('.file_selector .photo');
+        _this.photoDeleteBtn = document.querySelector('.file_selector .photo .delete_btn');
+        _this.photoDeleteBtn.addEventListener('click', _this.photoDeleteBtnClickHandler.bind(_this));
 
         _this.hide();
 
@@ -860,6 +866,13 @@ var NewPostModal = function (_Modal) {
 
             this.lat = lat;
             this.lng = lng;
+        }
+    }, {
+        key: 'photoDeleteBtnClickHandler',
+        value: function photoDeleteBtnClickHandler() {
+
+            this.uploadImage = null;
+            this.photoContainer.style.display = 'none';
         }
     }, {
         key: 'submit',
@@ -1308,8 +1321,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

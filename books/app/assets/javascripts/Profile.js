@@ -49,12 +49,14 @@ var EditProfileModal = function (_Modal) {
 
         _this.hide();
 
-        _this.fileUploadManager = new _FileUploadManager2.default('#file_photo', 200, 200, _this.upload.bind(_this), 'default', true);
+        _this.fileUploadManager = new _FileUploadManager2.default('#file_photo', 200, 200, _this.upload.bind(_this), 'auto', true);
         _this.fileUploadManager.element.addEventListener('ysdCallback', _this.fileUploadManagerCallBackHandler.bind(_this));
-        _this.uploadBtn = _this.element.getElementsByClassName('photo_upload_btn')[0];
-        _this.uploadBtn.addEventListener('click', _this.uploadBtnClickHandler.bind(_this));
+        // this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
+        // this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
 
-        _this.photoContainer = document.querySelector('.photo_container .photo');
+        _this.photoCircle = document.querySelector('.photo_circle');
+
+        _this.topPhotoContainer = document.querySelector('.photo_container .photo');
 
         _this.loading = new _Loading2.default();
 
@@ -87,7 +89,11 @@ var EditProfileModal = function (_Modal) {
             var obj = e.detail.value;
             switch (obj.type) {
 
-                case 'readerLoadStart':
+                case 'imgLoadComp':
+                    this.photoCircle.style.backgroundImage = 'url(' + obj.img.getAttribute('src') + ')';
+                    break;
+
+                case 'startExif':
                     this.loading.show();
                     break;
 
@@ -128,14 +134,18 @@ var EditProfileModal = function (_Modal) {
         key: 'uploadComp',
         value: function uploadComp(type) {
 
+            this.loadFlag = false;
+            this.loading.hide();
+
             if (type == 'error') {
                 alert('アップロードエラー\n時間を置いてから試してみてください。');
             } else {
 
                 setTimeout(function () {
+                    alert('プロフィール画像を更新しました。');
                     this.hide();
                 }.bind(this), 600);
-                this.photoContainer.style.backgroundImage = 'url(' + this.fileUploadManager.reader.result + ')';
+                this.topPhotoContainer.style.backgroundImage = 'url(' + this.fileUploadManager.reader.result + ')';
 
                 this.fileUploadManager.enabledFlag = false;
                 setTimeout(function () {
@@ -143,9 +153,7 @@ var EditProfileModal = function (_Modal) {
                 }.bind(this), 900);
             }
 
-            this.loadFlag = false;
             this.file = null;
-            this.loading.hide();
         }
     }, {
         key: 'type',
@@ -247,7 +255,13 @@ var FileUploadManager = function () {
 
             this.file = file;
 
-            if (this.type == 'auto') this.readFile();
+            this.reader.onload = function (e) {
+                this.img = new Image();
+                this.img.setAttribute('src', this.reader.result);
+                this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'imgLoadComp', img: this.img } } }));
+                if (this.type == 'auto') this.readFile();
+            }.bind(this);
+            this.reader.readAsDataURL(this.file);
         }
     }, {
         key: 'fileInputRefresh',
@@ -270,19 +284,13 @@ var FileUploadManager = function () {
                 return;
             }
             this.loadFlag = true;
-            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'readerLoadStart' } } }));
+            this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'startExif' } } }));
 
-            this.reader.onload = function (e) {
-
-                var img = new Image();
-                img.setAttribute('src', this.reader.result);
-                this.imageManager.fixExif(img, function (_img) {
-                    this.loadFlag = false;
-                    if (this.autoRefreshFlag) this.fileInputRefresh();
-                    this.callback(_img);
-                }.bind(this));
-            }.bind(this);
-            this.reader.readAsDataURL(this.file);
+            this.imageManager.fixExif(this.img, function (_img) {
+                this.loadFlag = false;
+                if (this.autoRefreshFlag) this.fileInputRefresh();
+                this.callback(_img);
+            }.bind(this));
         }
     }, {
         key: 'dataURLtoBlob',
@@ -686,8 +694,8 @@ var Profile = function () {
 
 module.exports = {
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

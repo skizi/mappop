@@ -22,13 +22,15 @@ export default class EditProfileModal extends Modal{
     	this.hide();
 
 
-        this.fileUploadManager = new FileUploadManager( '#file_photo', 200, 200, this.upload.bind( this ), 'default', true );
+        this.fileUploadManager = new FileUploadManager( '#file_photo', 200, 200, this.upload.bind( this ), 'auto', true );
         this.fileUploadManager.element.addEventListener( 'ysdCallback', this.fileUploadManagerCallBackHandler.bind( this ) );
-        this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
-        this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
+        // this.uploadBtn = this.element.getElementsByClassName( 'photo_upload_btn' )[0];
+        // this.uploadBtn.addEventListener( 'click', this.uploadBtnClickHandler.bind( this ) );
+
+        this.photoCircle = document.querySelector( '.photo_circle' );
 
 
-        this.photoContainer = document.querySelector( '.photo_container .photo' );
+        this.topPhotoContainer = document.querySelector( '.photo_container .photo' );
 
         this.loading = new Loading();
 
@@ -73,7 +75,11 @@ export default class EditProfileModal extends Modal{
         var obj = e.detail.value;
         switch( obj.type ){
 
-            case 'readerLoadStart':
+            case 'imgLoadComp':
+                this.photoCircle.style.backgroundImage = 'url(' + obj.img.getAttribute( 'src' ) + ')';
+                break;
+
+            case 'startExif':
                 this.loading.show();
                 break;
 
@@ -115,25 +121,26 @@ export default class EditProfileModal extends Modal{
 
     uploadComp( type ){
 
+        this.loadFlag = false;
+        this.loading.hide();
+
         if( type == 'error' ){
             alert( 'アップロードエラー\n時間を置いてから試してみてください。' );
         }else{
 
             setTimeout(function(){
+                alert( 'プロフィール画像を更新しました。' );
                 this.hide();
             }.bind( this ), 600)
-            this.photoContainer.style.backgroundImage = 'url(' + this.fileUploadManager.reader.result + ')';
+            this.topPhotoContainer.style.backgroundImage = 'url(' + this.fileUploadManager.reader.result + ')';
 
             this.fileUploadManager.enabledFlag = false;
             setTimeout(function(){
                 this.fileUploadManager.enabledFlag = true;
             }.bind( this ), 900);
         }
-
-        this.loadFlag = false;
-        this.file = null;
-        this.loading.hide();
     
+        this.file = null;
     }
 
 
