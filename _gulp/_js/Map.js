@@ -180,7 +180,8 @@ var _maxLatLng = L.latLng( _y, _x+w );
       min_lat:min.lat,
       min_lng:min.lng,
       max_lat:max.lat,
-      max_lng:max.lng
+      max_lng:max.lng,
+      limit:20
     };
 
     var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
@@ -244,6 +245,9 @@ console.log( "add!:" + key );
         .setContent( content )
         .openOn( this.map );
 
+// var draggable = new L.Draggable(popup._container, popup._wrapper);
+// draggable.enable();
+
     return popup;
 
   }
@@ -291,8 +295,8 @@ console.log( "add!:" + key );
   btnClickHandler(){
 
     var bounds = this.map.getCenter();
-
-  	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng } } } ) );
+    var zoom = this.map.getZoom();
+  	this.element.dispatchEvent( new CustomEvent( 'ysdCallback', { detail:{ value:{ type:'newPost', lat:bounds.lat, lng:bounds.lng, zoom:zoom } } } ) );
 
   }
 

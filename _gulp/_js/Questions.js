@@ -57,7 +57,7 @@ class Questions{
         break;
 
       case 'newPost':
-        this.newPostModal.setLatLng( obj.lat, obj.lng );
+        this.newPostModal.setLatLng( obj.lat, obj.lng, obj.zoom );
         this.newPostModal.show();
         break;
 

@@ -36,6 +36,15 @@ class LikesController < ApplicationController
   end
 
 
+  def edit
+    @like = Like.find(1)
+    @like.question_id = 1
+    if @like.save
+      render plain: "保存"
+    end
+  end
+
+
   def create
     @like = Like.new
     @like.user_id = params[:user_id]

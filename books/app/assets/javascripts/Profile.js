@@ -694,8 +694,8 @@ var Profile = function () {
 
 module.exports = {
 
-	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://160.16.62.37:8080',
 
 };
 

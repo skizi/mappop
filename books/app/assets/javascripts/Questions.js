@@ -554,7 +554,8 @@ var Map = function () {
         min_lat: min.lat,
         min_lng: min.lng,
         max_lat: max.lat,
-        max_lng: max.lng
+        max_lng: max.lng,
+        limit: 20
       };
 
       var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
@@ -614,6 +615,9 @@ var Map = function () {
 
       var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(data.lat), Number(data.lng)]).setContent(content).openOn(this.map);
 
+      // var draggable = new L.Draggable(popup._container, popup._wrapper);
+      // draggable.enable();
+
       return popup;
     }
   }, {
@@ -657,8 +661,8 @@ var Map = function () {
     value: function btnClickHandler() {
 
       var bounds = this.map.getCenter();
-
-      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng } } }));
+      var zoom = this.map.getZoom();
+      this.element.dispatchEvent(new CustomEvent('ysdCallback', { detail: { value: { type: 'newPost', lat: bounds.lat, lng: bounds.lng, zoom: zoom } } }));
     }
 
     //画面サイズに合ったlat lngの幅・高さを取得
@@ -830,6 +834,7 @@ var NewPostModal = function (_Modal) {
         _this.content = document.querySelector('#questionContent');
         _this.lat = 0;
         _this.lng = 0;
+        _this.zoom = 18;
 
         _this.fileUploadManager = new _FileUploadManager2.default('#fileContent', 200, 200, function (img) {
             this.uploadImage = img;
@@ -862,10 +867,11 @@ var NewPostModal = function (_Modal) {
         }
     }, {
         key: 'setLatLng',
-        value: function setLatLng(lat, lng) {
+        value: function setLatLng(lat, lng, zoom) {
 
             this.lat = lat;
             this.lng = lng;
+            this.zoom = zoom;
         }
     }, {
         key: 'photoDeleteBtnClickHandler',
@@ -874,6 +880,9 @@ var NewPostModal = function (_Modal) {
             this.uploadImage = null;
             this.photoContainer.style.display = 'none';
         }
+    }, {
+        key: 'reverseGeocoding',
+        value: function reverseGeocoding(callback) {}
     }, {
         key: 'submit',
         value: function submit() {
@@ -886,6 +895,25 @@ var NewPostModal = function (_Modal) {
                 alert('未入力の箇所があります');
                 return;
             }
+
+            var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (result) {
+                    this.submitStep2(result);
+                }.bind(this),
+                error: function (result) {
+                    console.log(result);
+                }.bind(this)
+            });
+        }
+    }, {
+        key: 'submitStep2',
+        value: function submitStep2(result) {
+
+            var title = this.title.value;
+            var content = this.content.value;
 
             var photoUrl = '';
             var formData = new FormData();
@@ -901,6 +929,9 @@ var NewPostModal = function (_Modal) {
             formData.append('lat', this.lat);
             formData.append('lng', this.lng);
             formData.append('user_id', app.user_id);
+            formData.append('country', result.address.country);
+            formData.append('state', result.address.state);
+            formData.append('city', result.address.city);
 
             var url = _Util2.default.apiHeadUrl + '/questions.json';
             $.ajax({
@@ -1017,7 +1048,7 @@ var Questions = function () {
           break;
 
         case 'newPost':
-          this.newPostModal.setLatLng(obj.lat, obj.lng);
+          this.newPostModal.setLatLng(obj.lat, obj.lng, obj.zoom);
           this.newPostModal.show();
           break;
 
@@ -1140,6 +1171,9 @@ var ShowPostModal = function (_Modal) {
                     console.log(result);
                 }.bind(this)
             });
+
+            //タップでいいねするポップを非表示にする
+            document.getElementsByClassName('like_popup')[0].style.opacity = '0';
         }
     }, {
         key: 'postLikeComp',
@@ -1321,8 +1355,8 @@ exports.default = ShowPostModal;
 
 module.exports = {
 
-	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: 'http://localhost:3000'
+	//apiHeadUrl : 'http://160.16.62.37:8080',
 
 };
 

@@ -4,11 +4,16 @@
 
 <% @questions.each do |question| %>
 	<h2>Q.<%= question.title %></h2>
+	<h2>id:<%= question.id %></h2>
 	<p><%= question.content %></p>
 	<p>緯度：<%= question.lat %></p>
 	<p>経度：<%= question.lng %></p>
 	<p>user_id：<%= question.user_id %></p>
 	<p>photo:<%= question.photo %></p>
+	<p>created_at:<%= question.created_at %></p>
+	<p>country:<%= question.country %></p>
+	<p>state:<%= question.state %></p>
+	<p>city:<%= question.city %></p>
 	<h3>Comments--</h3>
 	<% unless question.comments.empty? %>
 		<ul>

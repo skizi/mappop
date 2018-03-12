@@ -59,4 +59,6 @@ Rails.application.configure do
     end
   end
 
+  #redis
+  ENV["REDIS"] = "http://localhost:6379"
 end

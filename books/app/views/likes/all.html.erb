@@ -4,6 +4,7 @@
 
 <% @likes.each do |like| %>
 	<hr>
+	<p>id:<%= like.id %></p>
 	<p>question_id:<%= like.question_id %></p>
 	<p>user_id：<%= like.user_id %></p>
 <% end %>

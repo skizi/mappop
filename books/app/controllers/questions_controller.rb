@@ -27,7 +27,6 @@ class QuestionsController < ApplicationController
 
 
   def all
-
     #@questions = Question.all
     @questions = Question.includes([ :comments, :likes ]).all
     respond_to do |format|
@@ -43,7 +42,7 @@ class QuestionsController < ApplicationController
     latRange = Range.new( params['max_lat'], params['min_lat'] )
     lngRange = Range.new( params['min_lng'], params['max_lng'] )
     #@questions = Question.quadKey( 35.67848924554223, 139.76272863769532, 15 );
-    @questions = Question.where( lat: latRange, lng: lngRange )
+    @questions = Question.where( lat: latRange, lng: lngRange ).limit( params['limit'] )
     #@questions = Question.where( lat: 35.68658125560941..35.700522720414256).where( lng: 139.8128700256348..139.8183631896973 );
     
     respond_to do |format|
@@ -51,6 +50,22 @@ class QuestionsController < ApplicationController
       format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
     end
 
+  end
+
+
+  def get_ranking
+
+    ranks = Like.group(:question_id).order('count(question_id) desc').pluck(:question_id)
+    @questions = Question.where( id: ranks, city: params[:key] ).limit(5)
+
+# render plain: @questions
+# return
+#render plain: Like.group(:question_id).order('count(question_id) desc').limit(5).pluck(:question_id)
+
+    respond_to do |format|
+      format.html{ render :all }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
+    end
   end
 
 
@@ -70,7 +85,10 @@ class QuestionsController < ApplicationController
         content: params['content'],
         lat: params['lat'],
         lng: params['lng'],
-        user_id: params['user_id']
+        user_id: params['user_id'],
+        country: params['country'],
+        state: params['state'],
+        city: params['city']
       )
 
       #画像があれば保存
@@ -112,6 +130,6 @@ class QuestionsController < ApplicationController
 
 
   def question_params
-    params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo)
+    params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo, :country, :state, :city )
   end
 end

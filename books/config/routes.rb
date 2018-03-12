@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'questions' => 'questions#index'
   get 'questions/all'
   get 'questions/search_lat_lng'
+  get 'questions/get_ranking/:key' => 'questions#get_ranking'
   get 'questions/new/:user_id' => 'questions#new'
   get 'questions/:id' => 'questions#show'
 
@@ -23,6 +24,7 @@ Rails.application.routes.draw do
   get 'likes/all'
   get 'likes/get_likes/:question_id' => 'likes#get_likes'
   post 'likes/create/:question_id' => 'likes#create'
+  get 'likes/edit'
 
   #記述が上の方のものほど重要度が増す
 

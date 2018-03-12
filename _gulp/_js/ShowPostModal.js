@@ -49,6 +49,9 @@ export default class ShowPostModal extends Modal{
             }.bind( this )
         });
 
+        //タップでいいねするポップを非表示にする
+        document.getElementsByClassName( 'like_popup' )[0].style.opacity = '0';
+
     }
 
 

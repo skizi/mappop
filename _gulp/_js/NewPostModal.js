@@ -17,6 +17,7 @@ export default class NewPostModal extends Modal{
         this.content = document.querySelector( '#questionContent' );
         this.lat = 0;
         this.lng = 0;
+        this.zoom = 18;
 
         this.fileUploadManager = new FileUploadManager( '#fileContent', 200, 200, function( img ){
             this.uploadImage = img;
@@ -48,10 +49,11 @@ export default class NewPostModal extends Modal{
     }
 
 
-    setLatLng( lat, lng ){
+    setLatLng( lat, lng, zoom ){
 
         this.lat = lat;
         this.lng = lng;
+        this.zoom = zoom;
 
     }
 
@@ -64,16 +66,41 @@ export default class NewPostModal extends Modal{
     }
 
 
+    reverseGeocoding( callback ){
+
+    }
+
+
     submit(){
 
         if( this.loadFlag ) return;
-
+        
         var title = this.title.value;
         var content = this.content.value;
         if( title == '' || content == '' ){
             alert( '未入力の箇所があります' );
             return;
         }
+
+        var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
+        $.ajax({
+            url:url,
+            type:'GET',
+            success:function( result ){
+                this.submitStep2( result );
+            }.bind( this ),
+            error:function( result ){
+                console.log( result );
+            }.bind( this )
+        });
+
+    }
+
+
+    submitStep2( result ){
+
+        var title = this.title.value;
+        var content = this.content.value;
 
         var photoUrl = '';
         var formData = new FormData();
@@ -89,6 +116,9 @@ export default class NewPostModal extends Modal{
         formData.append( 'lat', this.lat );
         formData.append( 'lng', this.lng );
         formData.append( 'user_id', app.user_id );
+        formData.append( 'country', result.address.country );
+        formData.append( 'state', result.address.state );
+        formData.append( 'city', result.address.city );
 
 
         var url = Util.apiHeadUrl + '/questions.json';

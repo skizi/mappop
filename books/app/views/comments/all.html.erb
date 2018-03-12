@@ -4,6 +4,7 @@
 
 <% @comments.each do |comment| %>
 	<hr>
+	<p>id:<%= comment.id %></p>
 	<p>質問番号:<%= comment.question_id %></p>
 	<p>コメント：<%= comment.content %></p>
 	<p>user_id：<%= comment.user_id %></p>

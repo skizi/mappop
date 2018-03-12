@@ -65,3 +65,6 @@ gem 'bcrypt-ruby', '3.1.1.rc1', :require => 'bcrypt'
 gem 'settingslogic'
 
 gem 'meta-tags'
+
+#ランキング用
+gem 'redis'

@@ -762,6 +762,7 @@ footer{
                     font-weight: bold;
                     color: #ebb314;
                     border-bottom: 8px solid #ebb314;
+                    word-break: break-all;
 
                     .title_user_icon{
                         width:30px;
@@ -808,8 +809,36 @@ footer{
                             line-height: 12px;
                             color:#ebb313;
                             font-size:12px;
+                            font-weight: bold;
                             display: block;
                             text-align: center;
+                        }
+                        .like_popup{
+                            height: 20px;
+                            line-height: 20px;
+                            padding: 0 6px;
+                            background-color:#ebb314;
+                            border-radius:5px;
+                            color:#fff;
+                            font-size: 11px;
+                            border-radius: 4px;
+                            position:absolute;
+                            top: 30px;
+                            left: 85px;
+                            transition-duration: 1s;
+                            transition-property: opacity;
+                            @include animation( popupAnim0 1.2s ease 0s infinite );
+
+                            &:after{
+                                content:'';
+                                width:10px;
+                                height:10px;
+                                background-color:#ebb314;
+                                position:absolute;
+                                top: 5px;
+                                left: -3px;
+                                transform: rotate(45deg);
+                            }
                         }
                     }
                 }
@@ -1012,4 +1041,40 @@ footer{
     background-position:center center;
     transition-duration: 0.3s;
     transition-property: opacity;
+}
+
+
+
+
+@keyframes popupAnim0{
+  0% {
+    transform:  translate(0px,0px)  ;
+  }
+  50% {
+    transform:  translate(-4px,0px)  ;
+  }
+  100% {
+    transform:  translate(0px,0px)  ;
+  }
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes $animation-name {
+    @content;
+  }
+  @-moz-keyframes $animation-name {
+    @content;
+  } 
+  @keyframes $animation-name {
+    @content;
+  }
+}
+
+@mixin animation($animation-name) {
+  -webkit-animation: $animation-name;
+  -moz-animation: $animation-name;
+  animation: $animation-name;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
