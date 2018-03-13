@@ -454,7 +454,15 @@ var Map = function () {
       var now = this.getSplitAreaId(c.lat, c.lng);
       var hasFlag = this.hasOldIndex(now);
       if (!hasFlag) {
-        this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, now.x, now.y));
+        //通常popup取得
+        this.getQuestions(now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind(this, 'normal', now.x, now.y));
+
+        //ランキングpopup取得
+        this.getRankingData(3, function (result) {
+          this.jsonLoadComp('ranking', now.x, now.y, result);
+        }.bind(this));
+
+        //タイルindexキャッシュ
         this.oldIndexs.push({ x: now.x, y: now.y });
       }
 
@@ -575,11 +583,55 @@ var Map = function () {
       });
     }
   }, {
+    key: 'getRankingData',
+    value: function getRankingData(limit, callback) {
+
+      var c = this.map.getCenter();
+      var z = this.map.getZoom();
+      var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
+      if (this.nowRankingAjax) this.nowRankingAjax.abort();
+      this.nowRankingAjax = $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (_limit, _callback, result) {
+          this.getRankingDataStep2(_limit, _callback, result);
+        }.bind(this, limit, callback),
+        error: function (result) {
+          console.log(result);
+        }.bind(this)
+      });
+    }
+  }, {
+    key: 'getRankingDataStep2',
+    value: function getRankingDataStep2(limit, callback, result) {
+
+      var data = {
+        //key:result.address.city,
+        limit: limit
+      };
+      var url = _Util2.default.apiHeadUrl + '/questions/get_ranking/' + result.address.city;
+      if (this.nowRankingAjax) this.nowRankingAjax.abort();
+      this.nowRankingAjax = $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        data: data,
+        success: function (_callback, result) {
+          this.nowAjax = null;
+          if (_callback) _callback(result);
+        }.bind(this, callback),
+        error: function (_callback, result) {
+          this.nowAjax = null;
+          //_callback( result );
+        }.bind(this, callback)
+      });
+    }
+  }, {
     key: 'jsonLoadComp',
-    value: function jsonLoadComp(x, y, results) {
+    value: function jsonLoadComp(type, x, y, results) {
 
       var key = x + ',' + y;
-      this.popups[key] = [];
+      if (!this.popups[key]) this.popups[key] = [];
 
       var length = results.length;
       for (var i = 0; i < length; i++) {
@@ -597,7 +649,7 @@ var Map = function () {
         // });
 
         //leaflet
-        var popup = this.createPopup(data);
+        var popup = this.createPopup(data, type);
         popup.data = data;
         this.popups[key].push(popup);
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
@@ -607,9 +659,9 @@ var Map = function () {
     }
   }, {
     key: 'createPopup',
-    value: function createPopup(data) {
-
-      var content = L.DomUtil.create('div', 'popup');
+    value: function createPopup(data, type) {
+      console.log(type);
+      var content = L.DomUtil.create('div', 'popup ' + type);
       content.innerHTML = data.title;
       L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, data));
 
@@ -627,6 +679,7 @@ var Map = function () {
       if (allDeleteFlag) {
         for (var key in this.popups) {
           this.removeBoundsPopup(key);
+          console.log(key + ":delete!");
         }
       } else {
         var key = x + ',' + y;

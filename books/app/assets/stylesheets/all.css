@@ -1351,6 +1351,7 @@ body.questions_index .map_container { width: 100%; height: 450px; position: rela
 body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
 body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
 body.questions_index .popup { width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; cursor: pointer; }
+body.questions_index .popup.ranking { background-color: #ff0000; }
 
 @media screen and (min-width: 376px) { body.questions_index .map_container { height: 700px; }
   body.questions_index .map_container .map { width: 100%; height: 100%; }

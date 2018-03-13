@@ -254,6 +254,10 @@ body.questions_index{
 		line-height: 25px;
 		font-size: 13px;
 		cursor:pointer;
+
+		&.ranking{
+			background-color:#ff0000;
+		}
 	}
 }
 
