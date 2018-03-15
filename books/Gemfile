@@ -68,3 +68,9 @@ gem 'meta-tags'
 
 #ランキング用
 gem 'redis'
+
+
+#twitter, facebook ログイン用
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'

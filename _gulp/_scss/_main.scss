@@ -248,16 +248,43 @@ body.questions_index{
 		}
 	}
 
+	.leaflet-popup{
+
+		&.ranking{
+
+			&.rank1{
+				.leaflet-popup-content-wrapper,
+				.leaflet-popup-tip{
+					background-color:#ff0000;
+				}
+			}
+
+			&.rank2{
+				.leaflet-popup-content-wrapper,
+				.leaflet-popup-tip{
+					background-color:#ff8383;
+				}
+			}
+
+			&.rank3{
+				.leaflet-popup-content-wrapper,
+				.leaflet-popup-tip{
+					background-color:#ffb8b8;
+				}
+			}
+
+			.leaflet-popup-close-button{
+				color:#fff;
+			}
+		}
+	}
+
 	.popup{
 		width: 150px;
 		min-height: 25px;
 		line-height: 25px;
 		font-size: 13px;
 		cursor:pointer;
-
-		&.ranking{
-			background-color:#ff0000;
-		}
 	}
 }
 

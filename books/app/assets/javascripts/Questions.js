@@ -660,8 +660,8 @@ var Map = function () {
   }, {
     key: 'createPopup',
     value: function createPopup(data, type) {
-      console.log(type);
-      var content = L.DomUtil.create('div', 'popup ' + type);
+
+      var content = L.DomUtil.create('div', 'popup');
       content.innerHTML = data.title;
       L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, data));
 
@@ -669,6 +669,8 @@ var Map = function () {
 
       // var draggable = new L.Draggable(popup._container, popup._wrapper);
       // draggable.enable();
+      var element = popup.getElement();
+      element.setAttribute('class', element.className + ' ' + type);
 
       return popup;
     }

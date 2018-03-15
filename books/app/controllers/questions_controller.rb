@@ -55,11 +55,22 @@ class QuestionsController < ApplicationController
 
   def get_ranking
 
-    ranks = Like.group(:question_id).order('count(question_id) desc').pluck(:question_id)
-    @questions = Question.where( id: ranks, city: params[:key] ).limit(5)
+    ranks = Like.group(:question_id).order('count(question_id) desc').limit(3).pluck(:question_id)
+    # @questions = Question.eager_load(:likes).order( "likes.question_id" )
+    @questions = Question.where( id: ranks );
 
-# render plain: @questions
-# return
+# hoge = 0
+# @questions.each do |question|
+#   hoge += question.likes.count
+# end
+# render plain: hoge
+# return;
+
+# @questions.sort { |x, y|
+#    x.likes.size <=> y.likes.size
+# }
+
+@questions = @questions.sort { |a, b| b.likes.count <=> a.likes.count }
 #render plain: Like.group(:question_id).order('count(question_id) desc').limit(5).pluck(:question_id)
 
     respond_to do |format|

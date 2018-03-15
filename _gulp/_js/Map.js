@@ -290,8 +290,8 @@ console.log( "add!:" + key );
 
 
   createPopup( data, type ){
-    
-    var content = L.DomUtil.create( 'div', 'popup ' + type );
+
+    var content = L.DomUtil.create( 'div', 'popup' );
     content.innerHTML = data.title;
     L.DomEvent.on( content, 'click', this.popupClickHandler.bind( this, data ) );
 
@@ -302,6 +302,8 @@ console.log( "add!:" + key );
 
 // var draggable = new L.Draggable(popup._container, popup._wrapper);
 // draggable.enable();
+    var element = popup.getElement();
+    element.setAttribute( 'class', element.className + ' ' + type );
 
     return popup;
 
