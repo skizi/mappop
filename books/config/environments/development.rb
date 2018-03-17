@@ -59,6 +59,19 @@ Rails.application.configure do
     end
   end
 
-  #redis
-  ENV["REDIS"] = "http://localhost:6379"
+  # メール送信設定
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  host = 'http://localhost:3000/'
+  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    port:                 587,
+    address:              'smtp.gmail.com',
+    domain:               'smtp.gmail.com',
+    user_name:            'skizi3024@gmail.com',
+    password:             'dsropxivequpcmjs',
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
 end

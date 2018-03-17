@@ -650,6 +650,10 @@ label { height: 46px; line-height: 46px; display: inline-block; color: #848484; 
 .btn0:active { box-shadow: none; transform: translate(4px, 4px); }
 .btn0:link, .btn0:visited { color: #fff; }
 
+.twitter_btn { width: 152px; height: 40px; line-height: 40px; margin: 0 auto; padding-left: 26px; display: block; border-radius: 5px; background-color: #55acee; background-image: url(./twitter_icon.png); background-size: 20px auto; background-repeat: no-repeat; background-position: 24px 50%; text-align: center; color: #fff; font-size: 14px; text-decoration: none; letter-spacing: 0px; transition-duration: 0.3s; transition-property: opacity; }
+.twitter_btn:link, .twitter_btn:visited { color: #fff; }
+.twitter_btn:hover { opacity: 0.8; }
+
 @media screen and (min-width: 376px) { .btn0 { cursor: pointer; }
   .btn0:hover { box-shadow: none; transform: translate(7px, 7px); } }
 .btn1 { text-align: center; }
@@ -1344,6 +1348,8 @@ body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-si
 .signup_container form div, .login_container form div { overflow: hidden; *zoom: 1; }
 .signup_container form textarea, .login_container form textarea { height: 100px; }
 .signup_container form .btn0, .login_container form .btn0 { width: 325px; margin-bottom: 25px; }
+
+.login_container .twitter_btn { width: 176px; padding-left: 28px; }
 
 @media screen and (min-width: 376px) { .signup_container, .login_container { padding: 20px 0 80px; } }
 body.questions_index section.main_content { margin-bottom: 0; }

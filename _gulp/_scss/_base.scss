@@ -295,6 +295,38 @@ label{
 }
 
 
+.twitter_btn{
+    width: 152px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 auto;
+    padding-left: 26px;
+    display: block;
+    border-radius: 5px;
+    background-color: #55acee;
+    background-image: url(./twitter_icon.png);
+    background-size: 20px auto;
+    background-repeat: no-repeat;
+    background-position: 24px 50%;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0px;
+    transition-duration: 0.3s;
+    transition-property: opacity;
+
+    &:link,
+    &:visited{
+        color:#fff;
+    }
+
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+
 @media screen and (min-width: 376px) {
     .btn0{
         cursor:pointer;

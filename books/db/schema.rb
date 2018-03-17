@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180311091145) do
+ActiveRecord::Schema.define(version: 20180317161014) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 20180311091145) do
     t.string "city"
   end
 
+  create_table "tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.string "uuid"
+    t.datetime "expired_at"
+    t.index ["user_id"], name: "index_tokens_on_user_id"
+  end
+
   create_table "tweets", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -59,6 +68,9 @@ ActiveRecord::Schema.define(version: 20180311091145) do
     t.string "email"
     t.string "password_digest"
     t.binary "photo"
+    t.string "provider"
+    t.string "uid"
+    t.boolean "created", default: false, null: false
   end
 
 end

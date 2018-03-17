@@ -66,11 +66,8 @@ gem 'settingslogic'
 
 gem 'meta-tags'
 
-#ランキング用
-gem 'redis'
 
-
-#twitter, facebook ログイン用
-gem 'devise'
+# Twitterログイン用
+source 'https://rubygems.org'
 gem 'omniauth'
-gem 'omniauth-facebook'
+gem 'omniauth-twitter'

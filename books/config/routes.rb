@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
-
   root to: 'home#index'
 
   get 'login' => 'sessions#new'
@@ -9,6 +7,7 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
   get 'logout' => 'sessions#destroy'
+  get '/auth/:provider/callback' => 'sessions#createTwitter'
 
 
   get 'questions' => 'questions#index'
@@ -31,9 +30,15 @@ Rails.application.routes.draw do
   #記述が上の方のものほど重要度が増す
 
   get 'signup' => 'users#new'
+  get 'signup/:provider' => 'users#new'
+  get 'users/new/:provider' => 'users#new'
+  get 'users/new' => 'users#new'
+  get 'users/token/:uuid' => 'users#token'
+  get 'users/tmp'
   get 'users/all'
   get 'users/:id' => 'users#show'
   post 'users/upload_process'
+
 
 
   resources :questions
