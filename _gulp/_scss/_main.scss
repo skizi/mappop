@@ -256,25 +256,65 @@ body.questions_index{
 	.leaflet-popup{
 
 		&.ranking{
+			.leaflet-popup-content-wrapper,
+			.leaflet-popup-tip{
+				background-color:#d7bd84;
+			}
+
+			.leaflet-popup-content-wrapper{
+				background-repeat:no-repeat;
+				background-image:url('./map/king.png');
+				background-size:64px auto;
+				background-position:50% 10px;
+			}
+
+			.leaflet-popup-content{
+				padding-top: 65px;
+			}
+
+			.popup{
+			    color: #fff;
+			}
 
 			&.rank1{
 				.leaflet-popup-content-wrapper,
 				.leaflet-popup-tip{
-					background-color:#ff0000;
 				}
 			}
 
 			&.rank2{
 				.leaflet-popup-content-wrapper,
 				.leaflet-popup-tip{
-					background-color:#ff8383;
+				    background-color: #c0c0c0;
+				}
+
+				.leaflet-popup-content-wrapper{
+					background-image:url('./map/diamond.png');
+				    background-size: 50px auto;
+				}
+
+				.leaflet-popup-content{
+			        padding-top: 55px;
 				}
 			}
 
 			&.rank3{
 				.leaflet-popup-content-wrapper,
 				.leaflet-popup-tip{
-					background-color:#ffb8b8;
+					background-color:#fff;
+				}
+
+				.leaflet-popup-content-wrapper{
+					background-image:url('./map/ring.png');
+				    background-size: 40px auto;
+				}
+
+				.leaflet-popup-content{
+				    padding-top: 40px;
+				}
+
+				.popup{
+					color:#707070;
 				}
 			}
 
@@ -285,11 +325,21 @@ body.questions_index{
 	}
 
 	.popup{
+		@include clearfix;
 		width: 150px;
 		min-height: 25px;
 		line-height: 25px;
 		font-size: 13px;
 		cursor:pointer;
+	    font-weight: bold;
+	    color: #707070;
+
+		img{
+			height: 28px;
+			margin-right: 10px;
+			float: left;
+		    border-radius: 4px;
+		}
 	}
 }
 

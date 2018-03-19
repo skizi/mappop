@@ -55,9 +55,6 @@ class QuestionsController < ApplicationController
 
   def get_ranking
 
-    render plain: User.column_names
-    return
-
     ranks = Like.group(:question_id).order('count(question_id) desc').limit(3).pluck(:question_id)
     # @questions = Question.eager_load(:likes).order( "likes.question_id" )
     @questions = Question.where( id: ranks );
@@ -66,7 +63,7 @@ class QuestionsController < ApplicationController
 # @questions.each do |question|
 #   hoge += question.likes.count
 # end
-# render plain: hoge
+# render plain: ranks
 # return;
 
 # @questions.sort { |x, y|

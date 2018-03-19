@@ -649,7 +649,7 @@ var Map = function () {
         // });
 
         //leaflet
-        var popup = this.createPopup(data, type);
+        var popup = this.createPopup(data, type, i);
         popup.data = data;
         this.popups[key].push(popup);
         //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
@@ -659,20 +659,43 @@ var Map = function () {
     }
   }, {
     key: 'createPopup',
-    value: function createPopup(data, type) {
+    value: function createPopup(data, type, index) {
 
       var content = L.DomUtil.create('div', 'popup');
-      content.innerHTML = data.title;
+      //content.innerHTML = data.title;
       L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, data));
 
       var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(data.lat), Number(data.lng)]).setContent(content).openOn(this.map);
 
+      this.addUserIcon(data.user_id, content);
+      var span = document.createElement('span');
+      span.innerHTML = data.title;
+      content.appendChild(span);
+
       // var draggable = new L.Draggable(popup._container, popup._wrapper);
       // draggable.enable();
+      var rank = '';
+      if (type == 'ranking') {
+        rank = ' rank' + (index + 1);
+      }
       var element = popup.getElement();
-      element.setAttribute('class', element.className + ' ' + type);
+      element.setAttribute('class', element.className + ' ' + type + rank);
 
       return popup;
+    }
+  }, {
+    key: 'addUserIcon',
+    value: function addUserIcon(user_id, parent) {
+
+      var img = new Image();
+      var src = '/docs/user_icon/' + user_id + '.jpg';
+      img.setAttribute('src', src);
+      parent.appendChild(img);
+      img.onerror = function (_img) {
+        _img.setAttribute('src', '/docs/user_icon/no_image.jpg');
+      }.bind(this, img);
+
+      return img;
     }
   }, {
     key: 'removePopups',
