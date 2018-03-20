@@ -663,7 +663,6 @@ var Map = function () {
 
       var content = L.DomUtil.create('div', 'popup');
       //content.innerHTML = data.title;
-      L.DomEvent.on(content, 'click', this.popupClickHandler.bind(this, data));
 
       var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(data.lat), Number(data.lng)]).setContent(content).openOn(this.map);
 
@@ -680,6 +679,7 @@ var Map = function () {
       }
       var element = popup.getElement();
       element.setAttribute('class', element.className + ' ' + type + rank);
+      L.DomEvent.on(element, 'click', this.popupClickHandler.bind(this, data));
 
       return popup;
     }
@@ -718,8 +718,9 @@ var Map = function () {
 
       var length = this.popups[key].length;
       for (var i = 0; i < length; i++) {
-        var content = this.popups[key][i].getContent();
-        L.DomEvent.off(content, 'click', this.popupClickHandler.bind(this));
+        //var content = this.popups[ key ][i].getContent();
+        var element = this.popups[key][i].getElement();
+        L.DomEvent.off(element, 'click', this.popupClickHandler.bind(this));
         this.popups[key][i].remove();
         this.allPopupLength--;
       }

@@ -39,6 +39,11 @@ var Common = function () {
 				// 		event.preventDefault();
 				// 	}, false);
 				// }
+
+				if (window.innerWidth < 375) {
+						var wrapper = document.getElementsByClassName('wrapper')[0];
+						wrapper.style.zoom = window.innerWidth / 375;
+				}
 		}
 
 		_createClass(Common, [{

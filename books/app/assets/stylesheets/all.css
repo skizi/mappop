@@ -593,11 +593,9 @@ p, li, dt, dd, h2, h3, h4, span { background: url("./spacer.gif") 0 0 no-repeat;
 .cf { zoom: 1; }
 
 /*  BASE STYLE  */
-body, html { width: 100%; height: 100%; }
+body, html { width: auto; height: auto; overflow-x: hidden; }
 
-html { overflow-y: hidden; }
-
-body { color: #252525; font-family: microsoft yahei, Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif; -webkit-text-size-adjust: 100%; word-wrap: break-word; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
+body { color: #252525; font-family: microsoft yahei, Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif; -webkit-text-size-adjust: 100%; word-wrap: break-word; -webkit-overflow-scrolling: touch; }
 
 a { -webkit-tap-highlight-color: transparent; }
 a:link { color: #252525; }
@@ -716,7 +714,7 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
   footer div.inner { min-height: 140px; }
   footer div.inner div.right { min-width: 300px; } }
 .modal { width: 100%; height: 100%; background-color: transparent; display: none; position: fixed; top: 0px; left: 0px; }
-.modal .inner { width: 100%; height: 100%; padding: 0px 21px 0px 21px; box-sizing: border-box; background-color: #fff; position: absolute; left: 0px; top: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-100%); opacity: 1; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
+.modal .inner { width: 100%; height: 100%; padding: 0px 21px 0px 21px; box-sizing: border-box; background-color: #fff; position: absolute; left: 0px; top: 0px; transition-duration: 0.3s; transition-property: transform; transform: translateX(-100%); opacity: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .modal .inner input, .modal .inner textarea { width: 100%; }
 .modal .inner:before { content: ''; width: 100px; height: 100px; position: absolute; right: 0px; top: 0px; background-image: url("./menu/close_btn_bg.png"); background-repeat: no-repeat; background-position: right top; background-size: 100px; }
 .modal .inner .close_btn { width: 30px; height: 30px; display: block; position: absolute; top: 13px; right: 13px; background-image: url("./menu/close_btn.png"); text-indent: -9999px; background-size: 30px; }
@@ -1356,19 +1354,22 @@ body.questions_index section.main_content { margin-bottom: 0; }
 body.questions_index .map_container { width: 100%; height: 450px; position: relative; }
 body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
 body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
+body.questions_index .leaflet-popup { cursor: pointer; }
 body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking .leaflet-popup-tip { background-color: #d7bd84; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; }
+body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; position: relative; }
+body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper:after { content: '1'; width: 10px; height: 22px; padding-left: 21px; display: block; background-repeat: no-repeat; background-image: url(./map/flag.png); background-size: auto 22px; position: absolute; top: 15px; left: 21px; color: #fff; font-size: 19px; }
 body.questions_index .leaflet-popup.ranking .leaflet-popup-content { padding-top: 65px; }
 body.questions_index .leaflet-popup.ranking .popup { color: #fff; }
 body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-tip { background-color: #c0c0c0; }
-body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper { background-image: url("./map/diamond.png"); background-size: 50px auto; }
+body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper { background-image: url("./map/king_middle.png"); background-size: 33px auto; background-position: 50% 22px; }
+body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper:after { content: '2'; }
 body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content { padding-top: 55px; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-tip { background-color: #fff; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper { background-image: url("./map/ring.png"); background-size: 40px auto; }
+body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-tip { background-color: #b9aa98; }
+body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper { background-image: url("./map/king_min.png"); background-position: 50% 26px; background-size: 30px auto; }
+body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper:after { content: '3'; }
 body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content { padding-top: 40px; }
-body.questions_index .leaflet-popup.ranking.rank3 .popup { color: #707070; }
 body.questions_index .leaflet-popup.ranking .leaflet-popup-close-button { color: #fff; }
-body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; cursor: pointer; font-weight: bold; color: #707070; }
+body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; font-weight: bold; color: #707070; }
 body.questions_index .popup img { height: 28px; margin-right: 10px; float: left; border-radius: 4px; }
 
 @media screen and (min-width: 376px) { body.questions_index .map_container { height: 700px; }

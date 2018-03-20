@@ -254,6 +254,7 @@ body.questions_index{
 	}
 
 	.leaflet-popup{
+		cursor:pointer;
 
 		&.ranking{
 			.leaflet-popup-content-wrapper,
@@ -263,9 +264,27 @@ body.questions_index{
 
 			.leaflet-popup-content-wrapper{
 				background-repeat:no-repeat;
+				//http://icon-rainbow.com/?s=%E7%8E%8B%E5%86%A0
 				background-image:url('./map/king.png');
 				background-size:64px auto;
 				background-position:50% 10px;
+				position:relative;
+
+				&:after{
+					content: '1';
+				    width: 10px;
+				    height: 22px;
+				    padding-left: 21px;
+				    display: block;
+				    background-repeat: no-repeat;
+				    background-image: url(./map/flag.png);
+				    background-size: auto 22px;
+				    position: absolute;
+			        top: 15px;
+				    left: 21px;
+				    color: #fff;
+				    font-size: 19px;
+				}
 			}
 
 			.leaflet-popup-content{
@@ -289,8 +308,13 @@ body.questions_index{
 				}
 
 				.leaflet-popup-content-wrapper{
-					background-image:url('./map/diamond.png');
-				    background-size: 50px auto;
+					background-image:url('./map/king_middle.png');
+				    background-size: 33px auto;
+			        background-position: 50% 22px;
+					
+					&:after{
+						content: '2';
+					}
 				}
 
 				.leaflet-popup-content{
@@ -301,21 +325,28 @@ body.questions_index{
 			&.rank3{
 				.leaflet-popup-content-wrapper,
 				.leaflet-popup-tip{
-					background-color:#fff;
+					background-color:#b9aa98;
 				}
 
 				.leaflet-popup-content-wrapper{
-					background-image:url('./map/ring.png');
-				    background-size: 40px auto;
+					background-image:url('./map/king_min.png');
+			        background-position: 50% 26px;
+				    background-size: 30px auto;
+
+					&:after{
+						content: '3';
+						// background-image:url('./map/flag_black.png');
+						// color:#707070;
+					}
 				}
 
 				.leaflet-popup-content{
 				    padding-top: 40px;
 				}
 
-				.popup{
-					color:#707070;
-				}
+				// .popup{
+				// 	color:#707070;
+				// }
 			}
 
 			.leaflet-popup-close-button{
@@ -330,7 +361,6 @@ body.questions_index{
 		min-height: 25px;
 		line-height: 25px;
 		font-size: 13px;
-		cursor:pointer;
 	    font-weight: bold;
 	    color: #707070;
 
