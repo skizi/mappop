@@ -45,6 +45,10 @@ export default class Map{
     this.popups = {};
     this.allPopupLength = 0;
 
+    this.rankerPopups = {};
+    this.rankerPopups[ 'country' ] = [];
+    this.rankerPopups[ 'state' ] = [];
+    this.rankerPopups[ 'city' ] = [];
 
     this.oldIndexs = [];
     this.map.on( 'moveend', this.mapMoved.bind( this ) );
@@ -79,12 +83,7 @@ export default class Map{
     var hasFlag = this.hasOldIndex( now );
     if( !hasFlag ){
       //通常popup取得
-      this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, 'normal', now.x, now.y ) );
-
-      //ランキングpopup取得
-      this.getRankingData( 3, function( result ){
-         this.jsonLoadComp( 'ranking', now.x, now.y, result )
-      }.bind( this ) );
+      this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, now.x, now.y ) );
 
       //タイルindexキャッシュ
       this.oldIndexs.push( { x:now.x, y:now.y } );
@@ -211,7 +210,7 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
   }
 
-
+  /*
   getRankingData( limit, callback ){
 
     var c = this.map.getCenter();
@@ -234,21 +233,23 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
   getRankingDataStep2( limit, callback, result ){
 
+    var cityName = result.address.city;
+
     var data = {
       //key:result.address.city,
       limit:limit
     };
-    var url = Util.apiHeadUrl + '/questions/get_ranking/' + result.address.city;
+    var url = Util.apiHeadUrl + '/questions/get_ranking/' + cityName;
     if( this.nowRankingAjax ) this.nowRankingAjax.abort();
     this.nowRankingAjax = $.ajax({
         url:url,
         type:'GET',
         dataType:'json',
         data:data,
-        success:function( _callback, result ){
+        success:function( _callback, _cityName, result ){
           this.nowAjax = null;
-          if( _callback ) _callback( result );
-        }.bind( this, callback ),
+          if( _callback ) _callback( result, _cityName );
+        }.bind( this, callback, cityName ),
         error:function( _callback, result ){
           this.nowAjax = null;
           //_callback( result );
@@ -256,9 +257,9 @@ var _maxLatLng = L.latLng( _y, _x+w );
     });
 
   }
+  */
 
-
-  jsonLoadComp( type, x, y, results ){
+  jsonLoadComp( x, y, results ){
 
     var key = x + ',' + y;
     if( !this.popups[ key ] ) this.popups[ key ] = [];
@@ -277,19 +278,24 @@ var _maxLatLng = L.latLng( _y, _x+w );
   		// 	map: this.map,
   		// 	disableAutoPan: false
   		// });
+      //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
+
 
   		//leaflet
-      var popup = this.createPopup( data, type, i );
+      var popup = this.createPopup( data, i );
       popup.data = data;
       this.popups[ key ].push( popup );
-		  //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
+
   	}
+
     this.allPopupLength += length;
     console.log( "add!:" + key );
+
   }
 
 
-  createPopup( data, type, index ){
+  //ポップアップを作成
+  createPopup( data, index ){
 
     var content = L.DomUtil.create( 'div', 'popup' );
     //content.innerHTML = data.title;
@@ -306,12 +312,12 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
 // var draggable = new L.Draggable(popup._container, popup._wrapper);
 // draggable.enable();
-    var rank = '';
-    if( type == 'ranking' ){
-      rank = ' rank' + ( index + 1 );
-    }
+  
+    var rank = ' rank' + ( data.city_rank + 1 );
+    if( data.likes.length == 0 ) rank = '';
+
     var element = popup.getElement();
-    element.setAttribute( 'class', element.className + ' ' + type + rank );
+    element.setAttribute( 'class', element.className + rank );
     L.DomEvent.on( element, 'click', this.popupClickHandler.bind( this, data ) );
 
     return popup;

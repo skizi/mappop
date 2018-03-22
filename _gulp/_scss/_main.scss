@@ -256,7 +256,9 @@ body.questions_index{
 	.leaflet-popup{
 		cursor:pointer;
 
-		&.ranking{
+		&.rank1,
+		&.rank2,
+		&.rank3{
 			.leaflet-popup-content-wrapper,
 			.leaflet-popup-tip{
 				background-color:#d7bd84;
@@ -273,8 +275,9 @@ body.questions_index{
 				&:after{
 					content: '1';
 				    width: 10px;
-				    height: 22px;
-				    padding-left: 21px;
+					height: 17px;
+					padding-top: 5px;
+					padding-left: 19px;
 				    display: block;
 				    background-repeat: no-repeat;
 				    background-image: url(./map/flag.png);
@@ -283,7 +286,7 @@ body.questions_index{
 			        top: 15px;
 				    left: 21px;
 				    color: #fff;
-				    font-size: 19px;
+				    font-size: 15px;
 				}
 			}
 
@@ -295,71 +298,72 @@ body.questions_index{
 			    color: #fff;
 			}
 
-			&.rank1{
-				.leaflet-popup-content-wrapper,
-				.leaflet-popup-tip{
-				}
-			}
-
-			&.rank2{
-				.leaflet-popup-content-wrapper,
-				.leaflet-popup-tip{
-				    background-color: #c0c0c0;
-				}
-
-				.leaflet-popup-content-wrapper{
-					background-image:url('./map/king_middle.png');
-				    background-size: 33px auto;
-			        background-position: 50% 22px;
-					
-					&:after{
-						content: '2';
-					}
-				}
-
-				.leaflet-popup-content{
-			        padding-top: 55px;
-				}
-			}
-
-			&.rank3{
-				.leaflet-popup-content-wrapper,
-				.leaflet-popup-tip{
-					background-color:#b9aa98;
-				}
-
-				.leaflet-popup-content-wrapper{
-					background-image:url('./map/king_min.png');
-			        background-position: 50% 26px;
-				    background-size: 30px auto;
-
-					&:after{
-						content: '3';
-						// background-image:url('./map/flag_black.png');
-						// color:#707070;
-					}
-				}
-
-				.leaflet-popup-content{
-				    padding-top: 40px;
-				}
-
-				// .popup{
-				// 	color:#707070;
-				// }
-			}
-
 			.leaflet-popup-close-button{
 				color:#fff;
 			}
+		}
+
+		
+		&.rank1{
+			.leaflet-popup-content-wrapper,
+			.leaflet-popup-tip{
+			}
+		}
+
+		&.rank2{
+			.leaflet-popup-content-wrapper,
+			.leaflet-popup-tip{
+			    background-color: #c0c0c0;
+			}
+
+			.leaflet-popup-content-wrapper{
+				background-image:url('./map/king_middle.png');
+			    background-size: 33px auto;
+		        background-position: 50% 22px;
+				
+				&:after{
+					content: '2';
+				}
+			}
+
+			.leaflet-popup-content{
+		        padding-top: 55px;
+			}
+		}
+
+		&.rank3{
+			.leaflet-popup-content-wrapper,
+			.leaflet-popup-tip{
+				background-color:#b9aa98;
+			}
+
+			.leaflet-popup-content-wrapper{
+				background-image:url('./map/king_min.png');
+		        background-position: 50% 26px;
+			    background-size: 30px auto;
+
+				&:after{
+					content: '3';
+					// background-image:url('./map/flag_black.png');
+					// color:#707070;
+				}
+			}
+
+			.leaflet-popup-content{
+			    padding-top: 40px;
+			}
+
+			// .popup{
+			// 	color:#707070;
+			// }
 		}
 	}
 
 	.popup{
 		@include clearfix;
 		width: 150px;
-		min-height: 25px;
-		line-height: 25px;
+	    min-height: 28px;
+    	line-height: 28px;
 		font-size: 13px;
 	    font-weight: bold;
 	    color: #707070;

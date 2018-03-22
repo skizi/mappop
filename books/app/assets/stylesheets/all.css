@@ -723,16 +723,20 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.new .inner div input, .modal.new .inner div textarea { float: none; min-width: 100%; max-width: 100%; box-sizing: border-box; }
 .modal.new .inner div textarea { height: 160px; }
 .modal.show .inner div.top { width: auto; margin-bottom: 20px; padding: 20px 0 30px 0; border-bottom: 1px solid #ebb314; }
-.modal.show .inner div.top h2.title { min-height: 30px; line-height: 30px; margin-bottom: 20px; font-size: 22px; font-weight: bold; color: #ebb314; border-bottom: 8px solid #ebb314; word-break: break-all; }
+.modal.show .inner div.top h2.title { min-height: 30px; line-height: 30px; margin-bottom: 10px; font-size: 22px; font-weight: bold; color: #ebb314; border-bottom: 4px solid #ebb314; word-break: break-all; }
 .modal.show .inner div.top h2.title .title_user_icon { width: 30px; height: 30px; display: inline-block; position: relative; top: -4px; }
 .modal.show .inner div.top h2.title .title_user_icon a { transition-duration: 0.3s; transition-property: opacity; }
 .modal.show .inner div.top h2.title .title_user_icon a:hover { opacity: 0.8; }
-.modal.show .inner div.top h2.title .title_user_icon a img { width: 30px; }
+.modal.show .inner div.top h2.title .title_user_icon a img { width: 30px; border-radius: 4px; }
 .modal.show .inner div.top h2.title div.like_btn { margin-right: 10px; display: inline-block; cursor: pointer; }
 .modal.show .inner div.top h2.title div.like_btn .count { width: 49px; height: 41px; line-height: 41px; margin-bottom: 4px; padding-top: 6px; display: block; background-image: url("./map/like_btn.png"); background-repeat: no-repeat; text-align: center; color: #fff; font-size: 16px; text-shadow: -2px -1px 0 #a88112, -2px 0px 0 #a88112, -2px 1px 0 #a88112, -1px -2px 0 #a88112, -1px -1px 0 #a88112, -1px 0px 0 #a88112, -1px 1px 0 #a88112, -1px 2px 0 #a88112, 0px -2px 0 #a88112, 0px -1px 0 #a88112, 0px 0px 0 #a88112, 0px 1px 0 #a88112, 0px 2px 0 #a88112, 1px -2px 0 #a88112, 1px -1px 0 #a88112, 1px 0px 0 #a88112, 1px 1px 0 #a88112, 1px 2px 0 #a88112, 2px -1px 0 #a88112, 2px 0px 0 #a88112, 2px 1px 0 #a88112; letter-spacing: 1.5px; }
 .modal.show .inner div.top h2.title div.like_btn .like_btn_text { line-height: 12px; color: #ebb313; font-size: 12px; font-weight: bold; display: block; text-align: center; }
 .modal.show .inner div.top h2.title div.like_btn .like_popup { height: 20px; line-height: 20px; padding: 0 6px; background-color: #ebb314; border-radius: 5px; color: #fff; font-size: 11px; border-radius: 4px; position: absolute; top: 30px; left: 85px; transition-duration: 1s; transition-property: opacity; -moz-animation: popupAnim0 1.2s ease 0s infinite; -webkit-animation: popupAnim0 1.2s ease 0s infinite; animation: popupAnim0 1.2s ease 0s infinite; }
 .modal.show .inner div.top h2.title div.like_btn .like_popup:after { content: ''; width: 10px; height: 10px; background-color: #ebb314; position: absolute; top: 5px; left: -3px; transform: rotate(45deg); }
+.modal.show .inner div.top ul.sns { overflow: hidden; *zoom: 1; margin-bottom: 20px; }
+.modal.show .inner div.top ul.sns li { float: left; margin-right: 10px; }
+.modal.show .inner div.top ul.sns li:first-child { line-height: 18px; padding-top: 2px; color: #e8af0b; font-size: 10px; }
+.modal.show .inner div.top ul.sns li a img { width: 40px; }
 .modal.show .inner div.top div.photo { width: 100%; max-height: 200px; overflow: hidden; margin-bottom: 10px; text-align: center; }
 .modal.show .inner div.top div.photo img { height: 100%; border-radius: 10px; }
 .modal.show .inner div.top p.content { min-height: 120px; font-size: 18px; line-height: 30px; background: repeating-linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 29px, #ebb314 29px, #ebb314 30px); background-position: 0 -1px; }
@@ -1355,21 +1359,21 @@ body.questions_index .map_container { width: 100%; height: 450px; position: rela
 body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
 body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
 body.questions_index .leaflet-popup { cursor: pointer; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking .leaflet-popup-tip { background-color: #d7bd84; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; position: relative; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-content-wrapper:after { content: '1'; width: 10px; height: 22px; padding-left: 21px; display: block; background-repeat: no-repeat; background-image: url(./map/flag.png); background-size: auto 22px; position: absolute; top: 15px; left: 21px; color: #fff; font-size: 19px; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-content { padding-top: 65px; }
-body.questions_index .leaflet-popup.ranking .popup { color: #fff; }
-body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-tip { background-color: #c0c0c0; }
-body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper { background-image: url("./map/king_middle.png"); background-size: 33px auto; background-position: 50% 22px; }
-body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content-wrapper:after { content: '2'; }
-body.questions_index .leaflet-popup.ranking.rank2 .leaflet-popup-content { padding-top: 55px; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-tip { background-color: #b9aa98; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper { background-image: url("./map/king_min.png"); background-position: 50% 26px; background-size: 30px auto; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content-wrapper:after { content: '3'; }
-body.questions_index .leaflet-popup.ranking.rank3 .leaflet-popup-content { padding-top: 40px; }
-body.questions_index .leaflet-popup.ranking .leaflet-popup-close-button { color: #fff; }
-body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 25px; line-height: 25px; font-size: 13px; font-weight: bold; color: #707070; }
+body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank1 .leaflet-popup-tip, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-tip, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-tip { background-color: #d7bd84; }
+body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; position: relative; }
+body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper:after { content: '1'; width: 10px; height: 17px; padding-top: 5px; padding-left: 19px; display: block; background-repeat: no-repeat; background-image: url(./map/flag.png); background-size: auto 22px; position: absolute; top: 15px; left: 21px; color: #fff; font-size: 15px; }
+body.questions_index .leaflet-popup.rank1 .leaflet-popup-content, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content { padding-top: 65px; }
+body.questions_index .leaflet-popup.rank1 .popup, body.questions_index .leaflet-popup.rank2 .popup, body.questions_index .leaflet-popup.rank3 .popup { color: #fff; }
+body.questions_index .leaflet-popup.rank1 .leaflet-popup-close-button, body.questions_index .leaflet-popup.rank2 .leaflet-popup-close-button, body.questions_index .leaflet-popup.rank3 .leaflet-popup-close-button { color: #fff; }
+body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-tip { background-color: #c0c0c0; }
+body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper { background-image: url("./map/king_middle.png"); background-size: 33px auto; background-position: 50% 22px; }
+body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper:after { content: '2'; }
+body.questions_index .leaflet-popup.rank2 .leaflet-popup-content { padding-top: 55px; }
+body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-tip { background-color: #b9aa98; }
+body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper { background-image: url("./map/king_min.png"); background-position: 50% 26px; background-size: 30px auto; }
+body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper:after { content: '3'; }
+body.questions_index .leaflet-popup.rank3 .leaflet-popup-content { padding-top: 40px; }
+body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 28px; line-height: 28px; font-size: 13px; font-weight: bold; color: #707070; }
 body.questions_index .popup img { height: 28px; margin-right: 10px; float: left; border-radius: 4px; }
 
 @media screen and (min-width: 376px) { body.questions_index .map_container { height: 700px; }

@@ -784,11 +784,11 @@ footer{
                 h2.title{
                     min-height: 30px;
                     line-height: 30px;
-                    margin-bottom: 20px;
+                    margin-bottom: 10px;
                     font-size: 22px;
                     font-weight: bold;
                     color: #ebb314;
-                    border-bottom: 8px solid #ebb314;
+                    border-bottom: 4px solid #ebb314;
                     word-break: break-all;
 
                     .title_user_icon{
@@ -808,6 +808,7 @@ footer{
 
                             img{
                                 width:30px;
+                                border-radius: 4px;
                             }
                         }
                     }
@@ -869,6 +870,31 @@ footer{
                         }
                     }
                 }
+
+
+                ul.sns{
+                    @include clearfix;
+                    margin-bottom: 20px;
+
+                    li{
+                        float:left;
+                        margin-right: 10px;
+
+                        &:first-child{
+                            line-height: 18px;
+                            padding-top: 2px;
+                            color: #e8af0b;
+                            font-size: 10px;
+                        }
+
+                        a{
+                            img{
+                                width: 40px;
+                            }
+                        }
+                    }
+                }
+
 
                 div.photo{
                     width: 100%;

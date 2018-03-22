@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180317161014) do
+ActiveRecord::Schema.define(version: 20180322145910) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(version: 20180317161014) do
     t.string "country"
     t.string "state"
     t.string "city"
+    t.integer "city_rank"
+    t.integer "country_rank", default: -1
+    t.integer "state_rank", default: -1
   end
 
   create_table "tokens", force: :cascade do |t|

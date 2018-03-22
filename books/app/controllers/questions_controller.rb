@@ -44,6 +44,8 @@ class QuestionsController < ApplicationController
     #@questions = Question.quadKey( 35.67848924554223, 139.76272863769532, 15 );
     @questions = Question.where( lat: latRange, lng: lngRange ).limit( params['limit'] )
     #@questions = Question.where( lat: 35.68658125560941..35.700522720414256).where( lng: 139.8128700256348..139.8183631896973 );
+
+
     
     respond_to do |format|
       format.html{ render :all }
@@ -53,11 +55,11 @@ class QuestionsController < ApplicationController
   end
 
 
-  def get_ranking
+  def __get_ranking
 
     ranks = Like.group(:question_id).order('count(question_id) desc').limit(3).pluck(:question_id)
     # @questions = Question.eager_load(:likes).order( "likes.question_id" )
-    @questions = Question.where( id: ranks );
+    @questions = Question.where( city: params['key'], id: ranks );
 
 # hoge = 0
 # @questions.each do |question|
@@ -77,6 +79,70 @@ class QuestionsController < ApplicationController
       format.html{ render :all }
       format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
     end
+  end
+
+
+  def refresh_ranking
+
+    refresh_ranking_step2( 'country' )
+    refresh_ranking_step2( 'state' )
+    cities = refresh_ranking_step2( 'city' )
+
+    @questions = cities[ 'undefined' ] #cityがundefinedのものを参照
+ 
+    # render plain: cities2[ cities2.length()-2 ]
+    # render plain: cities[ '東京' ]
+    # return
+
+    respond_to do |format|
+      format.html{ render :all }
+      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
+    end
+  end
+
+
+  def refresh_ranking_step2( type )
+
+    rankName = 'city_rank'
+    if type == 'country' then
+      rankName = 'country_rank'
+    elsif type == 'state' then
+      rankName = 'state_rank'
+    end
+
+    @questions = Question.includes([ :likes ]).all
+    caches = {}
+    for q in @questions do
+
+      # まだ精査していない（ハッシュに存在しない）市区のみ参照する
+      name = q[ type ]
+      if !caches.include?( name )
+
+        caches[ name ] = Question.where( type + " = '" + name.to_s + "'" )
+        caches[ name ] = caches[ name ].sort { |a, b| b.likes.count <=> a.likes.count }
+        
+        rank = 0
+        ranks = {}
+        for _q in caches[ name ] do
+          _q[ rankName ] = rank
+          ranks[ _q.id ] = { rankName => rank }
+          rank += 1 
+        end
+
+        # .sortをかけると配列になってしまうので、
+        # ActiveRecordに変換するためにwhereする。
+        activeRecord = Question.where(id: caches[ name ].map{ |question| question.id })
+
+        # データベース更新
+        activeRecord.update( ranks.keys, ranks.values )
+
+      end
+
+    end
+
+
+    return caches
+
   end
 
 
@@ -141,6 +207,6 @@ class QuestionsController < ApplicationController
 
 
   def question_params
-    params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo, :country, :state, :city )
+    params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo, :country, :state, :city, :cityRank )
   end
 end

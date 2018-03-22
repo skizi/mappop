@@ -160,6 +160,18 @@ export default class ShowPostModal extends Modal{
 
         this.setLikeCount( data.likes );
 
+
+        //sns
+        var facebook = this.element.getElementsByClassName( 'facebook' )[0];
+        var twitter = this.element.getElementsByClassName( 'twitter' )[0];
+        var text = encodeURIComponent( data.content );
+        var url = encodeURIComponent( 'http://hoge.jp' );
+        var href = 'http://twitter.com/share?text=' + text + '&amp;url=' + url;
+        twitter.setAttribute( 'href', href );
+        var line = this.element.getElementsByClassName( 'line' )[0];
+        href = 'https://social-plugins.line.me/lineit/share?url=' + url + '&amp;text=' + text;
+        line.setAttribute( 'href', href );
+
     }
 
 

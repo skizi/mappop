@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get 'questions/all'
   get 'questions/search_lat_lng'
   get 'questions/get_ranking/:key' => 'questions#get_ranking'
+  get 'questions/refresh_ranking'
   get 'questions/new/:user_id' => 'questions#new'
   get 'questions/:id' => 'questions#show'
 
