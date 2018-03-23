@@ -6,6 +6,8 @@ export default class Map{
 
   constructor(){
 
+    this.zoom = 12;
+
   	this.element = document.querySelector( '.map_container .map' );
   	this.btn = document.querySelector( '.map_container .btn0' );
   	this.btn.addEventListener( 'click', this.btnClickHandler.bind( this ) );
@@ -25,7 +27,7 @@ export default class Map{
     this.searchRadius = 500;
 
     var latlng = [ 35.67848924554223, 139.76272863769532];
-    this.map = L.map( 'leafletMap' ).setView( latlng, 12 );
+    this.map = L.map( 'leafletMap' ).setView( latlng, this.zoom );
   	L.tileLayer(
   		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
@@ -52,7 +54,8 @@ export default class Map{
 
     this.oldIndexs = [];
     this.map.on( 'moveend', this.mapMoved.bind( this ) );
-    this.map.on( 'zoomstart', this.mapZoom.bind( this ) );
+    this.map.on( 'zoomstart', this.mapZoomStart.bind( this ) );
+    this.map.on( 'zoomend', this.mapZoomEnd.bind( this ) );
     // this.map.on( 'load', function(){
     // }.bind( this ) );
 
@@ -68,10 +71,18 @@ export default class Map{
   }
 
 
-  mapZoom(){
+  mapZoomStart(){
 
     this.oldIndexs = [];
     this.removePopups( 0, 0, true );
+
+  }
+
+
+  mapZoomEnd(){
+
+    this.zoom = this.map.getZoom();
+    console.log( "zoom:" + this.zoom );
 
   }
 
@@ -312,9 +323,8 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
 // var draggable = new L.Draggable(popup._container, popup._wrapper);
 // draggable.enable();
-  
-    var rank = ' rank' + ( data.city_rank + 1 );
-    if( data.likes.length == 0 ) rank = '';
+    
+    var rank = this.getRank( data );
 
     var element = popup.getElement();
     element.setAttribute( 'class', element.className + rank );
@@ -322,6 +332,27 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
     return popup;
 
+  }
+
+
+  getRank( data ){
+
+    var rank = 'stateRank1';
+
+    if( this.zoom < 8 ){
+      rank = ' ranker stateRank' + ( data.state_rank + 1 );
+      if( data.state_rank == -1 ) rank = '';
+    }else if( this.zoom < 14 ){
+      rank = ' ranker countryRank' + ( data.country_rank + 1 );
+      if( data.country_rank == -1 ) rank = '';
+    }else{
+      rank = ' ranker cityRank' + ( data.city_rank + 1 );
+      if( data.city_rank == -1 ) rank = '';
+    }
+    if( data.likes.length == 0 ) rank = '';
+    
+    return rank;
+  
   }
 
 

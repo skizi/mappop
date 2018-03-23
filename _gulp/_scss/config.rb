@@ -25,6 +25,8 @@ on_stylesheet_saved do |filename|
   end
 end
 
+Encoding.default_external = "utf-8";
+
 #require 'ceaser-easing'
 #http_path = "/"
 #css_dir = "CSS‚Ìo—ÍêŠ"

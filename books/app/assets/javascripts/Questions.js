@@ -387,6 +387,8 @@ var Map = function () {
   function Map() {
     _classCallCheck(this, Map);
 
+    this.zoom = 12;
+
     this.element = document.querySelector('.map_container .map');
     this.btn = document.querySelector('.map_container .btn0');
     this.btn.addEventListener('click', this.btnClickHandler.bind(this));
@@ -406,7 +408,7 @@ var Map = function () {
     this.searchRadius = 500;
 
     var latlng = [35.67848924554223, 139.76272863769532];
-    this.map = L.map('leafletMap').setView(latlng, 12);
+    this.map = L.map('leafletMap').setView(latlng, this.zoom);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
     //なぜかRetina対応タイルが存在しない
@@ -431,7 +433,8 @@ var Map = function () {
 
     this.oldIndexs = [];
     this.map.on('moveend', this.mapMoved.bind(this));
-    this.map.on('zoomstart', this.mapZoom.bind(this));
+    this.map.on('zoomstart', this.mapZoomStart.bind(this));
+    this.map.on('zoomend', this.mapZoomEnd.bind(this));
     // this.map.on( 'load', function(){
     // }.bind( this ) );
 
@@ -445,11 +448,18 @@ var Map = function () {
       this.checkNewQuestions();
     }
   }, {
-    key: 'mapZoom',
-    value: function mapZoom() {
+    key: 'mapZoomStart',
+    value: function mapZoomStart() {
 
       this.oldIndexs = [];
       this.removePopups(0, 0, true);
+    }
+  }, {
+    key: 'mapZoomEnd',
+    value: function mapZoomEnd() {
+
+      this.zoom = this.map.getZoom();
+      console.log("zoom:" + this.zoom);
     }
   }, {
     key: 'checkNewQuestions',
@@ -679,14 +689,33 @@ var Map = function () {
       // var draggable = new L.Draggable(popup._container, popup._wrapper);
       // draggable.enable();
 
-      var rank = ' rank' + (data.city_rank + 1);
-      if (data.likes.length == 0) rank = '';
+      var rank = this.getRank(data);
 
       var element = popup.getElement();
       element.setAttribute('class', element.className + rank);
       L.DomEvent.on(element, 'click', this.popupClickHandler.bind(this, data));
 
       return popup;
+    }
+  }, {
+    key: 'getRank',
+    value: function getRank(data) {
+
+      var rank = 'stateRank1';
+
+      if (this.zoom < 8) {
+        rank = ' ranker stateRank' + (data.state_rank + 1);
+        if (data.state_rank == -1) rank = '';
+      } else if (this.zoom < 14) {
+        rank = ' ranker countryRank' + (data.country_rank + 1);
+        if (data.country_rank == -1) rank = '';
+      } else {
+        rank = ' ranker cityRank' + (data.city_rank + 1);
+        if (data.city_rank == -1) rank = '';
+      }
+      if (data.likes.length == 0) rank = '';
+
+      return rank;
     }
   }, {
     key: 'addUserIcon',

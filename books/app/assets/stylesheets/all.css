@@ -1359,20 +1359,26 @@ body.questions_index .map_container { width: 100%; height: 450px; position: rela
 body.questions_index .map_container .map { height: 100%; width: 100%; z-index: 0; }
 body.questions_index .map_container .btn0 { margin-left: -170px; position: absolute; left: 50%; bottom: 17px; }
 body.questions_index .leaflet-popup { cursor: pointer; }
-body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank1 .leaflet-popup-tip, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-tip, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-tip { background-color: #d7bd84; }
-body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; position: relative; }
-body.questions_index .leaflet-popup.rank1 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper:after { content: '1'; width: 10px; height: 17px; padding-top: 5px; padding-left: 19px; display: block; background-repeat: no-repeat; background-image: url(./map/flag.png); background-size: auto 22px; position: absolute; top: 15px; left: 21px; color: #fff; font-size: 15px; }
-body.questions_index .leaflet-popup.rank1 .leaflet-popup-content, body.questions_index .leaflet-popup.rank2 .leaflet-popup-content, body.questions_index .leaflet-popup.rank3 .leaflet-popup-content { padding-top: 65px; }
-body.questions_index .leaflet-popup.rank1 .popup, body.questions_index .leaflet-popup.rank2 .popup, body.questions_index .leaflet-popup.rank3 .popup { color: #fff; }
-body.questions_index .leaflet-popup.rank1 .leaflet-popup-close-button, body.questions_index .leaflet-popup.rank2 .leaflet-popup-close-button, body.questions_index .leaflet-popup.rank3 .leaflet-popup-close-button { color: #fff; }
-body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank2 .leaflet-popup-tip { background-color: #c0c0c0; }
-body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper { background-image: url("./map/king_middle.png"); background-size: 33px auto; background-position: 50% 22px; }
-body.questions_index .leaflet-popup.rank2 .leaflet-popup-content-wrapper:after { content: '2'; }
-body.questions_index .leaflet-popup.rank2 .leaflet-popup-content { padding-top: 55px; }
-body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.rank3 .leaflet-popup-tip { background-color: #b9aa98; }
-body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper { background-image: url("./map/king_min.png"); background-position: 50% 26px; background-size: 30px auto; }
-body.questions_index .leaflet-popup.rank3 .leaflet-popup-content-wrapper:after { content: '3'; }
-body.questions_index .leaflet-popup.rank3 .leaflet-popup-content { padding-top: 40px; }
+body.questions_index .leaflet-popup.ranker .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.ranker .leaflet-popup-tip { background-color: #d7bd84; }
+body.questions_index .leaflet-popup.ranker .leaflet-popup-content-wrapper { background-repeat: no-repeat; background-image: url("./map/king.png"); background-size: 64px auto; background-position: 50% 10px; position: relative; }
+body.questions_index .leaflet-popup.ranker .leaflet-popup-content-wrapper:after { content: '市区1位'; height: 17px; padding-top: 5px; padding-left: 19px; display: block; background-repeat: no-repeat; background-image: url(./map/flag.png); background-size: auto 22px; position: absolute; top: 15px; left: 21px; color: #fff; font-size: 15px; }
+body.questions_index .leaflet-popup.ranker .leaflet-popup-content { padding-top: 65px; }
+body.questions_index .leaflet-popup.ranker .popup { color: #fff; }
+body.questions_index .leaflet-popup.ranker .leaflet-popup-close-button { color: #fff; }
+body.questions_index .leaflet-popup.countryRank1 .leaflet-popup-content-wrapper:after { content: '都道府県1位'; }
+body.questions_index .leaflet-popup.stateRank1 .leaflet-popup-content-wrapper:after { content: '世界1位'; }
+body.questions_index .leaflet-popup.cityRank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.cityRank2 .leaflet-popup-tip, body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-tip, body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-tip { background-color: #c0c0c0; }
+body.questions_index .leaflet-popup.cityRank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-content-wrapper { background-image: url("./map/king_middle.png"); background-size: 33px auto; background-position: 50% 22px; }
+body.questions_index .leaflet-popup.cityRank2 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-content-wrapper:after { content: '市区2位'; }
+body.questions_index .leaflet-popup.cityRank2 .leaflet-popup-content, body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-content, body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-content { padding-top: 55px; }
+body.questions_index .leaflet-popup.countryRank2 .leaflet-popup-content-wrapper:after { content: '都道府県2位'; }
+body.questions_index .leaflet-popup.stateRank2 .leaflet-popup-content-wrapper:after { content: '世界2位'; }
+body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-tip, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-tip, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-tip { background-color: #b9aa98; }
+body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content-wrapper, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content-wrapper { background-image: url("./map/king_min.png"); background-position: 50% 26px; background-size: 30px auto; }
+body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content-wrapper:after, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content-wrapper:after { content: '市区3位'; }
+body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content { padding-top: 40px; }
+body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content-wrapper:after { content: '都道府県3位'; }
+body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content-wrapper:after { content: '世界3位'; }
 body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 28px; line-height: 28px; font-size: 13px; font-weight: bold; color: #707070; }
 body.questions_index .popup img { height: 28px; margin-right: 10px; float: left; border-radius: 4px; }
 

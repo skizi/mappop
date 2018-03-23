@@ -256,9 +256,7 @@ body.questions_index{
 	.leaflet-popup{
 		cursor:pointer;
 
-		&.rank1,
-		&.rank2,
-		&.rank3{
+		&.ranker{
 			.leaflet-popup-content-wrapper,
 			.leaflet-popup-tip{
 				background-color:#d7bd84;
@@ -273,8 +271,7 @@ body.questions_index{
 				position:relative;
 
 				&:after{
-					content: '1';
-				    width: 10px;
+					content: '市区1位';
 					height: 17px;
 					padding-top: 5px;
 					padding-left: 19px;
@@ -302,15 +299,17 @@ body.questions_index{
 				color:#fff;
 			}
 		}
-
-		
-		&.rank1{
-			.leaflet-popup-content-wrapper,
-			.leaflet-popup-tip{
-			}
+		&.countryRank1 .leaflet-popup-content-wrapper:after{
+			content: '都道府県1位';
+		}
+		&.stateRank1 .leaflet-popup-content-wrapper:after{
+			content: '世界1位';
 		}
 
-		&.rank2{
+
+		&.cityRank2,
+		&.countryRank2,
+		&.stateRank2{
 			.leaflet-popup-content-wrapper,
 			.leaflet-popup-tip{
 			    background-color: #c0c0c0;
@@ -322,7 +321,7 @@ body.questions_index{
 		        background-position: 50% 22px;
 				
 				&:after{
-					content: '2';
+					content: '市区2位';
 				}
 			}
 
@@ -330,8 +329,17 @@ body.questions_index{
 		        padding-top: 55px;
 			}
 		}
+		&.countryRank2 .leaflet-popup-content-wrapper:after{
+			content: '都道府県2位';
+		}
+		&.stateRank2 .leaflet-popup-content-wrapper:after{
+			content: '世界2位';
+		}
 
-		&.rank3{
+
+		&.cityRank3,
+		&.countryRank3,
+		&.stateRank3{
 			.leaflet-popup-content-wrapper,
 			.leaflet-popup-tip{
 				background-color:#b9aa98;
@@ -343,19 +351,19 @@ body.questions_index{
 			    background-size: 30px auto;
 
 				&:after{
-					content: '3';
-					// background-image:url('./map/flag_black.png');
-					// color:#707070;
+					content: '市区3位';
 				}
 			}
 
 			.leaflet-popup-content{
 			    padding-top: 40px;
 			}
-
-			// .popup{
-			// 	color:#707070;
-			// }
+		}
+		&.countryRank3 .leaflet-popup-content-wrapper:after{
+			content: '都道府県3位';
+		}
+		&.stateRank3 .leaflet-popup-content-wrapper:after{
+			content: '世界3位';
 		}
 	}
 
