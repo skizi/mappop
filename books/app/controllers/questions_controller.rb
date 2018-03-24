@@ -39,12 +39,13 @@ class QuestionsController < ApplicationController
   def search_lat_lng
 
     #緯度は画面から見て、縦は上が大きい値、下が小さい値となる
-    latRange = Range.new( params['max_lat'], params['min_lat'] )
-    lngRange = Range.new( params['min_lng'], params['max_lng'] )
-    #@questions = Question.quadKey( 35.67848924554223, 139.76272863769532, 15 );
-    @questions = Question.where( lat: latRange, lng: lngRange ).limit( params['limit'] )
-    #@questions = Question.where( lat: 35.68658125560941..35.700522720414256).where( lng: 139.8128700256348..139.8183631896973 );
+    latRange = Range.new( params['max_lat'].to_f, params['min_lat'].to_f )
+    lngRange = Range.new( params['min_lng'].to_f, params['max_lng'].to_f )
+    @questions = Question.where( lat: latRange, lng: lngRange )
 
+    # 配列ソート後 takeで先頭のlimit数分取得する
+    @questions = @questions.sort { |a, b| b.likes.count <=> a.likes.count }
+    @questions = @questions.take( params['limit'].to_i )
 
     
     respond_to do |format|

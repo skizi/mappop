@@ -438,6 +438,9 @@ var Map = function () {
     // this.map.on( 'load', function(){
     // }.bind( this ) );
 
+
+    L.Icon.Default.imagePath = './assets/map/leaflet/';
+
     window.onload = this.checkNewQuestions.bind(this);
   }
 
@@ -445,6 +448,7 @@ var Map = function () {
     key: 'mapMoved',
     value: function mapMoved() {
 
+      console.log("checkNewQuestions...");
       this.checkNewQuestions();
     }
   }, {
@@ -460,6 +464,14 @@ var Map = function () {
 
       this.zoom = this.map.getZoom();
       console.log("zoom:" + this.zoom);
+      this.latLngDist = this.getLatLngDist();
+
+      var p = this.map.getPixelBounds();
+      var minLatLng = this.map.unproject(p.min);
+      L.marker([minLatLng.lat, minLatLng.lng]).addTo(this.map);
+
+      var maxLatLng = this.map.unproject(p.max);
+      L.marker([maxLatLng.lat, maxLatLng.lng]).addTo(this.map);
     }
   }, {
     key: 'checkNewQuestions',
@@ -703,7 +715,7 @@ var Map = function () {
 
       var rank = 'stateRank1';
 
-      if (this.zoom < 8) {
+      if (this.zoom < 6) {
         rank = ' ranker stateRank' + (data.state_rank + 1);
         if (data.state_rank == -1) rank = '';
       } else if (this.zoom < 14) {
