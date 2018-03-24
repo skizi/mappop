@@ -560,12 +560,17 @@ var Modal = function () {
     this.inner = this.element.getElementsByClassName('inner')[0];
     this.closeBtn = document.querySelector(expr + ' .close_btn');
     this.closeBtn.addEventListener('click', this.hide.bind(this));
+
+    this.htmlElement = document.getElementsByTagName('html')[0];
+
     this.hide();
   }
 
   _createClass(Modal, [{
     key: 'show',
     value: function show() {
+
+      this.htmlElement.style.overflowY = 'hidden';
 
       this.element.style.display = 'block';
       setTimeout(function () {
@@ -575,6 +580,8 @@ var Modal = function () {
   }, {
     key: 'hide',
     value: function hide() {
+
+      this.htmlElement.style.overflowY = 'auto';
 
       this.inner.style.transform = 'translateX(-100%)';
       setTimeout(function () {
@@ -696,8 +703,8 @@ module.exports = {
 
 	ua: null,
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

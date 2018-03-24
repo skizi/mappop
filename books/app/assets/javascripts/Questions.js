@@ -387,8 +387,8 @@ var Map = function () {
   function Map() {
     _classCallCheck(this, Map);
 
-    this.zoom = 9;
-    this.debugFlag = true;
+    this.zoom = 13;
+    this.debugFlag = false;
 
     this.element = document.querySelector('.map_container .map');
     this.btn = document.querySelector('.map_container .btn0');
@@ -444,6 +444,10 @@ var Map = function () {
     L.Icon.Default.imagePath = './assets/map/leaflet/';
 
     window.onload = this.checkNewQuestions.bind(this);
+
+    //ユーザーの現在地を取得
+    this.checkGps();
+    this.gpsIntervalId = setInterval(this.checkGps.bind(this), 5000);
   }
 
   _createClass(Map, [{
@@ -457,7 +461,6 @@ var Map = function () {
     value: function mapZoomStart() {
 
       this.allDelete();
-      this.oldIndexs = [];
     }
   }, {
     key: 'allDelete',
@@ -466,7 +469,7 @@ var Map = function () {
       var length = this.oldIndexs.length;
       for (var i = length - 1; i > -1; i--) {
         this.removeData(i);
-      }
+      }this.oldIndexs = [];
     }
   }, {
     key: 'mapZoomEnd',
@@ -505,7 +508,9 @@ var Map = function () {
         var old = this.oldIndexs[i];
         var distX = Math.abs(old.x - now.x);
         var distY = Math.abs(old.y - now.y);
-        if (distX + distY > 2) this.removeData(i);
+        if (distX + distY > 2) {
+          this.removeData(i);
+        }
       }
     }
   }, {
@@ -513,7 +518,6 @@ var Map = function () {
     value: function removeData(i) {
 
       var data = this.oldIndexs[i];
-      console.log("remove!" + data.x + ',' + data.y);
       this.removePopups(data.x, data.y);
       if (this.debugFlag) data.debugRect.remove();
       this.oldIndexs.splice(i, 1);
@@ -602,14 +606,14 @@ var Map = function () {
 
       //もし古いデータが残っていたら、ajaxキャンセル＆キャッシュされたデータを削除
       if (this.ajaxData) {
-        var _i = 0;
+        var _i = -1;
         var length = this.oldIndexs.length;
         for (var i = 0; i < length; i++) {
-          if (this.ajaxData.index == this.oldIndexs[i]) {
+          if (this.ajaxData.index.x == this.oldIndexs[i].x && this.ajaxData.index.y == this.oldIndexs[i].y) {
             _i = i;
           }
         }
-        this.removeData(_i);
+        if (_i != -1) this.removeData(_i);
 
         //abortが走るとajaxErrorが発行されてしまい、
         //ajaxDataがnullになってしまうので、後でabortする
@@ -715,7 +719,6 @@ var Map = function () {
       }
 
       this.allPopupLength += length;
-      console.log("add!:" + key);
     }
 
     //ポップアップを作成
@@ -786,7 +789,6 @@ var Map = function () {
       if (allDeleteFlag) {
         for (var key in this.popups) {
           this.removeBoundsPopup(key);
-          console.log(key + ":delete!");
         }
       } else {
         var key = x + ',' + y;
@@ -875,6 +877,36 @@ var Map = function () {
       return popup;
     }
   }, {
+    key: 'checkGps',
+    value: function checkGps() {
+
+      navigator.geolocation.getCurrentPosition(function (pos) {
+
+        var latLng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+        console.log(latLng);
+
+        if (this.userMaker) {
+
+          this.userMaker.setLatLng(latLng);
+        } else {
+          //初回アクセス
+
+          this.map.setZoomAround(latLng, 13);
+          this.userMaker = L.marker([latLng.lat, latLng.lng]).addTo(this.map);
+        }
+      }.bind(this), function (error) {
+
+        console.log(error);
+        if (error.code == 1) {
+          alert("位置情報の利用が許可されていません");
+        }
+
+        clearInterval(this.gpsIntervalId);
+      }.bind(this), {
+        enableHighAccuracy: true
+      });
+    }
+  }, {
     key: 'resize',
     value: function resize() {
 
@@ -884,6 +916,8 @@ var Map = function () {
       this.halfHeight = this.height * 0.5;
 
       this.latLngDist = this.getLatLngDist();
+
+      this.allDelete();
     }
   }]);
 
@@ -911,12 +945,17 @@ var Modal = function () {
     this.inner = this.element.getElementsByClassName('inner')[0];
     this.closeBtn = document.querySelector(expr + ' .close_btn');
     this.closeBtn.addEventListener('click', this.hide.bind(this));
+
+    this.htmlElement = document.getElementsByTagName('html')[0];
+
     this.hide();
   }
 
   _createClass(Modal, [{
     key: 'show',
     value: function show() {
+
+      this.htmlElement.style.overflowY = 'hidden';
 
       this.element.style.display = 'block';
       setTimeout(function () {
@@ -926,6 +965,8 @@ var Modal = function () {
   }, {
     key: 'hide',
     value: function hide() {
+
+      this.htmlElement.style.overflowY = 'auto';
 
       this.inner.style.transform = 'translateX(-100%)';
       setTimeout(function () {
@@ -1521,8 +1562,8 @@ module.exports = {
 
 	ua: null,
 
-	apiHeadUrl: 'http://localhost:3000'
-	//apiHeadUrl : 'http://160.16.62.37:8080',
+	//apiHeadUrl : 'http://localhost:3000',
+	apiHeadUrl: 'http://160.16.62.37:8080'
 
 };
 

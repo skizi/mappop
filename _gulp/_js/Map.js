@@ -6,8 +6,8 @@ export default class Map{
 
   constructor(){
 
-    this.zoom = 9;
-    this.debugFlag = true;
+    this.zoom = 13;
+    this.debugFlag = false;
 
   	this.element = document.querySelector( '.map_container .map' );
   	this.btn = document.querySelector( '.map_container .btn0' );
@@ -66,6 +66,11 @@ export default class Map{
 
     window.onload = this.checkNewQuestions.bind( this );
 
+
+    //ユーザーの現在地を取得
+    this.checkGps();
+    this.gpsIntervalId = setInterval( this.checkGps.bind( this ), 5000 );
+
   }
 
 
@@ -79,7 +84,6 @@ export default class Map{
   mapZoomStart(){
 
     this.allDelete();
-    this.oldIndexs = [];
 
   }
 
@@ -88,6 +92,7 @@ export default class Map{
 
     var length = this.oldIndexs.length;
     for( var i = length-1; i > -1; i-- ) this.removeData( i );
+    this.oldIndexs = [];
 
   }
 
@@ -128,7 +133,9 @@ export default class Map{
       var old = this.oldIndexs[i];
       var distX = Math.abs( old.x - now.x );
       var distY = Math.abs( old.y - now.y );
-      if( distX + distY > 2 ) this.removeData( i );
+      if( distX + distY > 2 ){
+        this.removeData( i );
+      }
     }
 
   }
@@ -137,7 +144,6 @@ export default class Map{
   removeData( i ){
 
     var data = this.oldIndexs[i];
-    console.log( "remove!" + data.x + ',' + data.y );
     this.removePopups( data.x, data.y );
     if( this.debugFlag ) data.debugRect.remove();
     this.oldIndexs.splice( i, 1 );
@@ -228,14 +234,16 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
     //もし古いデータが残っていたら、ajaxキャンセル＆キャッシュされたデータを削除
     if( this.ajaxData ){
-      var _i = 0;
+      var _i = -1;
       var length = this.oldIndexs.length;
       for( var i = 0; i < length; i++ ){
-        if( this.ajaxData.index == this.oldIndexs[i] ){
+        if( this.ajaxData.index.x == this.oldIndexs[i].x &&
+            this.ajaxData.index.y == this.oldIndexs[i].y ){
           _i = i;
         }
       }
-      this.removeData( _i );
+      if( _i != -1 ) this.removeData( _i );
+      
 
       //abortが走るとajaxErrorが発行されてしまい、
       //ajaxDataがnullになってしまうので、後でabortする
@@ -347,7 +355,6 @@ var _maxLatLng = L.latLng( _y, _x+w );
   	}
 
     this.allPopupLength += length;
-    console.log( "add!:" + key );
 
   }
 
@@ -423,7 +430,6 @@ var _maxLatLng = L.latLng( _y, _x+w );
     if( allDeleteFlag ){
       for( var key in this.popups ){
         this.removeBoundsPopup( key );
-        console.log(key + ":delete!");
       }
     }else{
       var key = x + ',' + y;
@@ -519,6 +525,42 @@ var _maxLatLng = L.latLng( _y, _x+w );
   }
 
 
+  checkGps(){
+    
+    navigator.geolocation.getCurrentPosition(
+      function( pos ){
+
+        var latLng = L.latLng( pos.coords.latitude, pos.coords.longitude );
+        console.log( latLng );
+        
+        if( this.userMaker ){
+        
+          this.userMaker.setLatLng( latLng );
+        
+        }else{//初回アクセス
+
+          this.map.setZoomAround( latLng, 13 );
+          this.userMaker = L.marker([ latLng.lat, latLng.lng ]).addTo(this.map);
+        }
+      }.bind( this ),
+      function( error ){
+
+        console.log( error );
+        if( error.code == 1 ){
+          alert( "位置情報の利用が許可されていません" );
+        }
+
+        clearInterval( this.gpsIntervalId );
+
+      }.bind( this ),
+      {
+        enableHighAccuracy:true
+      }
+    );
+
+  }
+
+
   resize(){
     
     this.width = this.element.clientWidth;
@@ -527,6 +569,8 @@ var _maxLatLng = L.latLng( _y, _x+w );
     this.halfHeight = this.height * 0.5;
 
     this.latLngDist = this.getLatLngDist();
+
+    this.allDelete();
   
   }
 

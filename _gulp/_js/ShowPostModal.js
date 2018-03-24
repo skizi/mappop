@@ -24,6 +24,7 @@ export default class ShowPostModal extends Modal{
         this.answerBtn.addEventListener( 'click', this.answerBtnClickHandler.bind( this ) );
 
         this.loading = new Loading();
+   
 
     	this.hide();
 

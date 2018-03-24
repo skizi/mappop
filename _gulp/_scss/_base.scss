@@ -877,6 +877,7 @@ footer{
                     margin-bottom: 20px;
 
                     li{
+                        height:42px;
                         float:left;
                         margin-right: 10px;
 
@@ -890,6 +891,8 @@ footer{
                         a{
                             img{
                                 width: 40px;
+                                border-radius: 5px;
+                                box-shadow: 0px 2px #e5e5e5;
                             }
                         }
                     }

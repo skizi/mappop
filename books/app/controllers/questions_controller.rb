@@ -95,10 +95,12 @@ class QuestionsController < ApplicationController
     # render plain: cities[ '東京' ]
     # return
 
-    respond_to do |format|
-      format.html{ render :all }
-      format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
-    end
+    # respond_to do |format|
+    #   format.html{ render :all }
+    #   format.json{ render json: @questions.to_json(:include => [ :comments, :likes ] ), status: :ok }
+    # end
+
+    render plain: 'ranking refresh complete!'
   end
 
 
