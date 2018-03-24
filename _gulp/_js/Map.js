@@ -6,7 +6,8 @@ export default class Map{
 
   constructor(){
 
-    this.zoom = 12;
+    this.zoom = 9;
+    this.debugFlag = true;
 
   	this.element = document.querySelector( '.map_container .map' );
   	this.btn = document.querySelector( '.map_container .btn0' );
@@ -58,6 +59,7 @@ export default class Map{
     this.map.on( 'zoomend', this.mapZoomEnd.bind( this ) );
     // this.map.on( 'load', function(){
     // }.bind( this ) );
+    //L.marker([ _maxLatLng.lat, _maxLatLng.lng ]).addTo(this.map);
 
 
     L.Icon.Default.imagePath = './assets/map/leaflet/';
@@ -69,7 +71,6 @@ export default class Map{
 
   mapMoved(){
 
-    console.log( "checkNewQuestions..." );
     this.checkNewQuestions();
 
   }
@@ -77,8 +78,16 @@ export default class Map{
 
   mapZoomStart(){
 
+    this.allDelete();
     this.oldIndexs = [];
-    this.removePopups( 0, 0, true );
+
+  }
+
+
+  allDelete(){
+
+    var length = this.oldIndexs.length;
+    for( var i = length-1; i > -1; i-- ) this.removeData( i );
 
   }
 
@@ -89,13 +98,6 @@ export default class Map{
     console.log( "zoom:" + this.zoom );
     this.latLngDist = this.getLatLngDist();
 
-    var p = this.map.getPixelBounds();
-    var minLatLng = this.map.unproject( p.min );
-    L.marker([ minLatLng.lat, minLatLng.lng ]).addTo(this.map);
-
-    var maxLatLng = this.map.unproject( p.max );
-    L.marker([ maxLatLng.lat, maxLatLng.lng ]).addTo(this.map);
-
   }
 
 
@@ -105,11 +107,19 @@ export default class Map{
     var now = this.getSplitAreaId( c.lat, c.lng );
     var hasFlag = this.hasOldIndex( now );
     if( !hasFlag ){
+
       //通常popup取得
-      this.getQuestions( now.minLatLng, now.maxLatLng, this.jsonLoadComp.bind( this, now.x, now.y ) );
+      this.getQuestions( now, this.jsonLoadComp.bind( this, now.x, now.y ) );
+
+      var data = { x:now.x, y:now.y };
+      if( this.debugFlag ){
+        var c = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        var bounds = [[now.minLatLng.lat, now.minLatLng.lng], [now.maxLatLng.lat, now.maxLatLng.lng]];
+        data.debugRect = L.rectangle(bounds, {color: c, weight: 1}).addTo(this.map);
+      }
 
       //タイルindexキャッシュ
-      this.oldIndexs.push( { x:now.x, y:now.y } );
+      this.oldIndexs.push( data );
     }
     
     //２マスはなれたポップアップたちを削除
@@ -118,12 +128,19 @@ export default class Map{
       var old = this.oldIndexs[i];
       var distX = Math.abs( old.x - now.x );
       var distY = Math.abs( old.y - now.y );
-      if( distX + distY > 2 ){
-        console.log( "remove!" + old.x + ',' + old.y );
-        this.removePopups( old.x, old.y );
-        this.oldIndexs.splice( i, 1 );
-      }
+      if( distX + distY > 2 ) this.removeData( i );
     }
+
+  }
+
+
+  removeData( i ){
+
+    var data = this.oldIndexs[i];
+    console.log( "remove!" + data.x + ',' + data.y );
+    this.removePopups( data.x, data.y );
+    if( this.debugFlag ) data.debugRect.remove();
+    this.oldIndexs.splice( i, 1 );
 
   }
 
@@ -199,37 +216,55 @@ var _maxLatLng = L.latLng( _y, _x+w );
 // console.log( "maxLatLng----" );
 // console.log( _maxLatLng.lat, _maxLatLng.lng );
 
+
     return { x:x, y:y, minLatLng:_minLatLng, maxLatLng:_maxLatLng };
 
   }
 
 
-  getQuestions( min, max, callback ){
+  getQuestions( hitAreaData, callback ){
 
+    var index = { x:hitAreaData.x, y:hitAreaData.y };
+
+    //もし古いデータが残っていたら、ajaxキャンセル＆キャッシュされたデータを削除
+    if( this.ajaxData ){
+      var _i = 0;
+      var length = this.oldIndexs.length;
+      for( var i = 0; i < length; i++ ){
+        if( this.ajaxData.index == this.oldIndexs[i] ){
+          _i = i;
+        }
+      }
+      this.removeData( _i );
+
+      //abortが走るとajaxErrorが発行されてしまい、
+      //ajaxDataがnullになってしまうので、後でabortする
+      this.ajaxData.$.abort();
+    }
+
+    //ajaxリクエスト
     var data = {
-      min_lat:min.lat,
-      min_lng:min.lng,
-      max_lat:max.lat,
-      max_lng:max.lng,
+      min_lat:hitAreaData.minLatLng.lat,
+      min_lng:hitAreaData.minLatLng.lng,
+      max_lat:hitAreaData.maxLatLng.lat,
+      max_lng:hitAreaData.maxLatLng.lng,
       limit:20
     };
-
-    var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
-    if( this.nowAjax ) this.nowAjax.abort();
-    this.nowAjax = $.ajax({
+    var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';    
+    this.ajaxData = { index:index };
+    this.ajaxData.$ = $.ajax({
         url:url,
         type:'GET',
         data:data,
         success:function( _callback, result ){
-          this.nowAjax = null;
+          this.ajaxData = null;
           _callback( result );
         }.bind( this, callback ),
         error:function( _callback, result ){
-          this.nowAjax = null;
+          this.ajaxData = null;
           //_callback( result );
         }.bind( this, callback )
     });
-
 
   }
 
@@ -270,11 +305,11 @@ var _maxLatLng = L.latLng( _y, _x+w );
         dataType:'json',
         data:data,
         success:function( _callback, _cityName, result ){
-          this.nowAjax = null;
+          this.ajaxData = null;
           if( _callback ) _callback( result, _cityName );
         }.bind( this, callback, cityName ),
         error:function( _callback, result ){
-          this.nowAjax = null;
+          this.ajaxData = null;
           //_callback( result );
         }.bind( this, callback )
     });
@@ -436,21 +471,13 @@ var _maxLatLng = L.latLng( _y, _x+w );
   //画面サイズに合ったlat lngの幅・高さを取得
   getLatLngDist(){
 
-      //map上のpixel値を取得後・・・
       var p = this.map.getPixelBounds();
-      // p.min.x += this.halfWidth - this.searchRadius;
-      // p.min.y += this.halfHeight - 300;
-      // p.max.x = p.max.x - this.halfWidth + this.searchRadius;
-      // p.max.y = p.max.y - this.halfHeight + 300;
-
       var minLatLng = this.map.unproject( p.min );
       var maxLatLng = this.map.unproject( p.max );
-  console.log( "pixel h:" + ( p.max.y - p.min.y ) );
 
       var x = ( maxLatLng.lng - minLatLng.lng );
       var y = ( minLatLng.lat - maxLatLng.lat );
       var latLngDist = { x:x, y:y };
-      console.log( "h:" + x );
 
       return latLngDist;
 
