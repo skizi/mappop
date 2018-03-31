@@ -30,6 +30,8 @@ export default class NewPostModal extends Modal{
         this.photoDeleteBtn = document.querySelector( '.file_selector .photo .delete_btn' );
         this.photoDeleteBtn.addEventListener( 'click', this.photoDeleteBtnClickHandler.bind( this ) );
 
+        this.authenticity_token = document.getElementById( 'authenticity_token' ).value;
+
         this.hide();
 
     }
@@ -82,7 +84,7 @@ export default class NewPostModal extends Modal{
             return;
         }
 
-        var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
+        var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
         $.ajax({
             url:url,
             type:'GET',
@@ -119,6 +121,7 @@ export default class NewPostModal extends Modal{
         formData.append( 'country', result.address.country );
         formData.append( 'state', result.address.state );
         formData.append( 'city', result.address.city );
+        formData.append( 'authenticity_token', this.authenticity_token );
 
 
         var url = Util.apiHeadUrl + '/questions.json';

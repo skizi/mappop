@@ -410,12 +410,12 @@ var Map = function () {
 
     var latlng = [35.67848924554223, 139.76272863769532];
     this.map = L.map('leafletMap').setView(latlng, this.zoom);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
     //なぜかRetina対応タイルが存在しない
-    //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
+    //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
     {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+      attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
       minZoom: 3,
       maxZoom: 18
       //detectRetina:true
@@ -649,7 +649,7 @@ var Map = function () {
     getRankingData( limit, callback ){
         var c = this.map.getCenter();
       var z = this.map.getZoom();
-      var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
+      var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
       if( this.nowRankingAjax ) this.nowRankingAjax.abort();
       this.nowRankingAjax = $.ajax({
           url:url,
@@ -778,6 +778,7 @@ var Map = function () {
       parent.appendChild(img);
       img.onerror = function (_img) {
         _img.setAttribute('src', '/docs/user_icon/no_image.jpg');
+        _img.onerror = null;
       }.bind(this, img);
 
       return img;
@@ -1041,6 +1042,8 @@ var NewPostModal = function (_Modal) {
         _this.photoDeleteBtn = document.querySelector('.file_selector .photo .delete_btn');
         _this.photoDeleteBtn.addEventListener('click', _this.photoDeleteBtnClickHandler.bind(_this));
 
+        _this.authenticity_token = document.getElementById('authenticity_token').value;
+
         _this.hide();
 
         return _this;
@@ -1090,7 +1093,7 @@ var NewPostModal = function (_Modal) {
                 return;
             }
 
-            var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
+            var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + this.lat + '&lon=' + this.lng + '&zoom=' + this.zoom;
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -1126,6 +1129,7 @@ var NewPostModal = function (_Modal) {
             formData.append('country', result.address.country);
             formData.append('state', result.address.state);
             formData.append('city', result.address.city);
+            formData.append('authenticity_token', this.authenticity_token);
 
             var url = _Util2.default.apiHeadUrl + '/questions.json';
             $.ajax({
@@ -1338,6 +1342,8 @@ var ShowPostModal = function (_Modal) {
 
         _this.loading = new _Loading2.default();
 
+        _this.authenticity_token = document.getElementById('authenticity_token').value;
+
         _this.hide();
 
         return _this;
@@ -1353,7 +1359,8 @@ var ShowPostModal = function (_Modal) {
             var url = _Util2.default.apiHeadUrl + '/likes/create/' + this.questionId + '.json';
             var data = {
                 question_id: this.questionId,
-                user_id: app.user_id
+                user_id: app.user_id,
+                authenticity_token: this.authenticity_token
             };
             $.ajax({
                 url: url,
@@ -1389,7 +1396,8 @@ var ShowPostModal = function (_Modal) {
             var data = {
                 content: comment,
                 question_id: question_id,
-                user_id: app.user_id
+                user_id: app.user_id,
+                authenticity_token: this.authenticity_token
             };
             $.ajax({
                 url: url,
@@ -1563,7 +1571,7 @@ module.exports = {
 	ua: null,
 
 	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: '//www.mappop.me'
 
 };
 

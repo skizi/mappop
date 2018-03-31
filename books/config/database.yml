@@ -21,9 +21,9 @@ test:
   database: db/test.sqlite3
 
 production:
-  adapter: mysql2
+  adapter: sqlite3
   encoding: utf8
-  vdatabase: mappop
+  database: mappop
   pool: 5
   username: root
   password: skizi3024

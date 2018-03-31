@@ -24,6 +24,8 @@ export default class ShowPostModal extends Modal{
         this.answerBtn.addEventListener( 'click', this.answerBtnClickHandler.bind( this ) );
 
         this.loading = new Loading();
+
+        this.authenticity_token = document.getElementById( 'authenticity_token' ).value;
    
 
     	this.hide();
@@ -37,7 +39,8 @@ export default class ShowPostModal extends Modal{
         var url = Util.apiHeadUrl + '/likes/create/' + this.questionId + '.json';
         var data = {
             question_id:this.questionId,
-            user_id:app.user_id
+            user_id:app.user_id,
+            authenticity_token:this.authenticity_token
         };
         $.ajax({
             url:url,
@@ -75,7 +78,8 @@ export default class ShowPostModal extends Modal{
         var data = {
             content:comment,
             question_id:question_id,
-            user_id:app.user_id
+            user_id:app.user_id,
+            authenticity_token : this.authenticity_token
         };
         $.ajax({
             url:url,

@@ -23,12 +23,12 @@ class Top{
     };
     this.map = L.map( 'leafletMap', opsion ).setView( latlng, 12 );
   	L.tileLayer(
-  		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  		'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
   		//なぜかRetina対応タイルが存在しない
-  		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
+  		//'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
   		{
-  			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+  			attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
         minZoom: 3,
   			maxZoom: 18
   			//detectRetina:true

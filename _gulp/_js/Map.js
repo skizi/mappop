@@ -30,12 +30,12 @@ export default class Map{
     var latlng = [ 35.67848924554223, 139.76272863769532];
     this.map = L.map( 'leafletMap' ).setView( latlng, this.zoom );
   	L.tileLayer(
-  		'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  		'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
   		//なぜかRetina対応タイルが存在しない
-  		//'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
+  		//'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png',
   		{
-  			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+  			attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
         minZoom: 3,
   			maxZoom: 18,
   			//detectRetina:true
@@ -281,7 +281,7 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
     var c = this.map.getCenter();
     var z = this.map.getZoom();
-    var url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
+    var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
     if( this.nowRankingAjax ) this.nowRankingAjax.abort();
     this.nowRankingAjax = $.ajax({
         url:url,
@@ -418,6 +418,7 @@ var _maxLatLng = L.latLng( _y, _x+w );
       parent.appendChild( img );
       img.onerror = function( _img ){
           _img.setAttribute( 'src', '/docs/user_icon/no_image.jpg' );
+          _img.onerror = null;
       }.bind( this, img );
 
       return img;

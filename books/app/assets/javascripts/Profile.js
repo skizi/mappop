@@ -60,6 +60,8 @@ var EditProfileModal = function (_Modal) {
 
         _this.loading = new _Loading2.default();
 
+        _this.authenticity_token = document.getElementById('authenticity_token').value;
+
         return _this;
     }
 
@@ -109,6 +111,7 @@ var EditProfileModal = function (_Modal) {
             name = name.split('.')[0] + '.jpg';
             formData.append('upfile', blob, name);
             formData.append('id', document.getElementById('user_id').value);
+            formData.append('authenticity_token', this.authenticity_token);
 
             var url = _Util2.default.apiHeadUrl + '/users/upload_process.json';
             $.ajax({
@@ -704,7 +707,7 @@ module.exports = {
 	ua: null,
 
 	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: 'http://160.16.62.37:8080'
+	apiHeadUrl: '//www.mappop.me'
 
 };
 

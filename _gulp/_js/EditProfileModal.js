@@ -33,6 +33,8 @@ export default class EditProfileModal extends Modal{
         this.topPhotoContainer = document.querySelector( '.photo_container .photo' );
 
         this.loading = new Loading();
+        
+        this.authenticity_token = document.getElementById( 'authenticity_token' ).value;
 
     }
 
@@ -96,6 +98,7 @@ export default class EditProfileModal extends Modal{
         name = name.split( '.' )[0] + '.jpg';
         formData.append( 'upfile', blob, name );
         formData.append( 'id', document.getElementById( 'user_id' ).value );
+        formData.append( 'authenticity_token', this.authenticity_token );
 
         var url = Util.apiHeadUrl + '/users/upload_process.json';
         $.ajax({

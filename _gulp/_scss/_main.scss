@@ -255,6 +255,24 @@ body.questions_index{
 
 	.leaflet-popup{
 		cursor:pointer;
+	    margin-bottom: 12px;
+
+		.leaflet-popup-content{
+		    margin: 6px 6px;
+		}
+
+		.leaflet-popup-content-wrapper{
+		    border-radius: 6px;
+		}
+
+		.leaflet-popup-tip-container{
+			margin-top: -1px;
+		}
+
+		.leaflet-popup-tip{
+			box-shadow:none;
+			margin:-13px auto 0;
+		}
 
 		&.ranker{
 			.leaflet-popup-content-wrapper,
