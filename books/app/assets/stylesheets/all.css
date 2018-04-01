@@ -593,9 +593,11 @@ p, li, dt, dd, h2, h3, h4, span { background: url("./spacer.gif") 0 0 no-repeat;
 .cf { zoom: 1; }
 
 /*  BASE STYLE  */
-body, html { width: auto; height: auto; overflow-x: hidden; }
+body, html { width: auto; height: auto; }
 
 body { color: #252525; font-family: microsoft yahei, Verdana "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", Sans-Serif; -webkit-text-size-adjust: 100%; word-wrap: break-word; -webkit-overflow-scrolling: touch; }
+
+.wrapper { overflow-x: hidden; }
 
 a { -webkit-tap-highlight-color: transparent; }
 a:link { color: #252525; }
@@ -605,7 +607,7 @@ a:active { color: #252525; }
 
 input[type="text"]:focus { outline: 0; border-color: none; }
 
-input[type="text"], input[type="password"], input[type="email"], textarea { width: 210px; min-width: 210px; max-width: 210px; height: 40px; line-height: 40px; font-size: 16px; padding-left: 5px; border-radius: 5px; float: right; }
+input[type="text"], input[type="password"], input[type="email"], textarea { width: 210px; min-width: 210px; max-width: 210px; height: 40px; line-height: 40px; font-size: 16px; padding-left: 5px; border-radius: 5px; float: right; border-color: #ddd; }
 
 input[type="checkbox"] { -webkit-appearance: none; position: relative; margin-right: 5px; border-radius: 8px; border: 1px solid #4c4c4c; -webkit-box-sizing: border-box; width: 28px; height: 28px; background: #fff; }
 
@@ -652,7 +654,8 @@ label { height: 46px; line-height: 46px; display: inline-block; color: #848484; 
 .twitter_btn:link, .twitter_btn:visited { color: #fff; }
 .twitter_btn:hover { opacity: 0.8; }
 
-@media screen and (min-width: 376px) { .btn0 { cursor: pointer; }
+@media screen and (min-width: 376px) { body { min-width: 680px; }
+  .btn0 { cursor: pointer; }
   .btn0:hover { box-shadow: none; transform: translate(7px, 7px); } }
 .btn1 { text-align: center; }
 .btn1 a { line-height: 110%; padding: 0 2px; display: inline-block; border-bottom: 1px solid #f1831b; font-size: 15px; color: #f1831b; text-decoration: none; }
@@ -1332,7 +1335,7 @@ body.home_index .howto div.steps div.step.step2 img { width: 53px; margin: 10px 
 body.home_index .howto div.steps div.step.step3 img { width: 110px; }
 body.home_index .howto div.steps div.step h3 { line-height: 110%; }
 body.home_index .howto div.steps div.step h3 span { color: #737373; font-size: 12px; border-bottom: 1px dashed #ebb314; }
-body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-size: 15px; letter-spacing: 0.5px; }
+body.home_index .howto p.about_text { line-height: 220%; margin: 0 20px; font-size: 15px; letter-spacing: 0.5px; }
 
 @media screen and (min-width: 376px) { body.home_index .top_content { height: 300px; }
   body.home_index .top_content #leafletMap { height: 300px; }
@@ -1345,7 +1348,7 @@ body.home_index .howto p.about_text { line-height: 180%; margin: 0 20px; font-si
   body.home_index .howto div.steps div.step.step1 h3 span, body.home_index .howto div.steps div.step.step2 h3 span, body.home_index .howto div.steps div.step.step3 h3 span { font-size: 14px; }
   body.home_index .howto div.steps div.step.step1 { margin-right: 100px; }
   body.home_index .howto div.steps div.step.step3 { margin: 0; }
-  body.home_index .howto p.about_text { width: 640px; margin: 0 auto 70px auto; line-height: 200%; letter-spacing: 2px; } }
+  body.home_index .howto p.about_text { width: 640px; margin: 0 auto 70px auto; line-height: 240%; letter-spacing: 2px; } }
 .signup_container, .login_container { width: 325px; margin: 0 auto; }
 .signup_container form div, .login_container form div { overflow: hidden; *zoom: 1; }
 .signup_container form textarea, .login_container form textarea { height: 100px; }

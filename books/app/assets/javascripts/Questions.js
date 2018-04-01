@@ -490,6 +490,7 @@ var Map = function () {
 
         //通常popup取得
         this.getQuestions(now, this.jsonLoadComp.bind(this, now.x, now.y));
+        this.getFlickr(now, this.jsonLoadComp.bind(this, now.x, now.y));
 
         var data = { x: now.x, y: now.y };
         if (this.debugFlag) {
@@ -688,6 +689,28 @@ var Map = function () {
       }
     */
 
+  }, {
+    key: 'getFlickr',
+    value: function getFlickr(hitAreaData, callback) {
+
+      var api_key = '2415b2459cc8d93907e16450ba24a24c';
+      var bbox = hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat + ',' + hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat;
+      var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key + '&sort=date-posted-desc&bbox=' + bbox + '&has_geo=1&geo_context=1&extras=date_upload&format=json&nojsoncallback=1&api_sig=eb82551efa0fe787a9511915286f4483';
+      //this.ajaxData = { index:index };
+      /*this.ajaxData.$ =*/$.ajax({
+        url: url,
+        type: 'GET',
+        data: {},
+        success: function (_callback, result) {
+          this.ajaxData = null;
+          _callback(result);
+        }.bind(this, callback),
+        error: function (_callback, result) {
+          this.ajaxData = null;
+          //_callback( result );
+        }.bind(this, callback)
+      });
+    }
   }, {
     key: 'jsonLoadComp',
     value: function jsonLoadComp(x, y, results) {
