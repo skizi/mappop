@@ -448,6 +448,8 @@ var Map = function () {
     //ユーザーの現在地を取得
     this.checkGps();
     this.gpsIntervalId = setInterval(this.checkGps.bind(this), 5000);
+
+    this.flickr_api_key = 'e43be56cbfe5eeada91756f2a08bd314';
   }
 
   _createClass(Map, [{
@@ -489,8 +491,8 @@ var Map = function () {
       if (!hasFlag) {
 
         //通常popup取得
-        this.getQuestions(now, this.jsonLoadComp.bind(this, now.x, now.y));
-        this.getFlickr(now, this.jsonLoadComp.bind(this, now.x, now.y));
+        this.getData(now, this.jsonLoadComp.bind(this, now.x, now.y), true);
+        this.getData(now, this.flickrLoadComp.bind(this, now.x, now.y));
 
         var data = { x: now.x, y: now.y };
         if (this.debugFlag) {
@@ -600,17 +602,64 @@ var Map = function () {
       return { x: x, y: y, minLatLng: _minLatLng, maxLatLng: _maxLatLng };
     }
   }, {
-    key: 'getQuestions',
-    value: function getQuestions(hitAreaData, callback) {
+    key: 'getData',
+    value: function getData(hitAreaData, callback, questionFlag) {
 
       var index = { x: hitAreaData.x, y: hitAreaData.y };
 
-      //もし古いデータが残っていたら、ajaxキャンセル＆キャッシュされたデータを削除
-      if (this.ajaxData) {
+      if (questionFlag) {
+
+        var data = {
+          min_lat: hitAreaData.minLatLng.lat,
+          min_lng: hitAreaData.minLatLng.lng,
+          max_lat: hitAreaData.maxLatLng.lat,
+          max_lng: hitAreaData.maxLatLng.lng,
+          limit: 20
+        };
+        var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
+        this.checkAbort(this.ajaxData);
+      } else {
+
+        var bbox = hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat + ',' + hitAreaData.maxLatLng.lng + ',' + hitAreaData.minLatLng.lat;
+        var limit = 20;
+        var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + this.flickr_api_key + '&sort=date-posted-desc&bbox=' + bbox + '&has_geo=1&geo_context=1&extras=date_upload&format=json&nojsoncallback=1&per_page=' + limit;
+        this.checkAbort(this.flickrAjaxData);
+      }
+
+      //ajaxリクエスト
+      var ajaxData = { index: index };
+      ajaxData.$ = $.ajax({
+        url: url,
+        type: 'GET',
+        data: data,
+        success: function (_callback, _ajaxData, result) {
+          _ajaxData = null;
+          _callback(result);
+        }.bind(this, callback, ajaxData),
+        error: function (_callback, _ajaxData, result) {
+          _ajaxData = null;
+          //_callback( result );
+        }.bind(this, callback, ajaxData)
+      });
+
+      if (questionFlag) {
+        this.ajaxData = ajaxData;
+      } else {
+        this.flickrAjaxData = ajaxData;
+      }
+    }
+
+    //もし古いデータが残っていたら、ajaxキャンセル＆キャッシュされたデータを削除
+
+  }, {
+    key: 'checkAbort',
+    value: function checkAbort(ajaxData) {
+
+      if (ajaxData) {
         var _i = -1;
         var length = this.oldIndexs.length;
         for (var i = 0; i < length; i++) {
-          if (this.ajaxData.index.x == this.oldIndexs[i].x && this.ajaxData.index.y == this.oldIndexs[i].y) {
+          if (ajaxData.index.x == this.oldIndexs[i].x && ajaxData.index.y == this.oldIndexs[i].y) {
             _i = i;
           }
         }
@@ -618,32 +667,8 @@ var Map = function () {
 
         //abortが走るとajaxErrorが発行されてしまい、
         //ajaxDataがnullになってしまうので、後でabortする
-        this.ajaxData.$.abort();
+        ajaxData.$.abort();
       }
-
-      //ajaxリクエスト
-      var data = {
-        min_lat: hitAreaData.minLatLng.lat,
-        min_lng: hitAreaData.minLatLng.lng,
-        max_lat: hitAreaData.maxLatLng.lat,
-        max_lng: hitAreaData.maxLatLng.lng,
-        limit: 20
-      };
-      var url = _Util2.default.apiHeadUrl + '/questions/search_lat_lng.json';
-      this.ajaxData = { index: index };
-      this.ajaxData.$ = $.ajax({
-        url: url,
-        type: 'GET',
-        data: data,
-        success: function (_callback, result) {
-          this.ajaxData = null;
-          _callback(result);
-        }.bind(this, callback),
-        error: function (_callback, result) {
-          this.ajaxData = null;
-          //_callback( result );
-        }.bind(this, callback)
-      });
     }
 
     /*
@@ -690,26 +715,36 @@ var Map = function () {
     */
 
   }, {
-    key: 'getFlickr',
-    value: function getFlickr(hitAreaData, callback) {
+    key: 'flickrLoadComp',
+    value: function flickrLoadComp(x, y, results) {
 
-      var api_key = '2415b2459cc8d93907e16450ba24a24c';
-      var bbox = hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat + ',' + hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat;
-      var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key + '&sort=date-posted-desc&bbox=' + bbox + '&has_geo=1&geo_context=1&extras=date_upload&format=json&nojsoncallback=1&api_sig=eb82551efa0fe787a9511915286f4483';
-      //this.ajaxData = { index:index };
-      /*this.ajaxData.$ =*/$.ajax({
-        url: url,
-        type: 'GET',
-        data: {},
-        success: function (_callback, result) {
-          this.ajaxData = null;
-          _callback(result);
-        }.bind(this, callback),
-        error: function (_callback, result) {
-          this.ajaxData = null;
-          //_callback( result );
-        }.bind(this, callback)
-      });
+      $.each(results.photos.photo, function (i, photo) {
+
+        var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&format=json&nojsoncallback=1&api_key=' + this.flickr_api_key + '&photo_id=' + photo.id;
+        $.ajax({
+          url: url,
+          type: 'GET',
+          dataType: 'json',
+          data: {},
+          success: function (_x, _y, _photo, result) {
+
+            var src = "http://farm" + _photo.farm + ".static.flickr.com/" + _photo.server + "/" + _photo.id + "_" + _photo.secret + "_m.jpg";
+            //$("<img/>").attr("src", src).appendTo( document.body );
+            var obj = result.photo.location;
+            var data = {
+              lat: obj.latitude,
+              lng: obj.longitude,
+              id: obj.id,
+              src: src,
+              flickrFlag: true
+            };
+            console.log(src);
+            this.jsonLoadComp(_x, _y, [data]);
+          }.bind(this, x, y, photo),
+          error: function (result) {}.bind(this)
+        });
+        //if ( i == 3 ) return false;
+      }.bind(this));
     }
   }, {
     key: 'jsonLoadComp',
@@ -721,19 +756,6 @@ var Map = function () {
       var length = results.length;
       for (var i = 0; i < length; i++) {
         var data = results[i];
-
-        //google map
-        // var content = document.createElement("div");
-        // content.className = 'popup';
-        // content.innerHTML = data.title;
-        // var popup = new google.maps.InfoWindow({
-        // 	content: content,
-        // 	position: { lat:Number( data.lat ), lng:Number( data.lng ) },
-        // 	map: this.map,
-        // 	disableAutoPan: false
-        // });
-        //google.maps.event.addDomListener( content,'click', this.popupClickHandler.bind( this, i ));
-
 
         //leaflet
         var popup = this.createPopup(data, i);
@@ -755,18 +777,30 @@ var Map = function () {
 
       var popup = L.popup({ autoPan: false, keepInView: true, autoClose: false, closeOnEscapeKey: false, closeOnClick: false }).setLatLng([Number(data.lat), Number(data.lng)]).setContent(content).openOn(this.map);
 
-      this.addUserIcon(data.user_id, content);
-      var span = document.createElement('span');
-      span.innerHTML = data.title;
-      content.appendChild(span);
+      var element = popup.getElement();
+
+      //flickrだったら
+      if (data.flickrFlag) {
+
+        var img = document.createElement('img');
+        img.setAttribute('src', data.src);
+        content.appendChild(img);
+        element.setAttribute('class', element.className + ' flickr');
+      } else {
+        //questionだったら
+
+        this.addUserIcon(data.user_id, content);
+        var span = document.createElement('span');
+        span.innerHTML = data.title;
+        content.appendChild(span);
+
+        var rank = this.getRank(data);
+        element.setAttribute('class', element.className + rank);
+      }
 
       // var draggable = new L.Draggable(popup._container, popup._wrapper);
       // draggable.enable();
 
-      var rank = this.getRank(data);
-
-      var element = popup.getElement();
-      element.setAttribute('class', element.className + rank);
       L.DomEvent.on(element, 'click', this.popupClickHandler.bind(this, data));
 
       return popup;

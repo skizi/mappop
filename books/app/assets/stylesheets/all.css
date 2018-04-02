@@ -1386,6 +1386,9 @@ body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content-wrapper:aft
 body.questions_index .leaflet-popup.cityRank3 .leaflet-popup-content, body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content, body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content { padding-top: 40px; }
 body.questions_index .leaflet-popup.countryRank3 .leaflet-popup-content-wrapper:after { content: '都道府県3位'; }
 body.questions_index .leaflet-popup.stateRank3 .leaflet-popup-content-wrapper:after { content: '世界3位'; }
+body.questions_index .leaflet-popup.flickr .leaflet-popup-content { width: 100px !important; }
+body.questions_index .leaflet-popup.flickr .popup { width: 100px; }
+body.questions_index .leaflet-popup.flickr .popup img { width: 100px; height: auto; }
 body.questions_index .popup { overflow: hidden; *zoom: 1; width: 150px; min-height: 28px; line-height: 28px; font-size: 13px; font-weight: bold; color: #707070; }
 body.questions_index .popup img { height: 28px; margin-right: 10px; float: left; border-radius: 4px; }
 

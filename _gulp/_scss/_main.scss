@@ -383,6 +383,20 @@ body.questions_index{
 		&.stateRank3 .leaflet-popup-content-wrapper:after{
 			content: '世界3位';
 		}
+
+
+		&.flickr{
+			.leaflet-popup-content{
+				width: 100px !important;
+			}
+			.popup{
+			    width: 100px;
+				img{
+					width:100px;
+					height:auto;
+				}
+			}
+		}
 	}
 
 	.popup{
