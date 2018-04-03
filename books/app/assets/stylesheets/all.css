@@ -754,6 +754,9 @@ footer p.copy a { text-decoration: none; font-size: 10px; }
 .modal.show .inner div.bottom ul.comments li.no_comment p { margin-left: 0; }
 .modal.show .inner div.bottom textarea { width: 100%; min-width: 100%; max-width: 100%; height: 100px; border-radius: 5px; margin-bottom: 5px; padding: 0 5px; font-size: 15px; line-height: 20px; float: none; box-sizing: border-box; }
 .modal.show .inner div.bottom .answer_btn { width: 100%; }
+.modal.show.flickr .inner div.top div.photo { max-height: 100%; }
+.modal.show.flickr .inner div.top p.content { display: none; }
+.modal.show.flickr .inner div.bottom { display: none; }
 .modal.edit_profile .inner div.container { padding: 20px 21px; position: relative; }
 .modal.edit_profile .inner div.container div.change_photo { transition-duration: 0.3s; transition-property: opacity; }
 .modal.edit_profile .inner div.container div.change_photo div.photo_circle { width: 180px; height: 180px; margin: 0 auto 35px; display: block; border-radius: 200px; border: 3px solid #fff; background-size: cover; background-repeat: no-repeat; box-shadow: 0px 0px 2px 2px rgba(1, 1, 1, 0.1); }

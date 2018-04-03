@@ -1000,6 +1000,28 @@ footer{
             }
 
         }
+
+
+        &.flickr{
+            .inner{
+                div.top{
+
+                    div.photo{
+                        max-height: 100%;
+                    }
+
+                    p.content{
+                        display: none;
+                    }
+
+                }
+
+                div.bottom{
+                    display: none;
+                }
+            }
+
+        }
     }
 
 

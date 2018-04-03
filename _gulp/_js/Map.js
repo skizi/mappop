@@ -8,6 +8,7 @@ export default class Map{
 
     this.zoom = 13;
     this.debugFlag = false;
+    this.ajaxData = {};
 
   	this.element = document.querySelector( '.map_container .map' );
   	this.btn = document.querySelector( '.map_container .btn0' );
@@ -69,7 +70,7 @@ export default class Map{
 
     //ユーザーの現在地を取得
     this.checkGps();
-    this.gpsIntervalId = setInterval( this.checkGps.bind( this ), 5000 );
+    //this.gpsIntervalId = setInterval( this.checkGps.bind( this ), 5000 );
 
 
     this.flickr_api_key = 'e43be56cbfe5eeada91756f2a08bd314';
@@ -117,8 +118,9 @@ export default class Map{
     if( !hasFlag ){
 
       //通常popup取得
-      this.getData( now, this.jsonLoadComp.bind( this, now.x, now.y ), true );
-      this.getData( now, this.flickrLoadComp.bind( this, now.x, now.y ) );
+      this.getData( now, this.jsonLoadComp.bind( this, now.x, now.y ), 'question' );
+      this.getData( now, this.flickrLoadComp.bind( this, now.x, now.y ), 'flickr' );
+      this.getData( now, this.chiikinogennkiLoadComp.bind( this, now.x, now.y ), 'chiikinogennki' );
 
       var data = { x:now.x, y:now.y };
       if( this.debugFlag ){
@@ -232,53 +234,54 @@ var _maxLatLng = L.latLng( _y, _x+w );
   }
 
 
-  getData( hitAreaData, callback, questionFlag ){
+  getData( hitAreaData, callback, type ){
 
     var index = { x:hitAreaData.x, y:hitAreaData.y };
 
-    if( questionFlag ){
+    switch( type ){
 
-      var data = {
-        min_lat:hitAreaData.minLatLng.lat,
-        min_lng:hitAreaData.minLatLng.lng,
-        max_lat:hitAreaData.maxLatLng.lat,
-        max_lng:hitAreaData.maxLatLng.lng,
-        limit:20
-      };
-      var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
-      this.checkAbort( this.ajaxData );
+      case 'question':
+        var data = {
+          min_lat:hitAreaData.minLatLng.lat,
+          min_lng:hitAreaData.minLatLng.lng,
+          max_lat:hitAreaData.maxLatLng.lat,
+          max_lng:hitAreaData.maxLatLng.lng,
+          limit:20
+        };
+        var url = Util.apiHeadUrl + '/questions/search_lat_lng.json';
+        break;
 
-    }else{
+      case 'flickr':
+        var bbox = hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat + ',' + hitAreaData.maxLatLng.lng + ',' + hitAreaData.minLatLng.lat;
+        var limit = 10;
+        var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + this.flickr_api_key + '&sort=interestingness-desc&bbox=' + bbox + '&has_geo=1&geo_context=1&extras=date_upload&format=json&nojsoncallback=1&per_page=' + limit;
+        break;
 
-      var bbox = hitAreaData.minLatLng.lng + ',' + hitAreaData.maxLatLng.lat + ',' + hitAreaData.maxLatLng.lng + ',' + hitAreaData.minLatLng.lat;
-      var limit = 20;
-      var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + this.flickr_api_key + '&sort=date-posted-desc&bbox=' + bbox + '&has_geo=1&geo_context=1&extras=date_upload&format=json&nojsoncallback=1&per_page=' + limit;
-      this.checkAbort( this.flickrAjaxData );
-
+      case 'chiikinogennki':
+        var limit = 10;
+        var coordinates = hitAreaData.minLatLng.lng + ',' + hitAreaData.minLatLng.lat + ',' + 5000;
+        var url = 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/%E7%BE%8E%E8%A1%93%E9%A4%A8/json?limit=' + limit + '&coordinates=' + coordinates;
+        break;
     }
 
 
     //ajaxリクエスト
-    var ajaxData = { index:index };
-    ajaxData.$ = $.ajax({
+    this.checkAbort( this.ajaxData[ type ] );
+    this.ajaxData[ type ] = { index:index };
+    this.ajaxData[ type ].ajax = $.ajax({
         url:url,
+        crossDomain: true,
         type:'GET',
         data:data,
-        success:function( _callback, _ajaxData, result ){
-          _ajaxData = null;
+        success:function( _callback, _type, result ){
+          this.ajaxData[ _type ] = null;
           _callback( result );
-        }.bind( this, callback, ajaxData ),
-        error:function( _callback, _ajaxData, result ){
-          _ajaxData = null;
+        }.bind( this, callback, type ),
+        error:function( _callback, _type, result ){
+          this.ajaxData[ _type ] = null;
           //_callback( result );
-        }.bind( this, callback, ajaxData )
+        }.bind( this, callback, type )
     });
-
-    if( questionFlag ){
-      this.ajaxData = ajaxData;
-    }else{
-      this.flickrAjaxData = ajaxData;
-    }
 
   }
 
@@ -357,40 +360,75 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
   flickrLoadComp( x, y, results ){
 
-    $.each( results.photos.photo, function(i,photo){
+    var length = results.photos.photo.length;
+    for( var i = 0; i < length; i++ ){
 
-        var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&format=json&nojsoncallback=1&api_key=' + this.flickr_api_key + '&photo_id=' + photo.id;
-        $.ajax({
-          url:url,
-          type:'GET',
-          dataType:'json',
-          data:{},
-          success:function( _x, _y, _photo, result ){
+      var photo = results.photos.photo[i];
+      var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&format=json&nojsoncallback=1&api_key=' + this.flickr_api_key + '&photo_id=' + photo.id;
+      $.ajax({
+        url:url,
+        type:'GET',
+        dataType:'json',
+        data:{},
+        success:function( _x, _y, _photo, result ){
 
-            var src = "http://farm"+ _photo.farm +".static.flickr.com/"+ _photo.server +"/"+ _photo.id +"_"+ _photo.secret +"_m.jpg";
-            //$("<img/>").attr("src", src).appendTo( document.body );
-            var obj = result.photo.location;
-            var data = {
-              lat:obj.latitude,
-              lng:obj.longitude,
-              id:obj.id,
-              src:src,
-              flickrFlag:true
-            };
-            console.log( src );
-            this.jsonLoadComp( _x, _y, [ data ] );
-            
-          }.bind( this, x, y, photo ),
-          error:function( result ){
-
-
-          }.bind( this )
+          var src = "https://farm"+ _photo.farm +".static.flickr.com/"+ _photo.server +"/"+ _photo.id +"_"+ _photo.secret;
+          var thumbnailSrc = src +"_m.jpg";
+          src = src +".jpg";
+          var obj = result.photo.location;
+          var title = obj.country._content + ' ' + obj.locality._content + ' '  + obj.neighbourhood._content;
+          var data = {
+            lat:obj.latitude,
+            lng:obj.longitude,
+            photo:src,
+            thumbnailSrc:thumbnailSrc,
+            id:obj.id,
+            src:src,
+            title:title,
+            type:'flickr'
+          };
+          this.jsonLoadComp( _x, _y, [ data ] );
+          
+        }.bind( this, x, y, photo ),
+        error:function( result ){
+        }.bind( this )
       });
         //if ( i == 3 ) return false;
-    }.bind( this ) );
+    }
 
   }
 
+
+  chiikinogennkiLoadComp( x, y, results ){
+
+    var _results = [];
+    var length = results.tourspots.length;
+    for( var i = 0; i < length; i++ ){
+      
+      var data = results.tourspots[i];
+      var title = '';
+      var photo = '';
+      if( data.views.length ){
+        title = data.views[0].name.written;
+        photo = data.place.url + data.views[0].fid;
+      }
+
+      var content = '';
+      if( data.descs.length ){
+        content = data.descs[0].body;
+      }
+
+      _results[i] = {
+        title:title,
+        content:content,
+        photo:photo,
+        lat:data.place.coordinates.latitude,
+        lng:data.place.coordinates.longitude,
+        type:'chiikinogennki'
+      };
+    }
+
+  }
 
 
   jsonLoadComp( x, y, results ){
@@ -429,10 +467,10 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
 
     //flickrだったら
-    if( data.flickrFlag ){
+    if( data.type == 'flickr' ){
 
       var img = document.createElement( 'img' );
-      img.setAttribute( 'src', data.src );
+      img.setAttribute( 'src', data.thumbnailSrc );
       content.appendChild( img );
       element.setAttribute( 'class', element.className + ' flickr' );
 
