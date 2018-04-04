@@ -630,9 +630,13 @@ var Map = function () {
           break;
 
         case 'chiikinogennki':
-          var limit = 10;
-          var coordinates = hitAreaData.minLatLng.lng + ',' + hitAreaData.minLatLng.lat + ',' + 5000;
-          var url = 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/%E7%BE%8E%E8%A1%93%E9%A4%A8/json?limit=' + limit + '&coordinates=' + coordinates;
+          var data = {
+            limit: 10,
+            lng: hitAreaData.minLatLng.lng,
+            lat: hitAreaData.minLatLng.lat,
+            dist: 5000
+          };
+          var url = _Util2.default.apiHeadUrl + '/questions/get_k_cloud';
           break;
       }
 
@@ -673,7 +677,7 @@ var Map = function () {
 
         //abortが走るとajaxErrorが発行されてしまい、
         //ajaxDataがnullになってしまうので、後でabortする
-        ajaxData.$.abort();
+        ajaxData.ajax.abort();
       }
     }
 
@@ -740,7 +744,9 @@ var Map = function () {
             var thumbnailSrc = src + "_m.jpg";
             src = src + ".jpg";
             var obj = result.photo.location;
-            var title = obj.country._content + ' ' + obj.locality._content + ' ' + obj.neighbourhood._content;
+            var title = obj.country._content;
+            if (obj.locality) title += ' ' + obj.locality._content;
+            if (obj.neighbourhood) title += ' ' + obj.neighbourhood._content;
             var data = {
               lat: obj.latitude,
               lng: obj.longitude,
@@ -769,25 +775,35 @@ var Map = function () {
         var data = results.tourspots[i];
         var title = '';
         var photo = '';
-        if (data.views.length) {
+        if (data.views) {
           title = data.views[0].name.written;
           photo = data.place.url + data.views[0].fid;
         }
 
         var content = '';
-        if (data.descs.length) {
+        if (data.descs) {
           content = data.descs[0].body;
         }
 
-        _results[i] = {
+        var lat = 0;
+        var lng = 0;
+        if (data.place.coordinates && data.place.coordinates.latitude) {
+          lat = data.place.coordinates.latitude;
+          lng = data.place.coordinates.longitude;
+        }
+
+        _results.push({
           title: title,
           content: content,
           photo: photo,
-          lat: data.place.coordinates.latitude,
-          lng: data.place.coordinates.longitude,
+          lat: lat,
+          lng: lng,
+          likes: [],
           type: 'chiikinogennki'
-        };
+        });
       }
+
+      this.jsonLoadComp(x, y, _results);
     }
   }, {
     key: 'jsonLoadComp',

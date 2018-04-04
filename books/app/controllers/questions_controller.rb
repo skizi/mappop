@@ -209,6 +209,63 @@ class QuestionsController < ApplicationController
   end
 
 
+  def get_k_cloud
+
+    limit = params['limit']
+    coordinates = params['lng'].to_s + ',' + params['lat'].to_s + ',' + params['dist'].to_s
+
+    # limit = '10'
+    # coordinates = '139.6917064,35.6894875,40000'
+    uri = URI.parse( 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/%E7%BE%8E%E8%A1%93%E9%A4%A8/json?limit=' + limit)# + '&coordinates=' + coordinates )
+    @query = uri.query
+
+
+    response = Net::HTTP.new( uri.host, uri.port ) 
+    response.use_ssl = true
+    response = response.start() do |http|
+      # 接続時に待つ最大秒数を設定
+      http.open_timeout = 5
+      # 読み込み一回でブロックして良い最大秒数を設定
+      http.read_timeout = 10
+      # ここでWebAPIを叩いている
+      # Net::HTTPResponseのインスタンスが返ってくる
+      http.get(uri.request_uri)
+    end
+
+
+    begin
+
+      case response
+      
+      when Net::HTTPSuccess
+        # responseのbody要素をJSON形式で解釈し、hashに変換
+        @result = JSON.parse(response.body)
+        render json: @result, status: :ok
+        return
+      
+      when Net::HTTPRedirection
+        @message = "Redirection: code=#{response.code} message=#{response.message}"
+      # その他エラー
+      else
+        @message = "HTTP ERROR: code=#{response.code} message=#{response.message}"
+      end
+
+    # エラー時処理
+    rescue IOError => e
+      @message = "e.message"
+    rescue TimeoutError => e
+      @message = "e.message"
+    rescue JSON::ParserError => e
+      @message = "e.message"
+    rescue => e
+      @message = "e.message"
+    end
+
+    render json: {status: :ng, code: 500, content: {message: @message }}
+
+  end
+
+
   def question_params
     params.require(:question).permit(:title, :content, :lat, :lng, :user_id, :photo, :country, :state, :city, :cityRank )
   end

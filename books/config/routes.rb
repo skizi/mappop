@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get 'questions' => 'questions#index'
   get 'questions/all'
+  get 'questions/get_k_cloud'
   get 'questions/search_lat_lng'
   get 'questions/get_ranking/:key' => 'questions#get_ranking'
   get 'questions/refresh_ranking'
