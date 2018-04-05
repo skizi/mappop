@@ -630,11 +630,15 @@ var Map = function () {
           break;
 
         case 'chiikinogennki':
+          var radDist = hitAreaData.minLatLng.lat - hitAreaData.maxLatLng.lat;
+          console.log("radDist:" + radDist);
+          var place = '東京都';
           var data = {
             limit: 10,
             lng: hitAreaData.minLatLng.lng,
-            lat: hitAreaData.minLatLng.lat,
-            dist: 5000
+            lat: hitAreaData.maxLatLng.lat,
+            dist: radDist * 111263.283, //１度の距離
+            place: place
           };
           var url = _Util2.default.apiHeadUrl + '/questions/get_k_cloud';
           break;
