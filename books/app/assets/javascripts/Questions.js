@@ -491,11 +491,20 @@ var Map = function () {
       var now = this.getSplitAreaId(c.lat, c.lng);
       var hasFlag = this.hasOldIndex(now);
       if (!hasFlag) {
-
-        //通常popup取得
-        this.getData(now, this.jsonLoadComp.bind(this, now.x, now.y), 'question');
-        this.getData(now, this.flickrLoadComp.bind(this, now.x, now.y), 'flickr');
-        this.getData(now, this.chiikinogennkiLoadComp.bind(this, now.x, now.y), 'chiikinogennki');
+        //地域名を取得してからポップアップ表示
+        if (this.reverseGeocodingAjax) this.reverseGeocodingAjax.abort();
+        this.reverseGeocodingAjax = this.reverseGeocoding(function (_now, r) {
+          this.reverseGeocodingAjax = null;
+          var place = r.address.state; // + ',';
+          if (r.address.city) {
+            //place += r.address.city;
+          } else if (r.address.county) {
+            //place += r.address.county;
+          }
+          this.getData(_now, this.jsonLoadComp.bind(this, _now.x, _now.y), 'question');
+          this.getData(_now, this.flickrLoadComp.bind(this, _now.x, _now.y), 'flickr');
+          this.getData(_now, this.chiikinogennkiLoadComp.bind(this, _now.x, _now.y), 'chiikinogennki', place);
+        }.bind(this, now));
 
         var data = { x: now.x, y: now.y };
         if (this.debugFlag) {
@@ -606,7 +615,7 @@ var Map = function () {
     }
   }, {
     key: 'getData',
-    value: function getData(hitAreaData, callback, type) {
+    value: function getData(hitAreaData, callback, type, place) {
 
       var index = { x: hitAreaData.x, y: hitAreaData.y };
 
@@ -631,14 +640,16 @@ var Map = function () {
 
         case 'chiikinogennki':
           var radDist = hitAreaData.minLatLng.lat - hitAreaData.maxLatLng.lat;
-          console.log("radDist:" + radDist);
-          var place = '東京都';
           var data = {
-            limit: 10,
-            lng: hitAreaData.minLatLng.lng,
-            lat: hitAreaData.maxLatLng.lat,
-            dist: radDist * 111263.283, //１度の距離
-            place: place
+            limit: 50,
+            // lng : hitAreaData.minLatLng.lng,
+            // lat : hitAreaData.maxLatLng.lat,
+            // dist : radDist * 111263.283,//１度の距離
+            place: place,
+            min_lat: hitAreaData.minLatLng.lat,
+            min_lng: hitAreaData.minLatLng.lng,
+            max_lat: hitAreaData.maxLatLng.lat,
+            max_lng: hitAreaData.maxLatLng.lng
           };
           var url = _Util2.default.apiHeadUrl + '/questions/get_k_cloud';
           break;
@@ -684,49 +695,54 @@ var Map = function () {
         ajaxData.ajax.abort();
       }
     }
+  }, {
+    key: 'reverseGeocoding',
+    value: function reverseGeocoding(callback) {
 
-    /*
-    getRankingData( limit, callback ){
-        var c = this.map.getCenter();
+      var c = this.map.getCenter();
       var z = this.map.getZoom();
       var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + c.lat + '&lon=' + c.lng + '&zoom=' + z;
-      if( this.nowRankingAjax ) this.nowRankingAjax.abort();
+      if (this.nowRankingAjax) this.nowRankingAjax.abort();
       this.nowRankingAjax = $.ajax({
-          url:url,
-          type:'GET',
-          success:function( _limit, _callback, result ){
-            this.getRankingDataStep2( _limit, _callback, result );
-          }.bind( this, limit, callback ),
-          error:function( result ){
-            console.log( result );
-          }.bind( this )
+        url: url,
+        type: 'GET',
+        success: function (_callback, result) {
+          _callback(result);
+        }.bind(this, callback),
+        error: function (result) {
+          console.log(result);
+        }.bind(this)
       });
-      }
+    }
+    /*
     
-    getRankingDataStep2( limit, callback, result ){
+      getRankingDataStep2( limit, callback, result ){
+    
         var cityName = result.address.city;
+    
         var data = {
-        //key:result.address.city,
-        limit:limit
-      };
-      var url = Util.apiHeadUrl + '/questions/get_ranking/' + cityName;
-      if( this.nowRankingAjax ) this.nowRankingAjax.abort();
-      this.nowRankingAjax = $.ajax({
-          url:url,
-          type:'GET',
-          dataType:'json',
-          data:data,
-          success:function( _callback, _cityName, result ){
-            this.ajaxData = null;
-            if( _callback ) _callback( result, _cityName );
-          }.bind( this, callback, cityName ),
-          error:function( _callback, result ){
-            this.ajaxData = null;
-            //_callback( result );
-          }.bind( this, callback )
-      });
+          //key:result.address.city,
+          limit:limit
+        };
+        var url = Util.apiHeadUrl + '/questions/get_ranking/' + cityName;
+        if( this.nowRankingAjax ) this.nowRankingAjax.abort();
+        this.nowRankingAjax = $.ajax({
+            url:url,
+            type:'GET',
+            dataType:'json',
+            data:data,
+            success:function( _callback, _cityName, result ){
+              this.ajaxData = null;
+              if( _callback ) _callback( result, _cityName );
+            }.bind( this, callback, cityName ),
+            error:function( _callback, result ){
+              this.ajaxData = null;
+              //_callback( result );
+            }.bind( this, callback )
+        });
+    
       }
-    */
+      */
 
   }, {
     key: 'flickrLoadComp',
@@ -779,8 +795,10 @@ var Map = function () {
         var data = results.tourspots[i];
         var title = '';
         var photo = '';
-        if (data.views) {
+        if (data.views && data.views[0].name) {
           title = data.views[0].name.written;
+        }
+        if (data.views && data.views[0].fid && data.place.url) {
           photo = data.place.url + data.views[0].fid;
         }
 
@@ -789,25 +807,28 @@ var Map = function () {
           content = data.descs[0].body;
         }
 
-        var lat = 0;
-        var lng = 0;
-        if (data.place.coordinates && data.place.coordinates.latitude) {
-          lat = data.place.coordinates.latitude;
-          lng = data.place.coordinates.longitude;
-        }
-
-        _results.push({
-          title: title,
-          content: content,
-          photo: photo,
-          lat: lat,
-          lng: lng,
-          likes: [],
-          type: 'chiikinogennki'
-        });
+        var lat = data.place.coordinates.latitude;
+        var lng = data.place.coordinates.longitude;
+        _results.push(this.generateData(title, content, photo, lat, lng));
       }
 
       this.jsonLoadComp(x, y, _results);
+    }
+  }, {
+    key: 'generateData',
+    value: function generateData(title, content, photo, lat, lng) {
+
+      var data = {
+        title: title,
+        content: content,
+        photo: photo,
+        lat: lat,
+        lng: lng,
+        likes: [],
+        type: 'chiikinogennki'
+      };
+
+      return data;
     }
   }, {
     key: 'jsonLoadComp',
@@ -1710,7 +1731,7 @@ module.exports = {
 	ua: null,
 
 	//apiHeadUrl : 'http://localhost:3000',
-	apiHeadUrl: '//www.mappop.me'
+	apiHeadUrl: 'https://www.mappop.me'
 
 };
 

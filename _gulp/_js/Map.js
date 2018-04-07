@@ -116,11 +116,20 @@ export default class Map{
     var now = this.getSplitAreaId( c.lat, c.lng );
     var hasFlag = this.hasOldIndex( now );
     if( !hasFlag ){
-
-      //通常popup取得
-      this.getData( now, this.jsonLoadComp.bind( this, now.x, now.y ), 'question' );
-      this.getData( now, this.flickrLoadComp.bind( this, now.x, now.y ), 'flickr' );
-      this.getData( now, this.chiikinogennkiLoadComp.bind( this, now.x, now.y ), 'chiikinogennki' );
+      //地域名を取得してからポップアップ表示
+      if( this.reverseGeocodingAjax ) this.reverseGeocodingAjax.abort();
+      this.reverseGeocodingAjax = this.reverseGeocoding(function( _now, r ){
+        this.reverseGeocodingAjax = null;
+        var place = r.address.state;// + ',';
+        if( r.address.city ){
+          //place += r.address.city;
+        }else if( r.address.county ){
+          //place += r.address.county;
+        }
+        this.getData( _now, this.jsonLoadComp.bind( this, _now.x, _now.y ), 'question' );
+        this.getData( _now, this.flickrLoadComp.bind( this, _now.x, _now.y ), 'flickr' );
+        this.getData( _now, this.chiikinogennkiLoadComp.bind( this, _now.x, _now.y ), 'chiikinogennki', place );
+      }.bind( this, now ));
 
       var data = { x:now.x, y:now.y };
       if( this.debugFlag ){
@@ -234,7 +243,7 @@ var _maxLatLng = L.latLng( _y, _x+w );
   }
 
 
-  getData( hitAreaData, callback, type ){
+  getData( hitAreaData, callback, type, place ){
 
     var index = { x:hitAreaData.x, y:hitAreaData.y };
 
@@ -259,14 +268,16 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
       case 'chiikinogennki':
         var radDist = hitAreaData.minLatLng.lat - hitAreaData.maxLatLng.lat;
-        console.log( "radDist:" + radDist );
-        var place = '東京都';
         var data = {
-          limit : 10,
-          lng : hitAreaData.minLatLng.lng,
-          lat : hitAreaData.maxLatLng.lat,
-          dist : radDist * 111263.283,//１度の距離
-          place: place
+          limit : 50,
+          // lng : hitAreaData.minLatLng.lng,
+          // lat : hitAreaData.maxLatLng.lat,
+          // dist : radDist * 111263.283,//１度の距離
+          place: place,
+          min_lat:hitAreaData.minLatLng.lat,
+          min_lng:hitAreaData.minLatLng.lng,
+          max_lat:hitAreaData.maxLatLng.lat,
+          max_lng:hitAreaData.maxLatLng.lng
         };
         var url = Util.apiHeadUrl + '/questions/get_k_cloud';
         break;
@@ -316,8 +327,8 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
   }
 
-  /*
-  getRankingData( limit, callback ){
+  
+  reverseGeocoding( callback ){
 
     var c = this.map.getCenter();
     var z = this.map.getZoom();
@@ -326,16 +337,16 @@ var _maxLatLng = L.latLng( _y, _x+w );
     this.nowRankingAjax = $.ajax({
         url:url,
         type:'GET',
-        success:function( _limit, _callback, result ){
-          this.getRankingDataStep2( _limit, _callback, result );
-        }.bind( this, limit, callback ),
+        success:function( _callback, result ){
+          _callback( result );
+        }.bind( this, callback ),
         error:function( result ){
           console.log( result );
         }.bind( this )
     });
 
   }
-
+/*
 
   getRankingDataStep2( limit, callback, result ){
 
@@ -418,8 +429,10 @@ var _maxLatLng = L.latLng( _y, _x+w );
       var data = results.tourspots[i];
       var title = '';
       var photo = '';
-      if( data.views ){
+      if( data.views && data.views[0].name ){
         title = data.views[0].name.written;
+      }
+      if( data.views && data.views[0].fid && data.place.url ){
         photo = data.place.url + data.views[0].fid;
       }
 
@@ -428,25 +441,30 @@ var _maxLatLng = L.latLng( _y, _x+w );
         content = data.descs[0].body;
       }
 
-      var lat = 0;
-      var lng = 0;
-      if( data.place.coordinates && data.place.coordinates.latitude ){
-        lat = data.place.coordinates.latitude;
-        lng = data.place.coordinates.longitude;
-      }
+      var lat = data.place.coordinates.latitude;
+      var lng = data.place.coordinates.longitude;
+      _results.push( this.generateData( title, content, photo, lat, lng ) );
 
-      _results.push({
-        title:title,
-        content:content,
-        photo:photo,
-        lat:lat,
-        lng:lng,
-        likes:[],
-        type:'chiikinogennki'
-      });
     }
 
     this.jsonLoadComp( x, y, _results );
+
+  }
+
+
+  generateData( title, content, photo, lat, lng ){
+
+    var data = {
+      title:title,
+      content:content,
+      photo:photo,
+      lat:lat,
+      lng:lng,
+      likes:[],
+      type:'chiikinogennki'
+    };
+
+    return data;
 
   }
 

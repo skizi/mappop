@@ -211,7 +211,7 @@ class QuestionsController < ApplicationController
 
   def get_k_cloud
 
-    limit = params['limit']
+    limit = params['limit'].to_s
     # coordinates = params['lng'].to_s + ',' + params['lat'].to_s + ',' + params['dist'].to_s
     place = ERB::Util.url_encode(params['place'].to_s)
     
@@ -222,10 +222,32 @@ class QuestionsController < ApplicationController
 
     # limit = '10'
     # coordinates = '139.6917064,35.6894875,40000'
-    uri = URI.parse( 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/' + categorys + '/json?limit=' + limit + '&place=' + place )# '&coordinates=' + coordinates )
-    @query = uri.query
+    uri = 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/' + categorys + '/json?limit=' + limit + '&place=' + place# '&coordinates=' + coordinates
+    result = connectApi( uri )
 
 
+
+    # uri = URI.parse( 'https://geoapi.heartrails.com/api/json?method=searchByPostal&postal=' + '153-0063' )
+    # result = connectApi( uri )
+    # render plain: result[ :result ][ 'response' ][ 'location' ][0]
+    # return
+
+    latRange = Range.new( params['max_lat'].to_f, params['min_lat'].to_f )
+    lngRange = Range.new( params['min_lng'].to_f, params['max_lng'].to_f )
+
+
+    if result[ :message ] == 'success'
+      result = checkGeolocation( result[ :result ], latRange, lngRange )
+      render json: result, status: :ok
+    else
+      render json: {status: :ng, code: 500, content: {message: result[ :message ] }}
+    end
+  end
+
+
+  def connectApi( uri )
+
+    uri = URI.parse( uri )
     response = Net::HTTP.new( uri.host, uri.port ) 
     response.use_ssl = true
     response = response.start() do |http|
@@ -246,8 +268,7 @@ class QuestionsController < ApplicationController
       when Net::HTTPSuccess
         # responseのbody要素をJSON形式で解釈し、hashに変換
         @result = JSON.parse(response.body)
-        render json: @result, status: :ok
-        return
+        @message = 'success'
       
       when Net::HTTPRedirection
         @message = "Redirection: code=#{response.code} message=#{response.message}"
@@ -267,7 +288,56 @@ class QuestionsController < ApplicationController
       @message = "e.message"
     end
 
-    render json: {status: :ng, code: 500, content: {message: @message }}
+    return { result: @result, message: @message }
+
+  end
+
+
+  def checkGeolocation( data, latRange, lngRange )
+
+    # 逆順でfor文
+    data[ 'tourspots' ].each_with_index.reverse_each do |value, i|
+    # for value in data[ 'tourspots' ] do
+
+      if value[ 'place' ][ 'coordinates' ].nil?
+        
+        # 郵便番号があれば郵便番号を緯度経度に変換し、
+        # 郵便版がなければ住所を緯度経度に変換する。
+        postalCode = value[ 'place' ][ 'postal_code' ]
+        if postalCode.nil?
+
+          keyword = value[ 'place' ][ 'pref' ][ 'written' ]
+          keyword += value[ 'place' ][ 'city' ][ 'written' ] if value[ 'place' ][ 'city' ]
+          keyword += value[ 'place' ][ 'street' ][ 'written' ] if value[ 'place' ][ 'street' ]
+          uri = 'https://geoapi.heartrails.com/api/json?method=suggest&matching=like&keyword=' + ERB::Util.url_encode( keyword )
+
+        else
+
+          uri = 'https://geoapi.heartrails.com/api/json?method=searchByPostal&postal=' + postalCode.to_s
+
+        end
+        result = connectApi( uri )
+
+        # 取得されたデータに緯度経度が入ってなければ配列から削除する。
+        # 緯度経度があればレンジと比較する。
+        # レンジ内であれば緯度経度を代入、レンジ外であれば配列から削除する。
+        if result[ :message ] == 'success'
+          location = result[ :result ][ 'response' ][ 'location' ]
+          if location.nil?
+            data[ 'tourspots' ].delete_at( i )
+            # data[ 'tourspots' ].delete( data[ 'tourspots' ][i] )
+          elsif latRange.first < location[0][ 'y' ].to_f && location[0][ 'y' ].to_f < latRange.last && lngRange.first < location[0][ 'x' ].to_f && location[0][ 'x' ].to_f < lngRange.last
+            value[ 'place' ][ 'coordinates' ] = { latitude: location[0][ 'y' ], longitude: location[0][ 'x' ] }
+          else
+            data[ 'tourspots' ].delete_at( i )
+          end
+        end
+
+      end
+
+    end
+
+    return data
 
   end
 
