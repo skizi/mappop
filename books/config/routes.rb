@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get 'privacypolicy' => 'home#privacypolicy'
+
   get 'login' => 'sessions#new'
   # 'sessions#new'
   post 'login' => 'sessions#create'
@@ -13,6 +15,7 @@ Rails.application.routes.draw do
   get 'questions' => 'questions#index'
   get 'questions/all'
   get 'questions/get_k_cloud'
+  get 'questions/get_fb_items'
   get 'questions/search_lat_lng'
   get 'questions/get_ranking/:key' => 'questions#get_ranking'
   get 'questions/refresh_ranking'

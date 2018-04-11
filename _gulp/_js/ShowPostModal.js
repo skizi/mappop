@@ -153,7 +153,7 @@ export default class ShowPostModal extends Modal{
             this.titleText.innerHTML = data.title;
 
         }else if( data.type == 'chiikinogennki' ){
-
+            
             this.element.className = 'modal show';            
 
             this.titleText.innerHTML = data.title;

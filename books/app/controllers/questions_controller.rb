@@ -299,7 +299,11 @@ class QuestionsController < ApplicationController
     data[ 'tourspots' ].each_with_index.reverse_each do |value, i|
     # for value in data[ 'tourspots' ] do
 
-      if value[ 'place' ][ 'coordinates' ].nil?
+      if value[ 'descs' ].nil? && value[ 'views' ].nil?
+        
+        data[ 'tourspots' ].delete_at( i )
+
+      elsif value[ 'place' ][ 'coordinates' ].nil?
         
         # 郵便番号があれば郵便番号を緯度経度に変換し、
         # 郵便版がなければ住所を緯度経度に変換する。
@@ -339,6 +343,51 @@ class QuestionsController < ApplicationController
 
     return data
 
+  end
+
+
+
+  def get_json( location, limit=10 )
+
+    raise ArgumentError, 'too many HTTP redirects' if limit == 0
+    uri = URI.parse(location)
+    begin
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+        http.open_timeout = 5
+        http.read_timeout = 10
+        http.get(uri.request_uri)
+      end
+      case response
+      when Net::HTTPSuccess
+        json = response.body
+        JSON.parse(json)
+      when Net::HTTPRedirection
+        location = response['location']
+        warn "redirected to #{location}"
+        get_json(location, limit - 1)
+      else
+        puts [uri.to_s, response.value].join(" : ")
+        # handle error
+      end
+    rescue => e
+      puts [uri.to_s, e.class, e].join(" : ")
+      # handle error
+    end
+  end
+
+  # FacebookGraphAPIからkeyを含む項目を取得する。
+  def get_fb_items
+
+    place = '東京'
+
+    begin
+      accecc_token = 'EAAWzUfxFJfwBAHlh4VyJ79ipSmE7eJRARGo9oo1T3GUAWBPMgjUdNK8wVD3d90sCfn15VMjpGnXxZAORwcEuXej9ZCfaloBYdEZAGshcTVKuuNcundz3RuBbrZAGUyYVgVtZCweKMSzDZC5gvT6ZABGyneJGgy67xZCKqUFiPvGP19cjbTD7tnhzYCeE17TOHHCwTccg0z6lWgZDZD'
+      fb_posts_json = get_json("https://graph.facebook.com/v2.12/search?type=place&q=cafe&center=40.7304,-73.9921&distance=1000&access_token=#{accecc_token}")
+    rescue => e
+      p e.message
+    end
+
+    render plain: fb_posts_json
   end
 
 

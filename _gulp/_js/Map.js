@@ -75,6 +75,50 @@ export default class Map{
 
     this.flickr_api_key = 'e43be56cbfe5eeada91756f2a08bd314';
 
+
+
+    var url = 'https://secure.mixi-platform.com/2/token';
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{
+          grant_type:'server_state',
+          client_id:'0a9e8d5c6813ad73f592'
+        },
+        success:function( result ){
+          console.log( result );
+          this.mixiStep2( result.server_state );
+        }.bind( this ),
+        error:function( result ){
+          console.log( result );
+        }.bind( this )
+    });
+  
+
+  }
+
+
+  mixiStep2( server_state ){
+
+    var url = 'https://secure.mixi-platform.com/2/token';
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:{
+          client_id:'0a9e8d5c6813ad73f592',
+          response_type:'code',
+          scope:'r_checkin',
+          display:'pc',
+          server_state:server_state
+        },
+        success:function( result ){
+          console.log( result );
+        }.bind( this ),
+        error:function( result ){
+          console.log( result );
+        }.bind( this )
+    });
+
   }
 
 
@@ -429,11 +473,14 @@ var _maxLatLng = L.latLng( _y, _x+w );
       var data = results.tourspots[i];
       var title = '';
       var photo = '';
-      if( data.views && data.views[0].name ){
-        title = data.views[0].name.written;
+      if( data.name ){
+        if( data.name.written ) title = data.name.written;
+        if( data.name.name1 ) title += data.name.name1.written;
+        if( data.name.name2 ) title += data.name.name2.written;
       }
       if( data.views && data.views[0].fid && data.place.url ){
-        photo = data.place.url + data.views[0].fid;
+        var refbase = data.mng.refbase;
+        photo = 'https://www.chiikinogennki.soumu.go.jp/k-cloud-api/v001/kanko/view/' + refbase + '/' + data.views[0].fid;
       }
 
       var content = '';
@@ -476,10 +523,9 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
   	var length = results.length;
   	for( var i = 0; i < length; i++ ){
-  		var data = results[i];
 
-  		//leaflet
-      var popup = this.createPopup( data, i );
+  		var data = results[i];
+      var popup = this.createPopup( data );
       popup.data = data;
       this.popups[ key ].push( popup );
 
@@ -491,7 +537,7 @@ var _maxLatLng = L.latLng( _y, _x+w );
 
 
   //ポップアップを作成
-  createPopup( data, index ){
+  createPopup( data ){
 
     var content = L.DomUtil.create( 'div', 'popup' );
     //content.innerHTML = data.title;

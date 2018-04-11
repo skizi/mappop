@@ -624,7 +624,6 @@ footer{
                     position:relative;
                     height: 16px;
                     line-height: 16px;
-                    z-index: -1;
 
                     &:after{
                         content:'';
@@ -911,12 +910,11 @@ footer{
 
                 div.photo{
                     width: 100%;
-                    max-height: 200px;
                     overflow: hidden;
                     margin-bottom: 10px;
                     text-align: center;
                     img{
-                        height: 100%;
+                        width: 500px;
                         border-radius: 10px;
                     }
                 }
