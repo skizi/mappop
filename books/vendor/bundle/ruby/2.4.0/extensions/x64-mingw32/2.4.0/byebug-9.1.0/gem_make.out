@@ -1,0 +1,20 @@
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/byebug-9.1.0/ext/byebug
+C:/Ruby24-x64/bin/ruby.exe -r ./siteconf20180415-22616-m1f94e.rb extconf.rb
+creating Makefile
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/byebug-9.1.0/ext/byebug
+make "DESTDIR=" clean
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/byebug-9.1.0/ext/byebug
+make "DESTDIR="
+generating byebug-x64-mingw32.def
+compiling breakpoint.c
+compiling byebug.c
+compiling context.c
+compiling locker.c
+compiling threads.c
+linking shared-object byebug/byebug.so
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/byebug-9.1.0/ext/byebug
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 byebug.so ./.gem.20180415-22616-1u2kn7w/byebug

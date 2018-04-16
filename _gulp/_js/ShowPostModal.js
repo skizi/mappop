@@ -152,7 +152,7 @@ export default class ShowPostModal extends Modal{
             this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
             this.titleText.innerHTML = data.title;
 
-        }else if( data.type == 'chiikinogennki' ){
+        }else if( data.type == 'chiikinogennki' || data.type == 'yahoo' ){
             
             this.element.className = 'modal show';            
 

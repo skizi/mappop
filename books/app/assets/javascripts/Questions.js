@@ -452,49 +452,9 @@ var Map = function () {
 
 
     this.flickr_api_key = 'e43be56cbfe5eeada91756f2a08bd314';
-
-    var url = 'https://secure.mixi-platform.com/2/token';
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: {
-        grant_type: 'server_state',
-        client_id: '0a9e8d5c6813ad73f592'
-      },
-      success: function (result) {
-        console.log(result);
-        this.mixiStep2(result.server_state);
-      }.bind(this),
-      error: function (result) {
-        console.log(result);
-      }.bind(this)
-    });
   }
 
   _createClass(Map, [{
-    key: 'mixiStep2',
-    value: function mixiStep2(server_state) {
-
-      var url = 'https://secure.mixi-platform.com/2/token';
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-          client_id: '0a9e8d5c6813ad73f592',
-          response_type: 'code',
-          scope: 'r_checkin',
-          display: 'pc',
-          server_state: server_state
-        },
-        success: function (result) {
-          console.log(result);
-        }.bind(this),
-        error: function (result) {
-          console.log(result);
-        }.bind(this)
-      });
-    }
-  }, {
     key: 'mapMoved',
     value: function mapMoved() {
 
@@ -544,6 +504,7 @@ var Map = function () {
           this.getData(_now, this.jsonLoadComp.bind(this, _now.x, _now.y), 'question');
           this.getData(_now, this.flickrLoadComp.bind(this, _now.x, _now.y), 'flickr');
           this.getData(_now, this.chiikinogennkiLoadComp.bind(this, _now.x, _now.y), 'chiikinogennki', place);
+          this.getData(_now, this.yahooLoadComp.bind(this, _now.x, _now.y), 'yahoo');
         }.bind(this, now));
 
         var data = { x: now.x, y: now.y };
@@ -693,6 +654,17 @@ var Map = function () {
           };
           var url = _Util2.default.apiHeadUrl + '/questions/get_k_cloud';
           break;
+
+        case 'yahoo':
+          var data = {
+            min_lat: hitAreaData.minLatLng.lat,
+            min_lng: hitAreaData.minLatLng.lng,
+            max_lat: hitAreaData.maxLatLng.lat,
+            max_lng: hitAreaData.maxLatLng.lng,
+            limit: 10
+          };
+          var url = _Util2.default.apiHeadUrl + '/questions/get_yahoo';
+          break;
       }
 
       //ajaxリクエスト
@@ -825,6 +797,31 @@ var Map = function () {
       }
     }
   }, {
+    key: 'yahooLoadComp',
+    value: function yahooLoadComp(x, y, results) {
+
+      var _results = [];
+      var length = results.result.Feature.length;
+      for (var i = 0; i < length; i++) {
+
+        var data = results.result.Feature[i];
+        var title = '';
+        var photo = '';
+        if (data.Name) title = data.Name;
+        if (data.Property.LeadImage) photo = data.Property.LeadImage;
+
+        var content = '';
+        if (data.Property) content = data.Property.Address;
+
+        var latLng = data.Geometry.Coordinates.split(',');
+        var lat = latLng[1];
+        var lng = latLng[0];
+        _results.push(this.generateData(title, content, photo, lat, lng, 'yahoo'));
+      }
+
+      this.jsonLoadComp(x, y, _results);
+    }
+  }, {
     key: 'chiikinogennkiLoadComp',
     value: function chiikinogennkiLoadComp(x, y, results) {
 
@@ -852,14 +849,14 @@ var Map = function () {
 
         var lat = data.place.coordinates.latitude;
         var lng = data.place.coordinates.longitude;
-        _results.push(this.generateData(title, content, photo, lat, lng));
+        _results.push(this.generateData(title, content, photo, lat, lng, 'chiikinogennki'));
       }
 
       this.jsonLoadComp(x, y, _results);
     }
   }, {
     key: 'generateData',
-    value: function generateData(title, content, photo, lat, lng) {
+    value: function generateData(title, content, photo, lat, lng, type) {
 
       var data = {
         title: title,
@@ -868,7 +865,7 @@ var Map = function () {
         lat: lat,
         lng: lng,
         likes: [],
-        type: 'chiikinogennki'
+        type: type
       };
 
       return data;
@@ -1021,6 +1018,8 @@ var Map = function () {
       var p = this.map.getPixelBounds();
       var minLatLng = this.map.unproject(p.min);
       var maxLatLng = this.map.unproject(p.max);
+
+      console.log({ minLatLng: minLatLng, maxLatLng: maxLatLng });
 
       var x = maxLatLng.lng - minLatLng.lng;
       var y = minLatLng.lat - maxLatLng.lat;
@@ -1650,7 +1649,7 @@ var ShowPostModal = function (_Modal) {
                 this.element.className = 'modal show flickr';
                 this.photoContainer.innerHTML = '<img src="' + data.photo + '">';
                 this.titleText.innerHTML = data.title;
-            } else if (data.type == 'chiikinogennki') {
+            } else if (data.type == 'chiikinogennki' || data.type == 'yahoo') {
 
                 this.element.className = 'modal show';
 

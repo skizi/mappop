@@ -1,0 +1,16 @@
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/websocket-driver-0.6.5/ext/websocket-driver
+C:/Ruby24-x64/bin/ruby.exe -r ./siteconf20180415-22616-1w0dhpo.rb extconf.rb
+creating Makefile
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/websocket-driver-0.6.5/ext/websocket-driver
+make "DESTDIR=" clean
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/websocket-driver-0.6.5/ext/websocket-driver
+make "DESTDIR="
+generating websocket_mask-x64-mingw32.def
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/websocket-driver-0.6.5/ext/websocket-driver
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20180415-22616-33t10y

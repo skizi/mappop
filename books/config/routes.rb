@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   get 'questions' => 'questions#index'
   get 'questions/all'
+  get 'questions/get_yahoo'
   get 'questions/get_k_cloud'
   get 'questions/get_fb_items'
   get 'questions/search_lat_lng'

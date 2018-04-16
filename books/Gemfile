@@ -72,3 +72,11 @@ gem 'meta-tags'
 source 'https://rubygems.org'
 gem 'omniauth'
 gem 'omniauth-twitter'
+
+
+# cron
+gem 'whenever', require: false
+
+
+#複数のactiverecordを一括登録する
+gem 'activerecord-import'

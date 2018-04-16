@@ -1,0 +1,21 @@
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/bcrypt-ruby-3.1.1.rc1/ext/mri
+C:/Ruby24-x64/bin/ruby.exe -r ./siteconf20180415-22616-5w7n1r.rb extconf.rb
+checking for ruby/util.h... yes
+creating Makefile
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/bcrypt-ruby-3.1.1.rc1/ext/mri
+make "DESTDIR=" clean
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/bcrypt-ruby-3.1.1.rc1/ext/mri
+make "DESTDIR="
+generating bcrypt_ext-x64-mingw32.def
+compiling bcrypt_ext.c
+compiling crypt.c
+compiling crypt_blowfish.c
+compiling crypt_gensalt.c
+compiling wrapper.c
+linking shared-object bcrypt_ext.so
+
+current directory: C:/xampp/htdocs/skizi/rails/mappop/books/vendor/bundle/ruby/2.4.0/gems/bcrypt-ruby-3.1.1.rc1/ext/mri
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 bcrypt_ext.so ./.gem.20180415-22616-1gxpz2y

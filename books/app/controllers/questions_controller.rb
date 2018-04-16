@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   # layout 'questions'
+  attr_accessor :yahooApiKeyword, :yahooApiPostCount, :yahooApiX, :yahooApiY
 
 
   def index
@@ -245,6 +246,131 @@ class QuestionsController < ApplicationController
   end
 
 
+  def get_yahoo
+
+    limit = params['limit'].to_s
+    bbox = params['min_lng'].to_s + ',' + params['max_lat'].to_s + ',' + params['max_lng'].to_s + ',' + params['min_lat'].to_s
+    keyword = ERB::Util.url_encode( '公園' )
+
+self.yahooApiKeyword = '神社'
+self.yahooApiPostCount = 0
+self.yahooApiX = 0
+self.yahooApiY = 0
+yahoo_api_submit()
+#hoge_submit()
+return
+
+    uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
+    #uri = 'https://map.yahooapis.jp/search/local/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&gc=01&bbox=' + bbox + '&sort=score&results=' + limit + '&output=json'
+    result = connectApi( uri )
+
+    if result[ :message ] == 'success'
+      render json: result, status: :ok
+    else
+      render json: {status: :ng, code: 500, content: {message: result[ :message ] }}
+    end
+
+  end
+
+
+  def hoge_submit
+
+    self.yahooApiPostCount += 1
+    if self.yahooApiPostCount == 2
+      render plain: 'yahoo comp!' + self.yahooApiPostCount.to_s
+    else
+      hoge_submit()
+    end
+
+  end
+
+
+  def yahoo_api_submit
+
+    if self.yahooApiPostCount == 4
+      render plain: 'yahoo comp!' + self.yahooApiPostCount.to_s
+    else
+      min_lng = self.yahooApiX * 0.0484085083 + 127.35351562500001
+      max_lat = self.yahooApiY * 0.03902968636 + 45.67548217560647
+      max_lng = min_lng + 0.0484085083
+      min_lat = max_lat + 0.03902968636
+
+      self.yahooApiX += 1
+      if self.yahooApiX == 379 then
+        self.yahooApiX = 0
+        self.yahooApiY += 1
+      end
+      self.yahooApiPostCount +=1
+
+      get_map_data( self.yahooApiKeyword, min_lng, max_lng, min_lat, max_lat )
+    end
+
+  end
+
+
+  def get_map_data( keyword, min_lng, max_lng, min_lat, max_lat )
+
+    limit = '100'
+    bbox = min_lng.to_s + ',' + max_lat.to_s + ',' + max_lng.to_s + ',' + min_lat.to_s
+    keyword = ERB::Util.url_encode( keyword )
+
+    uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
+    #uri = 'https://map.yahooapis.jp/search/local/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&gc=01&bbox=' + bbox + '&sort=score&results=' + limit + '&output=json'
+    result = connectApi( uri )
+
+    if result[ :message ] == 'success'
+      
+      array = result[ :result ][ 'Feature' ]
+      activeRecord = []
+      if array
+        array.each_with_index do |value, i|
+
+          photo = ''
+          if value[ 'Property' ][ 'LeadImage' ]
+            photo = value[ 'Property' ][ 'LeadImage' ]
+          end
+
+          latLng = value[ 'Geometry' ][ 'Coordinates' ].split( ',' )
+          lat = latLng[1];
+          lng = latLng[0];
+
+          content = ''
+          country = ''
+          if value[ 'Property' ]
+            content = value[ 'Property' ][ 'Address' ]
+            country = value[ 'Property' ][ 'Country' ][ 'Name' ]
+          end
+
+          @question = Question.new()
+          @question.user_id = 0
+          @question.title = value[ 'Name' ]
+          @question.content = content
+          @question.lat = lat
+          @question.lng = lng
+          @question.photo = photo
+          @question.country = country
+          @question.state = ''
+          @question.city = ''
+
+          activeRecord.push( @question )
+
+        end
+
+        Question.import activeRecord
+  
+      end
+
+      #activeRecord = Question.where(id: activeRecord.map{ |question| question.id })
+
+
+      #if activeRecord.save
+        yahoo_api_submit()
+      #end
+    end
+
+  end
+
+
   def connectApi( uri )
 
     uri = URI.parse( uri )
@@ -347,48 +473,48 @@ class QuestionsController < ApplicationController
 
 
 
-  def get_json( location, limit=10 )
+  # def get_json( location, limit=10 )
 
-    raise ArgumentError, 'too many HTTP redirects' if limit == 0
-    uri = URI.parse(location)
-    begin
-      response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
-        http.open_timeout = 5
-        http.read_timeout = 10
-        http.get(uri.request_uri)
-      end
-      case response
-      when Net::HTTPSuccess
-        json = response.body
-        JSON.parse(json)
-      when Net::HTTPRedirection
-        location = response['location']
-        warn "redirected to #{location}"
-        get_json(location, limit - 1)
-      else
-        puts [uri.to_s, response.value].join(" : ")
-        # handle error
-      end
-    rescue => e
-      puts [uri.to_s, e.class, e].join(" : ")
-      # handle error
-    end
-  end
+  #   raise ArgumentError, 'too many HTTP redirects' if limit == 0
+  #   uri = URI.parse(location)
+  #   begin
+  #     response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+  #       http.open_timeout = 5
+  #       http.read_timeout = 10
+  #       http.get(uri.request_uri)
+  #     end
+  #     case response
+  #     when Net::HTTPSuccess
+  #       json = response.body
+  #       JSON.parse(json)
+  #     when Net::HTTPRedirection
+  #       location = response['location']
+  #       warn "redirected to #{location}"
+  #       get_json(location, limit - 1)
+  #     else
+  #       puts [uri.to_s, response.value].join(" : ")
+  #       # handle error
+  #     end
+  #   rescue => e
+  #     puts [uri.to_s, e.class, e].join(" : ")
+  #     # handle error
+  #   end
+  # end
 
-  # FacebookGraphAPIからkeyを含む項目を取得する。
-  def get_fb_items
+  # # FacebookGraphAPIからkeyを含む項目を取得する。
+  # def get_fb_items
 
-    place = '東京'
+  #   place = '東京'
 
-    begin
-      accecc_token = 'EAAWzUfxFJfwBAHlh4VyJ79ipSmE7eJRARGo9oo1T3GUAWBPMgjUdNK8wVD3d90sCfn15VMjpGnXxZAORwcEuXej9ZCfaloBYdEZAGshcTVKuuNcundz3RuBbrZAGUyYVgVtZCweKMSzDZC5gvT6ZABGyneJGgy67xZCKqUFiPvGP19cjbTD7tnhzYCeE17TOHHCwTccg0z6lWgZDZD'
-      fb_posts_json = get_json("https://graph.facebook.com/v2.12/search?type=place&q=cafe&center=40.7304,-73.9921&distance=1000&access_token=#{accecc_token}")
-    rescue => e
-      p e.message
-    end
+  #   begin
+  #     accecc_token = 'EAAWzUfxFJfwBAHlh4VyJ79ipSmE7eJRARGo9oo1T3GUAWBPMgjUdNK8wVD3d90sCfn15VMjpGnXxZAORwcEuXej9ZCfaloBYdEZAGshcTVKuuNcundz3RuBbrZAGUyYVgVtZCweKMSzDZC5gvT6ZABGyneJGgy67xZCKqUFiPvGP19cjbTD7tnhzYCeE17TOHHCwTccg0z6lWgZDZD'
+  #     fb_posts_json = get_json("https://graph.facebook.com/v2.12/search?type=place&q=cafe&center=40.7304,-73.9921&distance=1000&access_token=#{accecc_token}")
+  #   rescue => e
+  #     p e.message
+  #   end
 
-    render plain: fb_posts_json
-  end
+  #   render plain: fb_posts_json
+  # end
 
 
   def question_params

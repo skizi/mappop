@@ -45,5 +45,9 @@ module Books
 	#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
 	#   end
 	# end
+
+	#cron
+	config.autoload_paths += %W(#{config.root}/lib)
+	config.enable_dependency_loading = true 
   end
 end
