@@ -250,24 +250,37 @@ class QuestionsController < ApplicationController
 
     limit = params['limit'].to_s
     bbox = params['min_lng'].to_s + ',' + params['max_lat'].to_s + ',' + params['max_lng'].to_s + ',' + params['min_lat'].to_s
-    keyword = ERB::Util.url_encode( '公園' )
+    keywords = [ '公園','神社','デパート','ペットショップ','家具屋','ヨドバシカメラ','ブックオフ','ゲーセン','ゲームショップ','本屋','図書館','カフェ','観光地','御苑' ]
 
-self.yahooApiKeyword = '神社'
-self.yahooApiPostCount = 0
-self.yahooApiX = 0
-self.yahooApiY = 0
-yahoo_api_submit()
-#hoge_submit()
-return
+    results = []
+    keywords.each_with_index do |value, i|
+      keyword = ERB::Util.url_encode( value )
+      uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
+      #uri = 'https://map.yahooapis.jp/search/local/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&gc=01&bbox=' + bbox + '&sort=score&results=' + limit + '&output=json'
+      result = connectApi( uri )
 
-    uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
-    #uri = 'https://map.yahooapis.jp/search/local/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&gc=01&bbox=' + bbox + '&sort=score&results=' + limit + '&output=json'
-    result = connectApi( uri )
+      if result[ :message ] == 'success'
+        
+        array = result[ :result ][ 'Feature' ]
+        if array
+          results.concat( array )
+        end
 
-    if result[ :message ] == 'success'
-      render json: result, status: :ok
+      end
+    end
+
+# self.yahooApiKeyword = '神社'
+# self.yahooApiPostCount = 0
+# self.yahooApiX = 0
+# self.yahooApiY = 0
+# yahoo_api_submit()
+# return
+
+
+    if results.length() > 0
+      render json: { result: { Feature: results } }, status: :ok
     else
-      render json: {status: :ng, code: 500, content: {message: result[ :message ] }}
+      render json: {status: :ng, code: 500, content: {message: 'error' }}
     end
 
   end
