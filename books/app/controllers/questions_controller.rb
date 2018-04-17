@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   # layout 'questions'
-  attr_accessor :yahooApiKeyword, :yahooApiPostCount, :yahooApiX, :yahooApiY
+  attr_accessor :yahooApiKeyword, :yahooApiPostCount, :yahooApiX, :yahooApiY, :hogege
 
 
   def index
@@ -287,11 +287,13 @@ return
 
   def yahoo_api_submit
 
-    if self.yahooApiPostCount == 4
+    if self.yahooApiPostCount == 40000
       render plain: 'yahoo comp!' + self.yahooApiPostCount.to_s
     else
       min_lng = self.yahooApiX * 0.0484085083 + 127.35351562500001
       max_lat = self.yahooApiY * 0.03902968636 + 45.67548217560647
+      # min_lng = self.yahooApiX * 0.0484085083 + 139.7066914
+      # max_lat = self.yahooApiY * 0.03902968636 + 35.6352256
       max_lng = min_lng + 0.0484085083
       min_lat = max_lat + 0.03902968636
 
@@ -357,7 +359,7 @@ return
         end
 
         Question.import activeRecord
-  
+        
       end
 
       #activeRecord = Question.where(id: activeRecord.map{ |question| question.id })
