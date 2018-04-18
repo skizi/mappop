@@ -255,8 +255,11 @@ class QuestionsController < ApplicationController
     results = []
     keywords.each_with_index do |value, i|
       keyword = ERB::Util.url_encode( value )
-      uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
-      #uri = 'https://map.yahooapis.jp/search/local/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&gc=01&bbox=' + bbox + '&sort=score&results=' + limit + '&output=json'
+      # if value == '公園'
+      #   uri = 'https://map.yahooapis.jp/geocode/V1/geoCoder?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&results=' + limit + '&bbox=' + bbox + '&output=json&query=' + keyword
+      # else
+      uri = 'https://map.yahooapis.jp/search/local/V1/localSearch?appid=dj00aiZpPXZlUG0wM1Y2cFdyeiZzPWNvbnN1bWVyc2VjcmV0Jng9ZjA-&bbox=' + bbox + '&results=' + limit + '&output=json&query=' + keyword
+      # end
       result = connectApi( uri )
 
       if result[ :message ] == 'success'
@@ -275,7 +278,6 @@ class QuestionsController < ApplicationController
 # self.yahooApiY = 0
 # yahoo_api_submit()
 # return
-
 
     if results.length() > 0
       render json: { result: { Feature: results } }, status: :ok
