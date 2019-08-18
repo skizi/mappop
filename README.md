@@ -6,6 +6,8 @@ Railsで作られた地図上に写真やテキストを保存できるアプリ
 ・サーバーサイドAPI : Rails  
 ・インフラ : nginx  
 ・Webフロントエンド : gulp, babel, sass  
+ruby 2.4.3  
+Rails 5.1.6   
 
 ## できること
 ・画像やテキストの投稿  
