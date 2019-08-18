@@ -1,5 +1,6 @@
 class User < ApplicationRecord
 	
+  # パスワードのバリデートチェックなど
 	has_secure_password
 
 	# メール送信時に使用する

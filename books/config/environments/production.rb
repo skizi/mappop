@@ -106,4 +106,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # railsを3000以外で立ち上げたときのエラー回避
+  config.action_controller.forgery_protection_origin_check = false
+
 end

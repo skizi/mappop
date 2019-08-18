@@ -3,7 +3,7 @@ defaults: &defaults
   # 全体ページ
   site:
     name: マップポップ MapPop
-    root_url: https://mappop.org
+    root_url: https://www.mappop.me
     meta:
       title: マップポップ MapPop
       description: さあ、街へ出かけよう。地図上で街の情報を共有しよう。新たな街の魅力を知れるかも。

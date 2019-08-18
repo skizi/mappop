@@ -1,3 +1,25 @@
 node_modules
-.DS_Store
 .sass-cache/
+node_modules
+# Ignore bundler config.
+/.bundle
+
+# Ignore bundler gems.
+ar-channel/vendor/bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+
+# Ignore other unneeded files.
+doc/
+*.swp
+*~
+.project
+.DS_Store
+.idea
+.secret
